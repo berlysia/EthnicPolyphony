@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:browser": "browserify src/browser/index.js -t babelify --outfile dist/browser.js",
+    "build:electron": "babel src/electron --out-file dist/electron.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
