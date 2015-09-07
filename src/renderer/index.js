@@ -12,7 +12,7 @@ api.getRequestToken((error, requestToken, requestTokenSecret, results) => {
   if (error) return console.log("Error getting OAuth request token : " + error);
   //store token and tokenSecret somewhere, you'll need them later; redirect user 
   
-  console.log(`requestToken: ${requestToken}, requestTokenSecret: ${requestTokenSecret}`)
+  console.log(`requestToken: ${requestToken}, requestTokenSecret: ${requestTokenSecret}`);
   
   const authUrl = `https://twitter.com/oauth/authenticate?oauth_token=${requestToken}`;
   console.log(`authUrl: ${authUrl}`);
