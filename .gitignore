@@ -1,3 +1,5 @@
+dist
+
 ### https://raw.github.com/github/gitignore/92fe23112d1863d526651434169928ea0b61b853/Node.gitignore
 
 # Logs
@@ -36,7 +38,8 @@ node_modules
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
