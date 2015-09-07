@@ -16,7 +16,9 @@
   "dependencies": {
     "arda": "^0.15.1",
     "electron-prebuilt": "^0.31.2",
-    "react": "^0.13.3"
+    "node-twitter-api": "^1.6.0",
+    "react": "^0.13.3",
+    "twitter": "^1.2.5"
   },
   "devDependencies": {
     "babel": "^5.8.23",
