@@ -1,5 +1,8 @@
 import app from 'app';
 import BrowserWindow from "browser-window";
+import CrashReporter from "crash-reporter";
+
+CrashReporter.start();
 
 global.twitterAppCredentials = {
   "consumer_key": process.env["TWITTER_CONSUMER_KEY"],

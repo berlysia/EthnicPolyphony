@@ -2,12 +2,12 @@
   "name": "hackathon2015natsu",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/electron/index.js",
   "scripts": {
     "start": "electron dist/electron.js",
-    "build:browser": "browserify src/browser/index.js -t babelify --outfile dist/browser.js",
-    "build:electron": "babel src/electron --out-file dist/electron.js",
-    "build": "npm run build:electron & npm run build:browser",
+    "build:renderer": "browserify --ignore remote src/renderer/index.js -t babelify --outfile dist/renderer.js",
+    "build:browser": "babel src/browser --out-file dist/browser.js",
+    "build": "npm run build:renderer & npm run build:browser",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,6 +18,7 @@
     "electron-prebuilt": "^0.31.2",
     "node-twitter-api": "^1.6.0",
     "react": "^0.13.3",
+    "request": "^2.61.0",
     "twitter": "^1.2.5"
   },
   "devDependencies": {

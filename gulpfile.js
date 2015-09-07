@@ -5,3 +5,5 @@ gulp.task('jsConfig', function() {
   return gulp.src("./src/**/*.js")
     .pipe(tsConfig({configFile: "./jsconfig.json"}));
 });
+
+gulp.task('default', ['jsConfig']);

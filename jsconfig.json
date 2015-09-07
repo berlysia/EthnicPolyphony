@@ -5,6 +5,6 @@
     },
     "files": [
         "./src/browser/index.js",
-        "./src/electron/index.js"
+        "./src/renderer/index.js"
     ]
 }
