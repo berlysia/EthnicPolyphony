@@ -1,10 +1,18 @@
+import app from 'app';
 import BrowserWindow from "browser-window";
 
-let window = new BrowserWindow({
-  width: 1200,
-  height: 900
+app.on('window-all-closed', () =>{
+  if (process.platform != 'darwin')
+    app.quit()
 });
 
-window.loadUrl(`file://${__dirname}/../index.html`);
+app.on('ready', () => {
+  let window = new BrowserWindow({
+    width: 1200,
+    height: 900
+  });
 
-window.on('closed', () => window = null);
+  window.loadUrl(`file://${__dirname}/../index.html`);
+
+  window.on('closed', () => window = null);
+});
