@@ -17,26 +17,25 @@ export default class Connection {
     this.accessTokenSecret = accessTokenSecret;
     connections.set(id, this);
   }
-}
 
-Connection.hasConnectionFor = hasConnectionFor;
-Connection.connect = connect;
-Connection.authenticate = authenticate;
-Connection.connections = connections;
+  get connections() {
+    return connections;
+  }
 
-function hasConnectionFor(user_id) {
-  return connections.has(user_id);
-}
+  static hasConnectionFor(user_id) {
+    return connections.has(user_id);
+  }
 
-function connect(user_id, accessToken, accessTokenSecret) {
-  new Connection(user_id, accessToken, accessTokenSecret);
-}
+  static connect(user_id, accessToken, accessTokenSecret) {
+    return new Connection(user_id, accessToken, accessTokenSecret);
+  }
 
-function authenticate() { // must be '.catch'ed
-  return Promise.resolve()
-    .then(getRequestToken)
-    .then(getPinCode)
-    .then(getAccessToken);
+  static authenticate() { // must be '.catch'ed
+    return Promise.resolve()
+      .then(getRequestToken)
+      .then(getPinCode)
+      .then(getAccessToken);
+  }
 }
 
 function getRequestToken() {
