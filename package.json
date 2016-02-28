@@ -8,6 +8,8 @@
     "build": "tsc -p .",
     "watch": "tsc -p . -w",
     "update": "tsconfig tsconfig.json -u",
+    "activate": "mv resources/credentials.json.keep resources/credentials.json",
+    "commit-ready": "mv resources/credentials.json resources/credentials.json.keep && cp resources/credentials.json.original resources/credentials.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
