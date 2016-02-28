@@ -1,0 +1,12 @@
+{
+  "ambientDependencies": {
+    "config": "github:DefinitelyTyped/DefinitelyTyped/config/config.d.ts#21939fb51a4c0046a4c7ef44a10959a5faf14309",
+    "es6-promise": "github:DefinitelyTyped/DefinitelyTyped/es6-promise/es6-promise.d.ts#830e8ebd9ef137d039d5c7ede24a421f08595f83",
+    "eventemitter2": "github:DefinitelyTyped/DefinitelyTyped/eventemitter2/eventemitter2.d.ts#0fe94d00f62c380037c686c828a9fad15c87ee46",
+    "github-electron": "github:DefinitelyTyped/DefinitelyTyped/github-electron/github-electron.d.ts#04be44e2b5380acbc39439a8ac61bd7938fc77e0",
+    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#aee0039a2d6686ec78352125010ebb38a7a7d743",
+    "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#83b88a031cc8f2006fd361bf0a0b548c3bcc8259",
+    "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts#ca5bfe76d2d9bf6852cbc712d9f3e0047c93486e",
+    "twitter": "github:DefinitelyTyped/DefinitelyTyped/twitter/twitter.d.ts#ef9449114bd9bacc1c38f7cf76a979c775093a9f"
+  }
+}

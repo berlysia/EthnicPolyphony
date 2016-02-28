@@ -1,5 +1,9 @@
-config/local.json
+resources/credentials.json.*
+resources/accounts.json
+resources/view.json
 dist/**/*.js
+dist/**/*.js.map
+typings/*/*
 .envrc
 
 ### https://raw.github.com/github/gitignore/92fe23112d1863d526651434169928ea0b61b853/Node.gitignore

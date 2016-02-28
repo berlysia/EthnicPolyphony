@@ -2,8 +2,37 @@
 <html>
 	<head>
 		<meta charset='utf-8'>
-    <script src='../dist/renderer.js'></script>
 	</head>
 	<body>
+    <section id='root'>
+      <View id='app'>
+        <Tabs id='tabs'>
+          <ul>
+            <li id='selected'>@berlysia/Home</li>
+            <li>@berlysia/User</li>
+            <li>new tab...</li>
+          </ul>
+        </Tabs>
+        <Editor>
+          <form id='tweetForm'>
+            <textarea name='tweet' id='tweetText'>text area</textarea>
+          </form>
+        </Editor>
+        <MainView id='mainview'>
+          <!-- misc... -->
+        </MainView>
+      </View>
+    </section>
+    
+    <script>
+      'use strict';
+      const remote = require('electron').remote
+      const React = require('react');
+      const render = require('react-dom').render;
+      const View = require('../dist/View').default;
+      var instances = remote.require('../dist/app');
+      console.log(instances)
+      render(React.createElement(View, instances), document.querySelector('#root'));
+    </script>
 	</body>
 </html>

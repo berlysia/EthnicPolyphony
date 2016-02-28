@@ -4,23 +4,29 @@
   "description": "",
   "main": "dist/browser.js",
   "scripts": {
-    "start": "electron dist/browser.js",
-    "build:renderer": "browserify src/renderer/index.js -t babelify --outfile dist/renderer.js",
-    "build:browser": "babel src/browser --out-file dist/browser.js",
-    "build": "npm run build:renderer & npm run build:browser",
+    "start": "electron dist/index.js",
+    "build": "tsc -p .",
+    "watch": "tsc -p . -w",
+    "update": "tsconfig tsconfig.json -u",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "berlysia",
   "license": "ISC",
   "dependencies": {
+    "babel-polyfill": "^6.5.0",
     "config": "^1.19.0",
+    "eventemitter2": "^0.4.14",
     "flumpt": "^0.1.4",
+    "map-iterator": "^1.1.0",
     "node-twitter-api": "^1.7.0",
+    "object-assign": "^4.0.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "react-virtualized": "^4.9.0",
-    "request": "^2.69.0"
+    "react-virtualized": "^4.10.0",
+    "reduce-iterator": "^1.0.0",
+    "request": "^2.69.0",
+    "twitter": "^1.2.5"
   },
   "devDependencies": {
     "babel-cli": "^6.4.5",
