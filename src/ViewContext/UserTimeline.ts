@@ -6,26 +6,26 @@ import ViewInfo from './ViewInfo';
 import {ViewType, generateViewOptionFromSeed} from '../AppContext/ActionCreator';
 
 export default class UserTimeline extends ViewContext {
-  stores: [ViewInfo, Tweets];
-  constructor(dispatcher: ActionEmitter, id: string, user_id: string) {
-    super(dispatcher);
+    stores: [ViewInfo, Tweets];
+    constructor(dispatcher: ActionEmitter, id: string, user_id: string) {
+        super(dispatcher);
 
-    const info = new ViewInfo();
-    info.setState(generateViewOptionFromSeed({
-      type: ViewType.UserTimeline,
-      source_id: id,
-      target_id: user_id,
-    }));
-    this.setStores(info, new Tweets());
-  }
-  
-  getState() {
-    return {
-      tweets: this.stores[1].getState(),
-      type: this.stores[0].getState(),
+        const info = new ViewInfo();
+        info.setState(generateViewOptionFromSeed({
+            type: ViewType.UserTimeline,
+            source_id: id,
+            target_id: user_id,
+        }));
+        this.setStores(info, new Tweets());
     }
-  }
+
+    getState() {
+        return {
+            tweets: this.stores[1].getState(),
+            type: this.stores[0].getState(),
+        }
+    }
 }
 
 // for Electron's remote module's bug
-Object.defineProperty(UserTimeline.prototype, 'getState', {enumerable: true});
+Object.defineProperty(UserTimeline.prototype, 'getState', { enumerable: true });

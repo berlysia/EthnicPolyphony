@@ -1,4 +1,4 @@
 export interface Action {
-  type: string,
-  value: any,
+    type: string,
+    value: any,
 };

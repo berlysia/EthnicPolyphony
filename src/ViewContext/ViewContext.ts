@@ -4,6 +4,6 @@ import ViewInfo from './ViewInfo';
 import Tweets from './Tweets';
 
 abstract class ViewContext extends StoreGroup {
-  stores: [ViewInfo, Tweets];
+    stores: [ViewInfo, Tweets];
 }
 export default ViewContext;
