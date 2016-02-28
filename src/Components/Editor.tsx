@@ -27,7 +27,7 @@ export default class Editor extends React.Component<Props, States> {
       inReplyTo = null;
     }
     
-    (this.props.actions as any)._updateStatus(
+    this.props.actions.updateStatus(
       this.props.stores.source_id,
       status,
       inReplyTo
@@ -39,6 +39,7 @@ export default class Editor extends React.Component<Props, States> {
     this._inReplyTo.value = '';
   }
   render() {
+    console.log('Editor#render');
     return (
       <form id='tweetForm' onSubmit={this._onSubmit.bind(this)}>
         <textarea name='tweet' ref={el => this._editor = el} id='tweetText'></textarea>

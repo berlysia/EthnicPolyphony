@@ -82,6 +82,10 @@ abstract class StoreGroup extends EventEmitter {
     return this.removeListener.bind(this, STORE_GROUPS_CHANGE, onChangeHandler);
   }
   
+  purge() {
+    this.removeAllListeners(STORE_GROUPS_CHANGE);
+  }
+  
   dispatch(action: Action) {
     this.emit(DISPATCH_BEFORE);
     for(let store of this.stores) {

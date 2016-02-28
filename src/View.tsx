@@ -18,7 +18,7 @@ export default class View extends React.Component<Props, States> {
   remover: Function;
 
   componentDidMount() {
-    this.remover = (this.props.store as any)._onChange(() => {
+    this.remover = this.props.store.onChange(() => {
       console.log('View#_onChange');
       this.forceUpdate();
     });
@@ -29,6 +29,7 @@ export default class View extends React.Component<Props, States> {
   }
   
   render() {
+    console.log('View#render');
     const state = this.props.store.getState();
     return (
       <section id='app'>

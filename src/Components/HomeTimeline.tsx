@@ -28,7 +28,7 @@ export default class HomeTimeline extends React.Component<Props, States> {
   remover: Function;
 
   componentDidMount() {
-    this.remover = (this.props.store as any)._onChange(() => {
+    this.remover = this.props.store.onChange(() => {
       console.log('HomeTimeline#_onChange');
       this.forceUpdate();
     });
@@ -44,25 +44,26 @@ export default class HomeTimeline extends React.Component<Props, States> {
   _reload() {
     const recent = this.props.store.getState().tweets[0];
     if(!recent) {
-      (this.props.appActions as any)._fetchTweet({});
+      this.props.appActions.fetchTweet({});
     } else {
       const since_id = recent.id_str;
-      (this.props.appActions as any)._fetchTweet({since_id});
+      this.props.appActions.fetchTweet({since_id});
     }
   }
   
   _reloadAppend() {
     const tweets = this.props.store.getState().tweets;
     if(!tweets[0]){
-      return (this.props.appActions as any)._fetchTweet({});
+      return this.props.appActions.fetchTweet({});
     }
     const length = Object.keys(tweets).length;
     const max_id = decrementNumericString(tweets[length - 1].id_str);
     
-    (this.props.appActions as any)._fetchTweet({max_id}, true);
+    this.props.appActions.fetchTweet({max_id}, true);
   }
   
   render() {
+    console.log('HomeTimeline#render');
     const state = this.props.store.getState();
     const tweets: any[] = [];
     console.log('tweets keys:', Object.keys(state.tweets));

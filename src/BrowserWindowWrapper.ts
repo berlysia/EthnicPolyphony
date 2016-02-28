@@ -1,22 +1,25 @@
 import {BrowserWindow} from "electron";
-import * as mapIterator from 'map-iterator';
-// import StoreGroup from './Flux/StoreGroup';
-// import ActionEmitter from './Flux/ActionEmitter';
 import {Action} from './Flux/Action';
 
 export default class BrowserWindowWrapper {
   private _window: Electron.BrowserWindow;
-  // private storeGroups: Map<string, StoreGroup>;
-  // private removeListeners: Function[];
+  listeners: {[key: string]: Function[]};
  
   constructor(private url: string, private options: Electron.BrowserWindowOptions) {
     this._window = null;
-    // this.storeGroups = new Map();
-    // this.removeListeners = [];
+    this.listeners = {};
   }
   
   get window() {
     return this._window;
+  }
+  
+  on(channel: string, listener: Function) {
+    if(this._window) {
+      this._window.on(channel, listener);
+    }
+    this.listeners[channel] = this.listeners[channel] || [];
+    this.listeners[channel].push(listener);
   }
 
   createWindow(url?: string) {
@@ -30,13 +33,17 @@ export default class BrowserWindowWrapper {
     
     // create window
     this._window = new BrowserWindow(this.options);
-    // this.subscribe();
+    
+    Object.keys(this.listeners).forEach(key => {
+      this.listeners[key].forEach(fn => {
+        this._window.on(key, fn);
+      })
+    });
 
     this._window.loadURL(url);
     this._window.show();
 
     this._window.on('closed', () => {
-      // this.removeListener();
       this._window = null;
     });
   }

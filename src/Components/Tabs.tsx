@@ -5,8 +5,6 @@ import {remote} from 'electron';
 import ActionCreator from '../AppContext/ActionCreator';
 import {ViewOption, ViewType} from '../AppContext/ActionCreator';
 
-const IDSNmap_get = remote.require('../dist/TwitterClient').IDSNmap_get;
-
 interface Props {
   actions: ActionCreator;
   tabs: ViewOption[];
@@ -15,6 +13,9 @@ interface Props {
 type States = {};
 
 export function generateDisplayName(option: ViewOption) {
+  console.log('generateDisplayName');
+  
+  const IDSNmap_get = remote.require('../dist/TwitterClient').IDSNmap_get;
   switch(option.type) {
     case ViewType.HomeTimeline: {
       return `@${IDSNmap_get(option.source_id)}/Home`;
@@ -48,6 +49,7 @@ export default class Tabs extends React.Component<Props, States> {
   }
   
   render() {
+    console.log('Tabs#render', this.props.tabs);
     return (
       <ul id='tabs'>
         {this.props.tabs.map(tab => {

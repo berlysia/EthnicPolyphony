@@ -81,7 +81,7 @@ export default class ActionCreator extends _ActionCreator {
         }
       })
       .then(tabs => {
-        tabs.reverse().map(this.createTab.bind(this));
+        tabs.map(this.createTab.bind(this));
         this.selectTab(tabs[0]);
       });
   }

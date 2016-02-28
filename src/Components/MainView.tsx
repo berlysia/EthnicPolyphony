@@ -18,6 +18,7 @@ type States = {};
 
 export default class MainView extends React.Component<Props, States> {
   render() {
+    console.log('MainView#render');
     let view: any = null;
     const top = this.props.stores;
     

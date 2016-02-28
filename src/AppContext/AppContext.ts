@@ -28,12 +28,4 @@ class AppContext extends StoreGroup {
   }
 }
 
-Object.defineProperty(AppContext.prototype, 'getState', {enumerable: true});
-Object.defineProperty(AppContext.prototype, '_onChange', {
-  enumerable: true,
-  value: function(listener: Function) {
-    return this.onChange(listener);
-  }
-});
-
 export default AppContext;

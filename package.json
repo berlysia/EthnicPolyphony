@@ -12,15 +12,11 @@
   },
   "keywords": [],
   "author": "berlysia",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "babel-polyfill": "^6.5.0",
-    "config": "^1.19.0",
     "eventemitter2": "^0.4.14",
-    "flumpt": "^0.1.4",
     "map-iterator": "^1.1.0",
     "node-twitter-api": "^1.7.0",
-    "object-assign": "^4.0.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-virtualized": "^4.10.0",
@@ -29,11 +25,6 @@
     "twitter": "^1.2.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.4.5",
-    "babel-preset-es2015-node4": "^2.0.3",
-    "babel-preset-react": "^6.3.13",
-    "babelify": "^7.2.0",
-    "browserify": "^13.0.0",
-    "electron-prebuilt": "^0.36.7"
+    "electron-prebuilt": "^0.36.9"
   }
 }

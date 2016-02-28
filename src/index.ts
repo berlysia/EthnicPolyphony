@@ -12,6 +12,11 @@ const mainWindow = new BrowserWindowWrapper(mainPageURL, {
   show: false,
 });
 
+mainWindow.on('closed', () => {
+  store.purge();
+  store.getState().top.store.purge();
+})
+
 
 app.on('ready', ()=>{
   Authentication.authorized()

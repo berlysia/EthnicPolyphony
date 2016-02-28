@@ -6,6 +6,7 @@ const byID = new Map<string, TwitterClient>();
 const IDSNmap = new Map<string, string>();
 
 export function IDSNmap_get(key: string) {
+  console.log('IDSNmap_get');
   return IDSNmap.get(key);
 } 
 

@@ -6,6 +6,7 @@ type State = {};
 
 export default class Tweet extends React.Component<Props, State> {
   render() {
+    console.log('Tweet#render');
     return (
       <div className='tweet'>
         <section className='tweet__author'>@{this.props.user.screen_name} / {this.props.user.name}</section>
