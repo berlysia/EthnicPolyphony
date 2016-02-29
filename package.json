@@ -1,7 +1,7 @@
 {
   "name": "ethnic-polyphony",
   "version": "0.0.1",
-  "description": "",
+  "description": "Ethnic Polyphony ====",
   "main": "dist/index.js",
   "scripts": {
     "start": "electron dist/index.js",
@@ -29,5 +29,13 @@
   },
   "devDependencies": {
     "electron-prebuilt": "^0.36.9"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berlysia/EthnicPolyphony.git"
+  },
+  "bugs": {
+    "url": "https://github.com/berlysia/EthnicPolyphony/issues"
+  },
+  "homepage": "https://github.com/berlysia/EthnicPolyphony#readme"
 }
