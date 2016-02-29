@@ -42,6 +42,9 @@ everything are in `resources`
 - add more types of view(user, list, search, etc...)
 - virtual scroll
 
+## structure
+
+![structure](https://raw.github.com/wiki/EthnicPolyphony/image.png)
 
 ## License
 
