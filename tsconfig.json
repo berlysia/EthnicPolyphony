@@ -23,7 +23,6 @@
         "src/Authentication.ts",
         "src/BrowserWindowWrapper.ts",
         "src/Constants.ts",
-        "src/Driver.ts",
         "src/EventEmitter.ts",
         "src/Flux/Action.ts",
         "src/Flux/ActionCreator.ts",
