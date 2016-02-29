@@ -91,9 +91,9 @@ export function authenticate() {
                     console.error('error on getRequestToken', err);
                     return;
                 }
-                console.log(`requestToken: ${requestToken}, requestTokenSecret: ${requestTokenSecret}`)
+                // console.log(`requestToken: ${requestToken}, requestTokenSecret: ${requestTokenSecret}`)
                 const authUrl = auther.getAuthUrl(requestToken);
-                console.log(`authUrl: ${authUrl}`);
+                // console.log(`authUrl: ${authUrl}`);
                 let authWindow = new BrowserWindow({
                     width: 800,
                     height: 600,
@@ -123,7 +123,6 @@ export function authenticate() {
                                 token['id'] = data['id_str'];
                                 token['screenName'] = data['screen_name'];
 
-                                console.log('done!!');
                                 resolve(token); // authentication is done!
 
                                 if (authWindow) {
@@ -138,7 +137,7 @@ export function authenticate() {
                     } else {
                         event.preventDefault();
 
-                        console.log(`else`, url);
+                        console.log(`authenticate else clause`, url);
                         resolve(authenticate());
                         authWindow.close();
                         return;

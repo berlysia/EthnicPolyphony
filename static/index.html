@@ -2,6 +2,16 @@
 <html>
 	<head>
 		<meta charset='utf-8'>
+    <link rel="stylesheet" href="../node_modules/react-virtualized/styles.css" />
+    <style>
+      html, body {
+        height: 100vh;
+        overflow: hidden;
+      }
+      #mainView {
+        height: 100%;
+      }
+    </style>
 	</head>
 	<body>
     <section id='root'>
@@ -31,7 +41,7 @@
       const render = require('react-dom').render;
       const View = require('../dist/View').default;
       var instances = remote.require('../dist/app');
-      console.log(instances)
+      // console.log(instances)
       render(React.createElement(View, instances), document.querySelector('#root'));
     </script>
 	</body>

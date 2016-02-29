@@ -29,7 +29,6 @@ export default class HomeTimeline extends React.Component<Props, States> {
 
     componentDidMount() {
         this.remover = this.props.store.onChange(() => {
-            console.log('HomeTimeline#_onChange');
             this.forceUpdate();
         });
     }

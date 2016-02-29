@@ -54,7 +54,7 @@ export default class ActionCreator extends _ActionCreator {
     }
 
     fetchHomeTimeline(id: string, params: any, append?: boolean) {
-        console.log(`fetchHomeTimeline: id:${id}, params:${JSON.stringify(params)}, append: ${append}`)
+        // console.log(`fetchHomeTimeline: id:${id}, params:${JSON.stringify(params)}, append: ${append}`)
         TwitterClient.byID(id).homeTimeline(params)
             .then(tweets => {
                 this.dispatcher.dispatch({

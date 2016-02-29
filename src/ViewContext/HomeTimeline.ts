@@ -30,16 +30,6 @@ export default class HomeTimeline extends ViewContext {
         }
     }
 
-    emitChange() {
-        console.log('HomeTimelineSG#emitChange');
-        return super.emitChange();
-    }
-
-    dispatch(action: any) {
-        console.log('HomeTimelineSG#dispatch');
-        return super.dispatch(action);
-    }
-
     // NOTE these methods are banned by TypeScript Compile  
     // getTweets() {
     //   return this.stores[1].tweets;

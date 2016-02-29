@@ -13,8 +13,6 @@ interface Props {
 type States = {};
 
 export function generateDisplayName(option: ViewOption) {
-    console.log('generateDisplayName');
-
     const IDSNmap_get = remote.require('../dist/TwitterClient').IDSNmap_get;
     switch (option.type) {
         case ViewType.HomeTimeline: {
@@ -49,7 +47,7 @@ export default class Tabs extends React.Component<Props, States> {
     }
 
     render() {
-        console.log('Tabs#render', this.props.tabs);
+        // console.log('Tabs#render', this.props.tabs);
         return (
             <ul id='tabs'>
                 {this.props.tabs.map(tab => {

@@ -10,7 +10,7 @@ export default class ActionEmitter extends EventEmitter {
     }
 
     dispatch(action: Action) {
-        console.log('dispatch', action.type);
+        // console.log('dispatch', action.type);
         this.emit(ACTION_KEY, action);
     }
 }
