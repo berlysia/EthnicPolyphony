@@ -186,6 +186,7 @@ export default class ViewManager extends ReduceStore {
                         item = temporaryContext.get(key);
                     } else {
                         item = generateStackItem(option, true);
+                        temporaryContext.set(key, item);
                     }
                 }
 
