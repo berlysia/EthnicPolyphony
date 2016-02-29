@@ -25,6 +25,7 @@ everything are in `resources`
 - when new Tweet added to timeline
 - Tweets are scrambled (depend on timing to invoke 'connect' and 'reload')
 - Tweets flow down when Tweet prepended  
+- memory leak because Tweet cache is unlimited 
 
 
 ## future works
