@@ -44,7 +44,7 @@ everything are in `resources`
 
 ## structure
 
-![structure](https://raw.github.com/wiki/EthnicPolyphony/image.png)
+![structure](https://raw.githubusercontent.com/berlysia/EthnicPolyphony/master/image.png)
 
 ## License
 
