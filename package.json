@@ -1,8 +1,8 @@
 {
-  "name": "twitterclient-electron",
+  "name": "ethnic-polyphony",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/browser.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "electron dist/index.js",
     "build": "tsc -p .",
