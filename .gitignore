@@ -1,4 +1,4 @@
-resources/credentials.json.*
+resources/credentials.json.keep
 resources/accounts.json
 resources/view.json
 dist/**/*.js
