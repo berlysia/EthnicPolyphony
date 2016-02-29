@@ -8,8 +8,9 @@ Twitter Client built with Electron & React & TypeScript. WIP.
 put your app credentials into `resources/credentials.json`.
 
 ```
-$ npm i -g typescript  # if absent (preferred 1.8 >=)
+$ npm install -g typescript typings  # if absent (preferred 1.8 >=)
 $ npm install
+$ typings install
 $ npm run build
 $ npm start
 ```
