@@ -26,7 +26,7 @@ everything are in `resources`
 - [ ] Tweets flow down when Tweet prepended  
 - [x] memory leak because Tweet cache is unlimited
 - [ ] break `resources/view.json` file sometimes
-
+- [x] cannot edit tweet when renderer hardly works
 
 ## future works
 
@@ -35,14 +35,14 @@ everything are in `resources`
 - [x] show images
 - [ ] favorite
 - [ ] put anchors
-- [ ] attach some styles
-
+- [x] attach some styles
+- [ ] ~~omit React(performance problem)~~
 
 ### low priority
 
 - [ ] attach some **good** styles
 - [ ] add more types of view(user, list, search, etc...)
-- [ ] virtual scroll
+- [ ] ~~virtual scroll~~
 
 ## structure
 

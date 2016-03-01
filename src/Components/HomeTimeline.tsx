@@ -27,12 +27,19 @@ function decrementNumericString(num: string): string {
 
 export default class HomeTimeline extends React.Component<Props, States> {
     remover: Function;
+    removerOnUnload: Function;
 
     _listenChange() {
-        console.log('HomeTimeline#listenChange');
         this.remover = this.props.store.onChange(() => {
             this.forceUpdate();
         });
+
+        const removerOnUnload = () => {
+            this._unlistenChange();
+        };
+        window.addEventListener('beforeunload', removerOnUnload);
+        this.removerOnUnload = window.removeEventListener.bind(window, 'beforeunload', removerOnUnload);
+
         if (!this.props.store.getState().tweets[0]) {
             this._reload();
         }
@@ -40,8 +47,8 @@ export default class HomeTimeline extends React.Component<Props, States> {
     }
 
     _unlistenChange() {
-        console.log('HomeTimeline#unlistenChange');
         this.remover();
+        this.removerOnUnload();
     }
 
     componentDidMount() {

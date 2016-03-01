@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+    <title>Ethnic Polyphony - editor</title>
+    <link rel="stylesheet" href="../node_modules/react-virtualized/styles.css" />
+    <style>
+      html, body, #root {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+      #tweetForm {
+        height: 100%;
+        width: 100%;
+      }
+      #tweetTextArea {
+        float: left;
+        display: block;
+        height: 100%;
+        width: 80%;
+        box-sizing: border-box;
+      }
+      #tweetSubmit {
+        float: left;
+        display: block;
+        height: 100%;
+        width: 20%;
+        border: 0 none;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+	</head>
+	<body>
+    <section id='root'></section>
+    
+    <script>
+      'use strict';
+      const remote = require('electron').remote
+      const React = require('react');
+      const render = require('react-dom').render;
+      const Editor = require('../dist/Components/Editor').default;
+      var instances = remote.require('../dist/app');
+      // console.log(instances)
+      render(React.createElement(Editor, instances), document.querySelector('#root'));
+    </script>
+	</body>
+</html>

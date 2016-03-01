@@ -26,6 +26,7 @@ export interface ViewContextStackItem extends ViewOption {
 }
 
 interface State {
+    current: ViewOption;
     tabs: ViewOption[];
     stack: ViewContextStackItem[];
 }
@@ -85,6 +86,10 @@ export default class ViewManager extends ReduceStore {
         return this.state.stack[this.state.stack.length - 1];
     }
 
+    getCurrentTab(): ViewOption {
+        return this.state.current;
+    }
+
     getStackTopStore(): ViewContextStoreGroup {
         const tmp = this.getStackTop();
         if (!tmp) {
@@ -136,6 +141,7 @@ export default class ViewManager extends ReduceStore {
                 const nextState = {
                     tabs: prevState.tabs,
                     stack: [item],
+                    current: item
                 };
 
                 return nextState;
@@ -155,6 +161,7 @@ export default class ViewManager extends ReduceStore {
                 const nextState = {
                     tabs: [...prevState.tabs, option],
                     stack: prevState.stack,
+                    current: prevState.current
                 };
 
                 return nextState;
@@ -165,12 +172,25 @@ export default class ViewManager extends ReduceStore {
                 const option: ViewOption = action.value.option;
                 const key: string = generateKey(option);
 
-                const nextState = {
-                    tabs: prevState.tabs.filter(x => x.key !== key),
-                    stack: prevState.stack,
-                }
+                const tabs = prevState.tabs.filter(x => x.key !== key);
 
-                return nextState;
+                if (key === prevState.current.key) {
+                    const nextState = {
+                        tabs,
+                        stack: [permanentContext.get(tabs[0].key)],
+                        current: tabs[0]
+                    };
+
+                    return nextState;
+                } else {
+                    const nextState = {
+                        tabs,
+                        stack: prevState.stack,
+                        current: prevState.current,
+                    };
+
+                    return nextState;
+                }
             }
 
             case keys.pushStack: {

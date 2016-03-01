@@ -8,7 +8,7 @@ class AppContext extends StoreGroup {
 
     getStores() {
         const vm = new ViewManager();
-        vm.setState({ tabs: [], stack: [] })
+        vm.setState({ tabs: [], stack: [], current: null })
         return [vm];
     }
 
@@ -16,6 +16,7 @@ class AppContext extends StoreGroup {
         return {
             tabs: this.stores[0].getTabs(),
             top: this.stores[0].getStackTop(),
+            current: this.stores[0].getCurrentTab(),
         };
     }
 
@@ -25,6 +26,10 @@ class AppContext extends StoreGroup {
 
     getTop() {
         return this.stores[0].getStackTop();
+    }
+
+    getCurrentTab() {
+        return this.stores[0].getCurrentTab();
     }
 }
 

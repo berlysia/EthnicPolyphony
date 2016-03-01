@@ -2,13 +2,39 @@
 <html>
 	<head>
 		<meta charset='utf-8'>
+    <title>Ethnic Polyphony - main</title>
     <link rel="stylesheet" href="../node_modules/react-virtualized/styles.css" />
     <style>
-      html, body {
+      html, body, #root {
+        margin: 0;
+        padding: 0;
         height: 100vh;
       }
       #mainView {
+        margin-left: 160px;
+      }
+      #tabs {
+        position: fixed;
+        width: 160px;
         height: 100%;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+      #tabs li {
+        list-style-type: none;
+        padding: 0 10px 0 10px;
+        margin: 0;
+        height: 2em;
+        line-height: 2em;
+        text-overflow: ellipsis;
+        width: 140px;
+        color: #222;
+        background: transparent;
+        border-bottom: 1px solid #999;
+      }
+      #tabs li.selected {
+        background: rgba(0, 0, 255, 0.2);
       }
       .tweet {
         border-bottom: 1px solid #999;
@@ -16,25 +42,7 @@
     </style>
 	</head>
 	<body>
-    <section id='root'>
-      <!--<View id='app'>
-        <Tabs id='tabs'>
-          <ul>
-            <li id='selected'>@berlysia/Home</li>
-            <li>@berlysia/User</li>
-            <li>new tab...</li>
-          </ul>
-        </Tabs>
-        <Editor>
-          <form id='tweetForm'>
-            <textarea name='tweet' id='tweetText'>text area</textarea>
-          </form>
-        </Editor>
-        <MainView id='mainview'>
-           misc... 
-        </MainView>
-      </View>-->
-    </section>
+    <section id='root'></section>
     
     <script>
       'use strict';
@@ -43,7 +51,7 @@
       const render = require('react-dom').render;
       const View = require('../dist/Components/View').default;
       var instances = remote.require('../dist/app');
-      // console.log(instances)
+
       render(React.createElement(View, instances), document.querySelector('#root'));
     </script>
 	</body>

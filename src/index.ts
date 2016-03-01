@@ -7,16 +7,14 @@ import TwitterClient from './TwitterClient';
 // initialize electron
 const mainPageURL = `file://${__dirname}/../static/index.html`;
 const mainWindow = new BrowserWindowWrapper(mainPageURL, {
-    width: 1200,
+    width: 600,
     height: 900,
-    show: false,
 });
-
-mainWindow.on('closed', () => {
-    store.purge();
-    store.getState().top.store.purge();
-})
-
+const editorPageURL = `file://${__dirname}/../static/editor.html`;
+const editorWindow = new BrowserWindowWrapper(editorPageURL, {
+    width: 400,
+    height: 120,
+});
 
 app.on('ready', () => {
     Authentication.authorized()
@@ -27,7 +25,10 @@ app.on('ready', () => {
             accs.map((acc: any) => new TwitterClient(acc, cred));
         })
         .then(() => actions.initialize())
-        .then(() => mainWindow.createWindow())
+        .then(() => {
+            mainWindow.createWindow();
+            editorWindow.createWindow();
+        })
         .catch(e => {
             console.error(`caught on initialization: ${e}`);
             app.quit();
@@ -45,5 +46,8 @@ app.on('window-all-closed', function() {
 app.on('activate', function() {
     if (mainWindow.window == null) {
         mainWindow.createWindow();
+    }
+    if (editorWindow.window == null) {
+        editorWindow.createWindow();
     }
 });
