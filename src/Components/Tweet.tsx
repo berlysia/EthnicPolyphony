@@ -21,10 +21,12 @@ export default class Tweet extends React.Component<Props, State> {
         // console.log('Tweet#render');
         return (
             <div className='tweet'>
+                <img className='tweet__profile_image' src={this.props.user.profile_image_url} width='48px' height='48px'/>
                 <section className='tweet__author'> @{this.props.user.screen_name} / {this.props.user.name}</section>
                 <section className='tweet__text' dangerouslySetInnerHTML={this.generateText() }></section>
                 <section className='tweet__created_at'>{this.props.created_at}</section>
                 <section className='tweet__id'>{this.props.id_str}</section>
+                <section className='tweet__source' dangerouslySetInnerHTML={{ __html: this.props.source }}></section>
             </div>
         );
     }

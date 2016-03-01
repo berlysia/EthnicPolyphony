@@ -54,6 +54,6 @@
         "src/Components/MainView.tsx",
         "src/Components/Tabs.tsx",
         "src/Components/Tweet.tsx",
-        "src/View.tsx"
+        "src/Components/View.tsx"
     ]
 }

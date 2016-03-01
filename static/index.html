@@ -10,11 +10,14 @@
       #mainView {
         height: 100%;
       }
+      .tweet {
+        border-bottom: 1px solid #999;
+      }
     </style>
 	</head>
 	<body>
     <section id='root'>
-      <View id='app'>
+      <!--<View id='app'>
         <Tabs id='tabs'>
           <ul>
             <li id='selected'>@berlysia/Home</li>
@@ -28,9 +31,9 @@
           </form>
         </Editor>
         <MainView id='mainview'>
-          <!-- misc... -->
+           misc... 
         </MainView>
-      </View>
+      </View>-->
     </section>
     
     <script>
@@ -38,7 +41,7 @@
       const remote = require('electron').remote
       const React = require('react');
       const render = require('react-dom').render;
-      const View = require('../dist/View').default;
+      const View = require('../dist/Components/View').default;
       var instances = remote.require('../dist/app');
       // console.log(instances)
       render(React.createElement(View, instances), document.querySelector('#root'));

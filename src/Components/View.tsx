@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import ActionCreator from './AppContext/ActionCreator';
-import AppContext from './AppContext/AppContext';
+import ActionCreator from '../AppContext/ActionCreator';
+import AppContext from '../AppContext/AppContext';
 
-import Tabs from './Components/Tabs';
-import Editor from './Components/Editor';
-import MainView from './Components/MainView';
+import Tabs from './Tabs';
+import Editor from './Editor';
+import MainView from './MainView';
 
 interface Props {
     actions: ActionCreator;
