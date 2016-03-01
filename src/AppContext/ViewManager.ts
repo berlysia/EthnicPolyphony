@@ -213,6 +213,7 @@ export default class ViewManager extends ReduceStore {
                 const nextState = {
                     tabs: prevState.tabs,
                     stack: [...prevState.stack, item],
+                    current: prevState.current,
                 };
 
                 return nextState;
