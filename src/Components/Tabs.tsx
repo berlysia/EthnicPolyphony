@@ -35,7 +35,7 @@ export function generateDisplayName(option: ViewOption) {
 
 export default class Tabs extends React.Component<Props, States> {
     _selectTab(option: any) {
-        (this.props.actions as any)._selectTab(option);
+        this.props.actions.selectTab(option);
     }
 
     _createTab() {
@@ -43,7 +43,7 @@ export default class Tabs extends React.Component<Props, States> {
     }
 
     _addAccount() {
-        (this.props.actions as any)._addAccount();
+        this.props.actions.addAccount();
     }
 
     render() {

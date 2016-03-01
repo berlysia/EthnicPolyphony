@@ -26,6 +26,3 @@ export default class SingleTweet extends ViewContext {
         }
     }
 }
-
-// for Electron's remote module's bug
-Object.defineProperty(SingleTweet.prototype, 'getState', { enumerable: true });

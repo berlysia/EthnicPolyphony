@@ -8,7 +8,6 @@ type State = {};
 export default class Tweet extends React.Component<Props, State> {
     generatedDangerouslyText: { __html: string };
 
-
     generateText(): { __html: string } {
         if (this.generatedDangerouslyText) {
             return this.generatedDangerouslyText;

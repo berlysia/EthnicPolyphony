@@ -26,6 +26,3 @@ export default class ListTimeline extends ViewContext {
         }
     }
 }
-
-// for Electron's remote module's bug
-Object.defineProperty(ListTimeline.prototype, 'getState', { enumerable: true });

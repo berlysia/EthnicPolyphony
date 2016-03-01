@@ -100,11 +100,3 @@ export default class ActionCreator extends _ActionCreator {
             });
     }
 }
-
-
-Object.defineProperty(ActionCreator.prototype, 'fetchUserTimeline', { enumerable: true });
-Object.defineProperty(ActionCreator.prototype, 'fetchHomeTimeline', { enumerable: true });
-Object.defineProperty(ActionCreator.prototype, 'fetchListTimeline', { enumerable: true });
-Object.defineProperty(ActionCreator.prototype, 'fetchSearchTimeline', { enumerable: true });
-Object.defineProperty(ActionCreator.prototype, 'fetchSingleTweet', { enumerable: true });
-Object.defineProperty(ActionCreator.prototype, 'connectUserStream', { enumerable: true });

@@ -26,6 +26,3 @@ export default class SearchTimeline extends ViewContext {
         }
     }
 }
-
-// for Electron's remote module's bug
-Object.defineProperty(SearchTimeline.prototype, 'getState', { enumerable: true });

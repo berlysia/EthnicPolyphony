@@ -26,6 +26,3 @@ export default class UserTimeline extends ViewContext {
         }
     }
 }
-
-// for Electron's remote module's bug
-Object.defineProperty(UserTimeline.prototype, 'getState', { enumerable: true });

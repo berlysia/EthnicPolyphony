@@ -29,33 +29,4 @@ export default class HomeTimeline extends ViewContext {
             tweets: this.stores[1].getState(),
         }
     }
-
-    // NOTE these methods are banned by TypeScript Compile  
-    // getTweets() {
-    //   return this.stores[1].tweets;
-    // }  
-    // getKey() {
-    //   return this.stores[0].y;
-    // }  
-    // getType() {
-    //   return this.store0].type;
-    // }  
-    // getSourceID() {
-    //   return this.stor[0].source_id;
-    // }  
-    // getTargetID() {
-    //   return thistores[0].target_id;
-    // }  
-    // getQuery() {
-    //   return this.stores[0].query;
-    // }
 }
-
-// for Electron's remote module's bug
-Object.defineProperty(HomeTimeline.prototype, 'getState', { enumerable: true });
-Object.defineProperty(HomeTimeline.prototype, '_onChange', {
-    enumerable: true,
-    value: function(listener: Function) {
-        return this.onChange(listener);
-    }
-});
