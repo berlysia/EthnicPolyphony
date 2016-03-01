@@ -22,7 +22,6 @@ everything are in `resources`
 
 ## known issue
 
-- [ ] when new Tweet added to timeline
 - [x] Tweets are scrambled (depend on timing to invoke 'connect' and 'reload')
 - [ ] Tweets flow down when Tweet prepended  
 - [x] memory leak because Tweet cache is unlimited
