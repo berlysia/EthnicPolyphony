@@ -17,6 +17,14 @@ interface Props {
 type States = {};
 
 export default class MainView extends React.Component<Props, States> {
+    renderWrapper(view: JSX.Element) {
+        return (
+            <section id='mainView'>
+                {view}
+            </section>
+        );
+    }
+
     render() {
         // console.log('MainView#render');
         let view: any = null;
@@ -24,13 +32,15 @@ export default class MainView extends React.Component<Props, States> {
 
         switch (top.type) {
             case ViewType.HomeTimeline: {
-                view = <HomeTimeline
-                    source_id={top.source_id}
-                    store={top.store}
-                    actions={top.actions}
-                    appActions={this.props.actions}
-                    />;
-            } break;
+                return this.renderWrapper(
+                    <HomeTimeline
+                        source_id={top.source_id}
+                        store={top.store}
+                        actions={top.actions}
+                        appActions={this.props.actions}
+                        />
+                );
+            };
             // case ViewType.UserTimeline: {
             //   view = <UserTimeline
             //     source_id={top.source_id}
@@ -59,11 +69,5 @@ export default class MainView extends React.Component<Props, States> {
             //   />;
             // } break;
         }
-
-        return (
-            <section id='mainView'>
-                {view}
-            </section>
-        );
     }
 }

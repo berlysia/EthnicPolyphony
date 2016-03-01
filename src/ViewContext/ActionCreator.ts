@@ -8,6 +8,7 @@ export const keys = {
     // fetchSearchTimeline: 'fetchSearchTimeline',
     // fetchSingleTweet: 'fetchSingleTweet',
     prepend: 'prepend',
+    prependSingle: 'prependSingle',
     append: 'append',
     error: 'error',
 };
@@ -17,8 +18,8 @@ export default class ActionCreator extends _ActionCreator {
     connectUserStream(id: string, params: any) {
         TwitterClient.byID(id).userStream((tweet: any) => {
             this.dispatcher.dispatch({
-                type: keys.prepend,
-                value: [tweet],
+                type: keys.prependSingle,
+                value: tweet,
             });
         });
     }

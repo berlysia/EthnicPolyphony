@@ -30,3 +30,7 @@ export interface Tweet {
     truncated: boolean;
     user: Users;
 };
+
+export function greaterByID(a: Tweet, b: Tweet) {
+    return a.id_str > b.id_str;
+}

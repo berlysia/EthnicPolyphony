@@ -20,6 +20,10 @@ export interface TwitterParamsForFetch {
     include_rts?: boolean;
 }
 
+export const defaultFetchParams: TwitterParamsForFetch = {
+    count: 50,
+}
+
 
 export default class TwitterClient {
     private client: Twitter.Twitter;
@@ -63,15 +67,15 @@ export default class TwitterClient {
     }
 
     userTimeline(screen_name: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ screen_name }, params || {}), METHOD.GET, 'statuses/user_timeline');
+        return this.baseFunc(Object.assign({ screen_name }, defaultFetchParams, params || {}), METHOD.GET, 'statuses/user_timeline');
     }
 
     userTimelineByID(user_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ user_id }, params || {}), METHOD.GET, 'statuses/user_timeline');
+        return this.baseFunc(Object.assign({ user_id }, defaultFetchParams, params || {}), METHOD.GET, 'statuses/user_timeline');
     }
 
     homeTimeline(params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, params || {}), METHOD.GET, 'statuses/home_timeline');
+        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.GET, 'statuses/home_timeline');
     }
 
     updateStatus(status: string, in_reply_to_status_id: string, params?: TwitterParamsForFetch) {
@@ -79,39 +83,39 @@ export default class TwitterClient {
         return this.baseFunc(Object.assign({
             status,
             in_reply_to_status_id_str: in_reply_to_status_id
-        }, params || {}), METHOD.POST, 'statuses/update');
+        }, defaultFetchParams, params || {}), METHOD.POST, 'statuses/update');
     }
 
     destroyStatus(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, params || {}), METHOD.POST, `statuses/destroy/${status_id}`);
+        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.POST, `statuses/destroy/${status_id}`);
     }
 
     retweet(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, params || {}), METHOD.POST, `statuses/retweet/${status_id}`);
+        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.POST, `statuses/retweet/${status_id}`);
     }
 
     unretweet(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, params || {}), METHOD.POST, `statuses/unretweet/${status_id}`);
+        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.POST, `statuses/unretweet/${status_id}`);
     }
 
     favorite(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ id: status_id }, params || {}), METHOD.POST, 'favorites/create');
+        return this.baseFunc(Object.assign({ id: status_id }, defaultFetchParams, params || {}), METHOD.POST, 'favorites/create');
     }
 
     unfavorite(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ id: status_id }, params || {}), METHOD.POST, 'favorites/destroy');
+        return this.baseFunc(Object.assign({ id: status_id }, defaultFetchParams, params || {}), METHOD.POST, 'favorites/destroy');
     }
 
     listsList(params?: TwitterParamsForFetch) {
-        return this.baseFunc(params || {}, METHOD.GET, 'lists/list');
+        return this.baseFunc(Object.assign({}, params || {}), METHOD.GET, 'lists/list');
     }
 
     listsStatuses(list_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ list_id }, params || {}), METHOD.GET, 'lists/statuses');
+        return this.baseFunc(Object.assign({ list_id }, defaultFetchParams, params || {}), METHOD.GET, 'lists/statuses');
     }
 
     searchTweets(q: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ q }, params || {}), METHOD.GET, 'search/tweets');
+        return this.baseFunc(Object.assign({ q }, defaultFetchParams, params || {}), METHOD.GET, 'search/tweets');
     }
 
     userStream(callback: Function, params?: TwitterParamsForFetch) {

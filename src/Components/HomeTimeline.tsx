@@ -5,6 +5,7 @@ import ActionCreator from '../ViewContext/ActionCreator';
 import {default as HomeTimelineStoreGroup} from '../ViewContext/HomeTimeline';
 
 import Tweet from './Tweet';
+import {TWEETS_SHOW_MAX} from '../ViewContext/Tweets';
 
 interface Props {
     source_id: string;
@@ -27,13 +28,27 @@ function decrementNumericString(num: string): string {
 export default class HomeTimeline extends React.Component<Props, States> {
     remover: Function;
 
-    componentDidMount() {
+    _listenChange() {
+        console.log('HomeTimeline#listenChange');
         this.remover = this.props.store.onChange(() => {
             this.forceUpdate();
         });
+        if (!this.props.store.getState().tweets[0]) {
+            this._reload();
+        }
+        this._connect(); // if dups, rejected by client
+    }
+
+    _unlistenChange() {
+        console.log('HomeTimeline#unlistenChange');
+        this.remover();
+    }
+
+    componentDidMount() {
+        this._listenChange();
     }
     componentWillUnmount() {
-        this.remover();
+        this._unlistenChange();
     }
 
     _connect() {
@@ -62,11 +77,16 @@ export default class HomeTimeline extends React.Component<Props, States> {
     }
 
     render() {
+        if (this.remover) {
+            this._unlistenChange();
+            this._listenChange();
+        }
+
         // console.log('HomeTimeline#render');
         const state = this.props.store.getState();
         const tweets: any[] = [];
         // console.log('tweets keys:', Object.keys(state.tweets));
-        for (let i = 0, l = Object.keys(state.tweets).length; i < l; ++i) {
+        for (let i = 0, l = Math.min(Object.keys(state.tweets).length, TWEETS_SHOW_MAX); i < l; ++i) {
             tweets[i] = state.tweets[i];
         }
         return (
