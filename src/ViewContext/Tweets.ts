@@ -19,7 +19,7 @@ function calcPosition(tw: Tweet, tweets: Tweet[]): number {
     return (ub === lb) ? lb : -1;
 }
 
-export const TWEETS_SHOW_MAX = 40;
+export const TWEETS_SHOW_MAX = 200;
 export const TWEETS_CACHE_MAX = 200;
 
 export default class Tweets extends ReduceStore {

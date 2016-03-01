@@ -17,6 +17,11 @@ export default class Tweet extends React.Component<Props, State> {
         }
     }
 
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
+        return this.props.id_str !== nextProps.id_str
+            || this.props.favorited !== nextProps.favorited;
+    }
+
     render() {
         // console.log('Tweet#render');
         return (
