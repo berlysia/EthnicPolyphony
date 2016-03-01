@@ -62,10 +62,10 @@ export default class HomeTimeline extends React.Component<Props, States> {
     }
 
     render() {
-        console.log('HomeTimeline#render');
+        // console.log('HomeTimeline#render');
         const state = this.props.store.getState();
         const tweets: any[] = [];
-        console.log('tweets keys:', Object.keys(state.tweets));
+        // console.log('tweets keys:', Object.keys(state.tweets));
         for (let i = 0, l = Object.keys(state.tweets).length; i < l; ++i) {
             tweets[i] = state.tweets[i];
         }
