@@ -21,7 +21,12 @@ export default class JSONLoader {
                     if (err) {
                         return reject(err);
                     }
-                    resolve(JSON.parse(data));
+                    try {
+                        data = JSON.parse(data);
+                        resolve(data);
+                    } catch (e) {
+                        reject(e);
+                    }
                 });
             });
         });
