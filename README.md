@@ -22,28 +22,28 @@ everything are in `resources`
 
 ## known issue
 
-- when new Tweet added to timeline
-- Tweets are scrambled (depend on timing to invoke 'connect' and 'reload')
-- Tweets flow down when Tweet prepended  
-- memory leak because Tweet cache is unlimited
-- break `resources/view.json` file sometimes
+- [ ] when new Tweet added to timeline
+- [x] Tweets are scrambled (depend on timing to invoke 'connect' and 'reload')
+- [ ] Tweets flow down when Tweet prepended  
+- [x] memory leak because Tweet cache is unlimited
+- [ ] break `resources/view.json` file sometimes
 
 
 ## future works
 
 ### high priority
 
-- show images
-- favorite
-- put anchors
-- attach some styles
+- [x] show images
+- [ ] favorite
+- [ ] put anchors
+- [ ] attach some styles
 
 
 ### low priority
 
-- attach some **good** styles
-- add more types of view(user, list, search, etc...)
-- virtual scroll
+- [ ] attach some **good** styles
+- [ ] add more types of view(user, list, search, etc...)
+- [ ] virtual scroll
 
 ## structure
 

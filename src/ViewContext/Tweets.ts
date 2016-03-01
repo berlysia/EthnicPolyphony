@@ -14,6 +14,7 @@ function sortTweet(curr: Tweet, next: Tweet) {
 }
 
 function calcPosition(tw: Tweet, tweets: Tweet[]): number {
+    // tweets should be sorted.
     const ub = upper_bound(tw, tweets, greaterByID);
     const lb = lower_bound(tw, tweets, greaterByID);
     return (ub === lb) ? lb : -1;
