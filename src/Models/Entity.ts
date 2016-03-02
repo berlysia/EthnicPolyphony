@@ -14,38 +14,33 @@ function trimMediaSize(object: any): MediaSize {
 
 export interface Entity {
     hashtags: {
-        [index: number]: {
-            text: string;
-        }
-    }
+        text: string;
+        indices: [number, number];
+    }[];
     media: {
-        [index: number]: {
-            id_str: string;
-            type: string;
-            display_url: string;
-            expanded_url: string;
-            media_url: string;
-            sizes: {
-                thumb: MediaSize;
-                large: MediaSize;
-                medium: MediaSize;
-                small: MediaSize;
-            }
+        id_str: string;
+        type: string;
+        display_url: string;
+        expanded_url: string;
+        media_url: string;
+        sizes: {
+            thumb: MediaSize;
+            large: MediaSize;
+            medium: MediaSize;
+            small: MediaSize;
         }
-    }
+    }[];
     urls: {
-        [index: number]: {
-            display_url: string;
-            expanded_url: string;
-        }
-    };
+        display_url: string;
+        expanded_url: string;
+        indices: [number, number];
+    }[];
     user_mentions: {
-        [index: number]: {
-            id_str: string;
-            name: string;
-            screen_name: string;
-        }
-    }
+        id_str: string;
+        name: string;
+        screen_name: string;
+        indices: [number, number];
+    }[];
 }
 
 export function trimEntity(object: any): Entity {

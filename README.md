@@ -33,7 +33,7 @@ everything are in `resources`
 
 ### high priority
 
-- [x] show images
+- [x][x] show (icon) images (+ user media)
 - [ ] favorite
 - [ ] put anchors
 - [x] attach some styles
