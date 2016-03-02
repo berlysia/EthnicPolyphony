@@ -5,13 +5,7 @@ import {remote} from 'electron';
 import ActionCreator from '../AppContext/ActionCreator';
 import {ViewOption, ViewType} from '../AppContext/ActionCreator';
 
-interface Props {
-    actions: ActionCreator;
-    tabs: ViewOption[];
-    current: ViewOption;
-};
-
-type States = {};
+const debug = require('remote').require('debug')('Components:Tabs');
 
 export function generateDisplayName(option: ViewOption) {
     const IDSNmap_get = remote.require('../dist/TwitterClient').IDSNmap_get;
@@ -34,34 +28,60 @@ export function generateDisplayName(option: ViewOption) {
     }
 }
 
-export default class Tabs extends React.Component<Props, States> {
-    _selectTab(option: any) {
-        this.props.actions.selectTab(option);
+interface TabProps {
+    actions: ActionCreator;
+    tab: ViewOption;
+    currentKey: string;
+    key: string;
+}
+
+export class Tab extends React.Component<TabProps, {}> {
+    _selectTab() {
+        this.props.actions.selectTab(this.props.tab);
     }
+    bindedSelectTab = this._selectTab.bind(this);
+
+    render() {
+        return (
+            <li
+                className={(this.props.currentKey === this.props.tab.key) ? 'selected' : ''}
+                onClick={this.bindedSelectTab}
+                >{generateDisplayName(this.props.tab) }</li>
+        );
+    }
+}
+
+interface Props {
+    actions: ActionCreator;
+    tabs: ViewOption[];
+    current: ViewOption;
+};
+
+type States = {};
+
+export default class Tabs extends React.Component<Props, States> {
 
     _createTab() {
         console.warn('not implemented');
     }
+    bindedCreateTab = this._createTab.bind(this);
 
     _addAccount() {
+        debug('add account...');
         this.props.actions.addAccount();
     }
+    bindedAddAccount = this._addAccount.bind(this);
 
     render() {
-        // console.log('Tabs#render', this.props.tabs);
+        debug('Tabs#render', this.props.tabs);
+        // TODO cutting out tab element as ReactComponent (optimize for onClick) 
         return (
             <ul id='tabs'>
-                {this.props.tabs.map(tab => {
-                    return (
-                        <li
-                            key={tab.key}
-                            onClick={() => this._selectTab(tab) }
-                            className={(this.props.current.key === tab.key) ? 'selected' : ''}
-                            >{generateDisplayName(tab) }</li>
-                    );
-                }) }
-                <li onClick={this._createTab.bind(this) }>new Tab...</li>
-                <li onClick={this._addAccount.bind(this) }>new Account...</li>
+                {this.props.tabs.map(tab => (
+                    <Tab key={tab.key} tab={tab} currentKey={this.props.current.key} actions={this.props.actions} />
+                )) }
+                <li onClick={this.bindedCreateTab }>new Tab...</li>
+                <li onClick={this.bindedAddAccount }>new Account...</li>
             </ul>
         );
     }

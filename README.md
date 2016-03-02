@@ -28,7 +28,7 @@ everything are in `resources`
 - [ ] break `resources/view.json` file sometimes
 - [x] cannot edit tweet when renderer hardly works
 
-## future works
+## tasks
 
 ### high priority
 

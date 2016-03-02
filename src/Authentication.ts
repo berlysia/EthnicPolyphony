@@ -3,6 +3,8 @@ import JSONLoader from './JSONLoader';
 import {BrowserWindow} from "electron";
 import {account_storage, credential_storage} from './Constants';
 
+const debug = require('debug')('Authentication');
+
 export function authorized(): Promise<any> {
     return new Promise((resolve, reject) => {
         defaultAccount()
@@ -137,7 +139,7 @@ export function authenticate() {
                     } else {
                         event.preventDefault();
 
-                        console.log(`authenticate else clause`, url);
+                        debug(`authenticate else clause`, url);
                         resolve(authenticate());
                         authWindow.close();
                         return;

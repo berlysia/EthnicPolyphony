@@ -7,6 +7,8 @@ import Tabs from './Tabs';
 import Editor from './Editor';
 import MainView from './MainView';
 
+const debug = require('remote').require('debug')('Components:View');
+
 interface Props {
     actions: ActionCreator;
     store: AppContext;
@@ -16,7 +18,7 @@ type States = {};
 
 export default class View extends React.Component<Props, States> {
     remover: Function;
-    removerOnUnload: Function
+    removerOnUnload: Function;
 
     componentDidMount() {
         this.remover = this.props.store.onChange(() => {
@@ -33,6 +35,7 @@ export default class View extends React.Component<Props, States> {
     }
 
     render() {
+        debug('View#render');
         const state = this.props.store.getState();
         // <Editor actions={this.props.actions} store={this.props.store} />
         return (

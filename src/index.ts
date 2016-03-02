@@ -13,16 +13,16 @@ const mainWindow = new BrowserWindowWrapper(mainPageURL, {
 const editorPageURL = `file://${__dirname}/../static/editor.html`;
 const editorWindow = new BrowserWindowWrapper(editorPageURL, {
     width: 400,
-    height: 120,
+    height: 80,
 });
 
 app.on('ready', () => {
     Authentication.authorized()
         .then(() => Promise.all([Authentication.getCredentials(), Authentication.getAccounts()]))
         .then(data => {
-            const cred = data[0];
-            const accs = data[1];
-            accs.map((acc: any) => new TwitterClient(acc, cred));
+            const credentials = data[0];
+            const accounts = data[1];
+            accounts.map((account: any) => new TwitterClient(account, credentials));
         })
         .then(() => actions.initialize())
         .then(() => {

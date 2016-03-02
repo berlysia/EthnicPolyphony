@@ -9,6 +9,8 @@ import HomeTimeline from './HomeTimeline';
 // import ListTimeline from './ListTimeline';
 // import SearchTimeline from './SearchTimeline';
 
+const debug = require('remote').require('debug')('Components:MainView');
+
 interface Props {
     actions: ActionCreator;
     stores: ViewContextStackItem;
@@ -26,7 +28,7 @@ export default class MainView extends React.Component<Props, States> {
     }
 
     render() {
-        // console.log('MainView#render');
+        debug('MainView#render');
         let view: any = null;
         const top = this.props.stores;
 

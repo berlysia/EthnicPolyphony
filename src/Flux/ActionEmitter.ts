@@ -1,6 +1,8 @@
 import EventEmitter from '../EventEmitter';
 import {Action} from './Action';
 
+const debug = require('debug')('Flux:ActionEmitter');
+
 export const ACTION_KEY = ":PRIVATE:ACTION:KEY:";
 
 export default class ActionEmitter extends EventEmitter {
@@ -10,7 +12,7 @@ export default class ActionEmitter extends EventEmitter {
     }
 
     dispatch(action: Action) {
-        // console.log('dispatch', action.type);
+        debug('dispatch', action.type);
         this.emit(ACTION_KEY, action);
     }
 }

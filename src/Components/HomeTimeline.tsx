@@ -5,7 +5,10 @@ import ActionCreator from '../ViewContext/ActionCreator';
 import {default as HomeTimelineStoreGroup} from '../ViewContext/HomeTimeline';
 
 import Tweet from './Tweet';
+import TweetList from './TweetList';
 import {TWEETS_SHOW_MAX} from '../ViewContext/Tweets';
+
+const debug = require('remote').require('debug')('Components:HomeTimeline');
 
 interface Props {
     source_id: string;
@@ -28,17 +31,13 @@ function decrementNumericString(num: string): string {
 export default class HomeTimeline extends React.Component<Props, States> {
     remover: Function;
     removerOnUnload: Function;
+    bindedForceUpdate: Function = this.forceUpdate.bind(this);
 
     _listenChange() {
-        this.remover = this.props.store.onChange(() => {
-            this.forceUpdate();
-        });
+        this.remover = this.props.store.onChange(this.bindedForceUpdate);
 
-        const removerOnUnload = () => {
-            this._unlistenChange();
-        };
-        window.addEventListener('beforeunload', removerOnUnload);
-        this.removerOnUnload = window.removeEventListener.bind(window, 'beforeunload', removerOnUnload);
+        window.addEventListener('beforeunload', this.bindedUnlistenChange as any);
+        this.removerOnUnload = window.removeEventListener.bind(window, 'beforeunload', this.bindedUnlistenChange);
 
         if (!this.props.store.getState().tweets[0]) {
             this._reload();
@@ -50,10 +49,12 @@ export default class HomeTimeline extends React.Component<Props, States> {
         this.remover();
         this.removerOnUnload();
     }
+    bindedUnlistenChange: Function = this._unlistenChange.bind(this);
 
     componentDidMount() {
         this._listenChange();
     }
+
     componentWillUnmount() {
         this._unlistenChange();
     }
@@ -61,6 +62,7 @@ export default class HomeTimeline extends React.Component<Props, States> {
     _connect() {
         this.props.actions.connectUserStream(this.props.source_id, {});
     }
+    bindedConnect: Function = this._connect.bind(this);
 
     _reload() {
         const recent = this.props.store.getState().tweets[0];
@@ -71,6 +73,7 @@ export default class HomeTimeline extends React.Component<Props, States> {
             this.props.appActions.fetchTweet({ since_id });
         }
     }
+    bindedReload: Function = this._reload.bind(this);
 
     _reloadAppend() {
         const tweets = this.props.store.getState().tweets;
@@ -82,26 +85,21 @@ export default class HomeTimeline extends React.Component<Props, States> {
 
         this.props.appActions.fetchTweet({ max_id }, true);
     }
+    bindedReloadAppend: Function = this._reloadAppend.bind(this);
 
     render() {
+        debug('HomeTimeline#render');
         if (this.remover) {
             this._unlistenChange();
             this._listenChange();
         }
 
-        // console.log('HomeTimeline#render');
-        const state = this.props.store.getState();
-        const tweets: any[] = [];
-        // console.log('tweets keys:', Object.keys(state.tweets));
-        for (let i = 0, l = Math.min(Object.keys(state.tweets).length, TWEETS_SHOW_MAX); i < l; ++i) {
-            tweets[i] = state.tweets[i];
-        }
         return (
             <section>
-                <button onClick={this._connect.bind(this) } >connect</button>
-                <button onClick={this._reload.bind(this) } >reload</button>
-                {tweets.map((tw: any) => React.createElement(Tweet, Object.assign({ key: tw.id_str }, tw))) }
-                <button onClick={this._reloadAppend.bind(this) } >reloadAppend</button>
+                <button onClick={this.bindedConnect as any} >connect</button>
+                <button onClick={this.bindedReload as any} >reload</button>
+                <TweetList tweets={this.props.store.getState().tweets} />
+                <button onClick={this.bindedReloadAppend as any} >reloadAppend</button>
             </section>
         );
     }
