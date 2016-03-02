@@ -1,4 +1,5 @@
 import _ActionCreator from '../Flux/ActionCreator';
+import ActionEmitter from '../Flux/ActionEmitter';
 import TwitterClient from '../TwitterClient';
 
 export const keys = {
@@ -13,14 +14,36 @@ export const keys = {
     error: 'error',
 };
 
+export class StreamQueue {
+    queue: any[];
+    dispatcher: ActionEmitter;
+    timer: NodeJS.Timer;
+
+    constructor(dispatcher: ActionEmitter) {
+        this.queue = [];
+        this.dispatcher = dispatcher;
+        this.timer = setInterval(() => this.flush(), 5 * 1000);
+    }
+
+    receiver(tweet: any) {
+        this.queue.unshift(tweet);
+    }
+
+    flush() {
+        if (this.queue.length === 0) return;
+        this.dispatcher.dispatch({
+            type: keys.prepend,
+            value: this.queue.splice(0),
+        });
+    }
+}
+
 // for user action
 export default class ActionCreator extends _ActionCreator {
     connectUserStream(id: string, params: any) {
-        TwitterClient.byID(id).userStream((tweet: any) => {
-            this.dispatcher.dispatch({
-                type: keys.prependSingle,
-                value: tweet,
-            });
+        const queue = new StreamQueue(this.dispatcher);
+        TwitterClient.byID(id).userStream((tw: any) => {
+            queue.receiver(tw);
         });
     }
 

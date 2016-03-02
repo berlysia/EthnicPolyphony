@@ -27,6 +27,7 @@ everything are in `resources`
 - [x] memory leak because Tweet cache is unlimited
 - [ ] break `resources/view.json` file sometimes
 - [x] cannot edit tweet when renderer hardly works
+  - Now receiving Tweet from user stream is queued and flush every 5 seconds
 
 ## tasks
 
