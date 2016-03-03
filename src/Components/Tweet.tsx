@@ -29,8 +29,8 @@ export class TweetText extends React.Component<PropsWithClassName, {}> {
         const md5 = calcmd5(this.props.id_str + text);
 
         const elements = this.mergedEntities.reduceRight((prev: JSX.Element[], curr: any, idx: number) => {
-            prev.unshift(<span key={md5 + idx + '_spn'}>{text.substr(curr.indices[1]) }</span>);
-            prev.unshift(<a key={md5 + idx + '_a'} href='#' onClick={this._onClick.bind(this, idx) }>{curr.display_url}</a>);
+            prev.unshift(<span key={md5 + idx + '_spn'}>{text.substr(curr.indices[1]) + ' '}</span>);
+            prev.unshift(<a key={md5 + idx + '_a'} href='#' onClick={() => this._onClick(idx) }>{curr.display_url}</a>);
             text = text.substr(0, curr.indices[0]);
             return prev;
         }, []);
@@ -78,11 +78,9 @@ export class TweetImages extends React.Component<PropsWithClassName, {}> {
             <section className={this.props.className || ''}>
                 {(this.props.entities.media || []).reduce((prev: JSX.Element[], media: any, idx: number) => {
                     prev.push(<img
-                        key={calcmd5(media.media_url) }
+                        key={calcmd5(idx + media.media_url) }
                         src={`${media.media_url}:thumb`}
-                        width='48px'
-                        height='48px'
-                        onClick={this._onClick.bind(this, idx) }
+                        onClick={() => this._onClick(idx) }
                         />);
                     return prev;
                 }, []) }
