@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+const debug = require('debug')('JSONLoader');
 
 function validate(basepath: string, given: string) {
     return given.startsWith(basepath);
@@ -8,6 +9,7 @@ function validate(basepath: string, given: string) {
 export default class JSONLoader {
     private static basepath = path.resolve(__dirname, '..', 'resources');
     static read(name: string): Promise<any> {
+        debug(`::read name:${name}`);
         return new Promise((resolve, reject) => {
             const jsonpath = path.resolve(this.basepath, name);
             if (!validate(this.basepath, jsonpath)) {
@@ -51,13 +53,16 @@ export default class JSONLoader {
     }
 
     static write(name: string, data: any): Promise<{}> {
+        debug(`::write name:${name}, data:${JSON.stringify(data)}`);
         return new Promise((resolve, reject) => {
             const jsonpath = path.resolve(this.basepath, name);
             if (!validate(this.basepath, jsonpath)) {
+                debug('::write rejected by invalid path');
                 return reject(`invalid path: ${jsonpath}`);
             }
             fs.writeFile(jsonpath, JSON.stringify(data, null, '  '), err => {
                 if (err) {
+                    debug('::write rejected by writeFile error');
                     return reject(err);
                 }
 

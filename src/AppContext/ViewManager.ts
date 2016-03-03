@@ -138,11 +138,10 @@ export default class ViewManager extends ReduceStore {
                 const key: string = generateKey(option);
                 const item: ViewContextStackItem = permanentContext.get(key);
 
-                const nextState = {
-                    tabs: prevState.tabs,
+                const nextState = Object.assign({}, prevState, {
                     stack: [item],
                     current: item
-                };
+                });
 
                 return nextState;
             }
@@ -158,11 +157,9 @@ export default class ViewManager extends ReduceStore {
                     permanentContext.set(key, item);
                 }
 
-                const nextState = {
+                const nextState = Object.assign({}, prevState, {
                     tabs: [...prevState.tabs, option],
-                    stack: prevState.stack,
-                    current: prevState.current
-                };
+                });
 
                 return nextState;
             }
@@ -175,19 +172,17 @@ export default class ViewManager extends ReduceStore {
                 const tabs = prevState.tabs.filter(x => x.key !== key);
 
                 if (key === prevState.current.key) {
-                    const nextState = {
+                    const nextState = Object.assign({}, prevState, {
                         tabs,
                         stack: [permanentContext.get(tabs[0].key)],
                         current: tabs[0]
-                    };
+                    });
 
                     return nextState;
                 } else {
-                    const nextState = {
+                    const nextState = Object.assign({}, prevState, {
                         tabs,
-                        stack: prevState.stack,
-                        current: prevState.current,
-                    };
+                    });
 
                     return nextState;
                 }
@@ -210,11 +205,9 @@ export default class ViewManager extends ReduceStore {
                     }
                 }
 
-                const nextState = {
-                    tabs: prevState.tabs,
+                const nextState = Object.assign({}, prevState, {
                     stack: [...prevState.stack, item],
-                    current: prevState.current,
-                };
+                });
 
                 return nextState;
             }

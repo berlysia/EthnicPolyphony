@@ -15,6 +15,8 @@ interface Props {
     store: HomeTimelineStoreGroup;
     actions: ActionCreator;
     appActions: AppActionCreator;
+    id: string;
+    freeze: boolean;
 };
 
 type States = {};
@@ -31,7 +33,12 @@ function decrementNumericString(num: string): string {
 export default class HomeTimeline extends React.Component<Props, States> {
     remover: Function;
     removerOnUnload: Function;
-    bindedForceUpdate: Function = this.forceUpdate.bind(this);
+
+    _wrappedForceUpdate() {
+        if (this.props.freeze) return;
+        this.forceUpdate();
+    }
+    bindedForceUpdate: Function = this._wrappedForceUpdate.bind(this);
 
     _listenChange() {
         this.remover = this.props.store.onChange(this.bindedForceUpdate);
@@ -87,6 +94,10 @@ export default class HomeTimeline extends React.Component<Props, States> {
     }
     bindedReloadAppend: Function = this._reloadAppend.bind(this);
 
+    shouldComponentUpdate(nextProps: Props, nextState: States) {
+        return this.props.store !== nextProps.store;
+    }
+
     render() {
         debug('HomeTimeline#render');
         if (this.remover) {
@@ -95,7 +106,7 @@ export default class HomeTimeline extends React.Component<Props, States> {
         }
 
         return (
-            <section>
+            <section id={this.props.id}>
                 <button onClick={this.bindedConnect as any} >connect</button>
                 <button onClick={this.bindedReload as any} >reload</button>
                 <TweetList tweets={this.props.store.getState().tweets} />

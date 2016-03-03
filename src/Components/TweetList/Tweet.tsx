@@ -63,10 +63,14 @@ export class TweetImages extends React.Component<PropsWithClassName, {}> {
     _onClick(index: number) {
         if (this.mergedEntities[index]
             && this.mergedEntities[index].media_url) {
-            if (this.mergedEntities[index].type === 'photo') {
-                shell.openExternal(this.mergedEntities[index].media_url + ':orig');
-            } else {
-                shell.openExternal(this.mergedEntities[index].expanded_url);
+            switch (this.mergedEntities[index].type) {
+                case 'photo':
+                case 'multi photos': {
+                    shell.openExternal(this.mergedEntities[index].media_url + ':orig');
+                } break;
+                default: {
+                    shell.openExternal(this.mergedEntities[index].expanded_url);
+                }
             }
         }
     }

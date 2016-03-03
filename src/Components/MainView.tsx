@@ -16,30 +16,56 @@ interface Props {
     stores: ViewContextStackItem;
 };
 
-type States = {};
+interface States {
+    onTop: boolean;
+}
 
 export default class MainView extends React.Component<Props, States> {
-    renderWrapper(view: JSX.Element) {
-        return (
-            <section id='mainView'>
-                {view}
-            </section>
-        );
+    constructor() {
+        super();
+        this.state = { onTop: true };
+    }
+
+    listenerOnScroll: EventListener;
+
+    _setListenerOnScroll() {
+        window.removeEventListener('scroll', this.listenerOnScroll);
+        let timer: NodeJS.Timer;
+        this.listenerOnScroll = () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                this.setState({ onTop: window.scrollY === 0 });
+            }, 500);
+        };
+        window.addEventListener('scroll', this.listenerOnScroll);
+    }
+
+    componentDidMount() {
+        this._setListenerOnScroll();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.listenerOnScroll);
+    }
+
+    componentWillReceiveProps(nextProps: Props) {
+        this.setState({ onTop: window.scrollY === 0 });
     }
 
     render() {
+        debug(JSON.stringify(this.state));
         debug('MainView#render');
         let view: any = null;
         const top = this.props.stores;
 
         switch (top.type) {
             case ViewType.HomeTimeline: {
-                return this.renderWrapper(
+                return (
                     <HomeTimeline
-                        source_id={top.source_id}
-                        store={top.store}
-                        actions={top.actions}
+                        id='mainView'
+                        {...top}
                         appActions={this.props.actions}
+                        freeze={!this.state.onTop}
                         />
                 );
             };

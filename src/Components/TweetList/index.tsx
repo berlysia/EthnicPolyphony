@@ -26,8 +26,8 @@ export default class TweetList extends React.Component<Props, States> {
 
         return (
             <section>
-                {this.props.tweets.map((tw: any) => {
-                    return React.createElement(Tweet, Object.assign({ key: tw.id_str }, tw));
+                {this.props.tweets.map((tw: any, idx: number) => {
+                    return React.createElement(Tweet, Object.assign({ key: tw.id_str, first: idx === 0 }, tw));
                 }) }
             </section>
         );
