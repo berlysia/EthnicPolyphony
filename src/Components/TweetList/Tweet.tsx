@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {sanitize} from 'dompurify';
 import {Tweet as TweetModel, Entities} from '../../Models/Tweet';
 import {shell} from 'electron';
 import {calcmd5} from '../../util';
