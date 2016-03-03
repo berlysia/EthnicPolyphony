@@ -4,7 +4,7 @@ import AppActionCreator from '../AppContext/ActionCreator';
 import ActionCreator from '../ViewContext/ActionCreator';
 import {default as HomeTimelineStoreGroup} from '../ViewContext/HomeTimeline';
 
-import Tweet from './Tweet';
+import Tweet from './TweetList/Tweet';
 import TweetList from './TweetList';
 import {TWEETS_SHOW_MAX} from '../ViewContext/Tweets';
 

@@ -31,9 +31,7 @@
         "src/Flux/StoreGroup.ts",
         "src/index.ts",
         "src/JSONLoader.ts",
-        "src/Models/Entity.ts",
         "src/Models/Tweet.ts",
-        "src/Models/Users.ts",
         "src/TwitterClient.ts",
         "src/typings/map-iterator.d.ts",
         "src/typings/node-twitter-api.d.ts",
@@ -53,7 +51,8 @@
         "src/Components/HomeTimeline.tsx",
         "src/Components/MainView.tsx",
         "src/Components/Tabs.tsx",
-        "src/Components/Tweet.tsx",
+        "src/Components/TweetList/index.tsx",
+        "src/Components/TweetList/Tweet.tsx",
         "src/Components/View.tsx"
     ]
 }

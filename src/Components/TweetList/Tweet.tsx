@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {sanitize} from 'dompurify';
-import {Tweet as TweetModel} from '../Models/Tweet';
-import {Entity} from '../Models/Entity';
+import {Tweet as TweetModel, Entities} from '../../Models/Tweet';
 import {shell} from 'electron';
-import {calcmd5} from '../util';
+import {calcmd5} from '../../util';
 
 const debug = require('remote').require('debug')('Components:Tweet');
 
@@ -44,8 +43,14 @@ export class TweetText extends React.Component<PropsWithClassName, {}> {
     }
 
     render() {
-        this.mergedEntities = [].concat(this.props.entities.urls).concat(this.props.entities.media || [])
-            .sort((a: any, b: any) => b.indices[0] - a.indices[0]);
+        this.mergedEntities = []
+            .concat(this.props.entities.urls)
+            .concat((this.props.extended_entities && this.props.extended_entities.media) || [])
+            .sort((a: any, b: any) => a.indices[0] - b.indices[0])
+            .reduce((prev: any[], curr: any, idx: number, arr: any[]) => {
+                if (idx === 0 || curr.indices[0] !== arr[idx - 1].indices[0]) prev.push(curr);
+                return prev;
+            }, []);
 
         return (
             <section className={this.props.className || ''} >
@@ -57,26 +62,33 @@ export class TweetText extends React.Component<PropsWithClassName, {}> {
 
 export class TweetImages extends React.Component<PropsWithClassName, {}> {
     _onClick(index: number) {
-        if (this.props.entities
-            && this.props.entities.media
-            && this.props.entities.media[index]
-            && this.props.entities.media[index].media_url) {
-            if (this.props.entities.media[index].type === 'photo') {
-                shell.openExternal(this.props.entities.media[index].media_url + ':orig');
+        if (this.mergedEntities[index]
+            && this.mergedEntities[index].media_url) {
+            if (this.mergedEntities[index].type === 'photo') {
+                shell.openExternal(this.mergedEntities[index].media_url + ':orig');
             } else {
-                shell.openExternal(this.props.entities.media[index].expanded_url);
+                shell.openExternal(this.mergedEntities[index].expanded_url);
             }
         }
     }
+
+    mergedEntities: {
+        indices: [number, number],
+        type: string,
+        media_url: string,
+        expanded_url: string
+    }[];
 
     shouldComponentUpdate(nextProps: PropsWithClassName, nextState: {}) {
         return this.props.id_str !== this.props.id_str;
     }
 
     render() {
+        this.mergedEntities = ((this.props.extended_entities && this.props.extended_entities.media) || []);
+
         return (
             <section className={this.props.className || ''}>
-                {(this.props.entities.media || []).reduce((prev: JSX.Element[], media: any, idx: number) => {
+                {this.mergedEntities.reduce((prev: JSX.Element[], media: any, idx: number) => {
                     prev.push(<img
                         key={calcmd5(idx + media.media_url) }
                         src={`${media.media_url}:thumb`}
