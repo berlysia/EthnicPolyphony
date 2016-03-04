@@ -105,7 +105,23 @@ export class TweetImages extends React.Component<PropsWithClassName, {}> {
     }
 }
 
+const profileImageSize: {
+    normal: string;
+    bigger: string;
+    mini: string;
+    original: string;
+} = {
+        normal: '_normal',
+        bigger: '_bigger',
+        mini: '_mini',
+        original: '',
+    };
+
 export default class Tweet extends React.Component<Props, {}> {
+
+    getProfileImage(sizeStr: string) {
+        return this.props.user.profile_image_url.replace('_normal', sizeStr);
+    }
 
     get created_at(): string {
         return formatDateString(this.props.created_at);
@@ -146,7 +162,7 @@ export default class Tweet extends React.Component<Props, {}> {
         return (
             <div className='tweet'>
                 <section className='tweet__header'>
-                    <img className='tweet__profile_image' src={this.props.user.profile_image_url} width='48px' height='48px'/>
+                    <img className='tweet__profile_image' src={this.getProfileImage(profileImageSize.bigger) } width='48px' height='48px'/>
                 </section>
                 <section className='tweet__content'>
                     <section className='tweet__author'> @{this.props.user.screen_name} / {this.props.user.name}</section>
