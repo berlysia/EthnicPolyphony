@@ -169,7 +169,7 @@ export default class Tweet extends React.Component<Props, {}> {
                     <TweetText className='tweet__text' {...this.props} />
                     <section className='tweet__footer'>
                         <section className='tweet__created_at'><a href='#' onClick={this._openPermaLink}>{this.created_at}</a></section>
-                        <section className='tweet__source' onClick={this._openSourceLink}>{this.source_string}</section>
+                        <section className='tweet__source'><a href='#' onClick={this._openSourceLink}>{this.source_string}</a></section>
                     </section>
                     <TweetImages className=' tweet__images' {...this.props} />
                 </section>
