@@ -132,7 +132,7 @@ export default class Tweet extends React.Component<Props, {}> {
     _openPermaLink = this.__openPermaLink.bind(this);
 
     __openSourceLink() {
-        const matched = decodeURIComponent(this.props.source).match(/href="(https?:\/\/.+)"/);
+        const matched = decodeURIComponent(this.props.source).match(/href="(https?:\/\/.+?)"/);
         if (matched[1]) {
             shell.openExternal(matched[1]);
         }
