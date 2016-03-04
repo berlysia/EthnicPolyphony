@@ -95,7 +95,8 @@ export default class HomeTimeline extends React.Component<Props, States> {
     bindedReloadAppend: Function = this._reloadAppend.bind(this);
 
     shouldComponentUpdate(nextProps: Props, nextState: States) {
-        return this.props.store !== nextProps.store;
+        return (this.props.freeze && !nextProps.freeze)
+            || this.props.store !== nextProps.store;
     }
 
     render() {

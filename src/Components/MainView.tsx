@@ -53,7 +53,6 @@ export default class MainView extends React.Component<Props, States> {
     }
 
     render() {
-        debug(JSON.stringify(this.state));
         debug('MainView#render');
         let view: any = null;
         const top = this.props.stores;

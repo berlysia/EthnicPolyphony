@@ -4,6 +4,7 @@
     "dompurify": "github:DefinitelyTyped/DefinitelyTyped/dompurify/dompurify.d.ts#5b053a7579fad0f6ca37345f5fe60547ad16f08a",
     "eventemitter2": "github:DefinitelyTyped/DefinitelyTyped/eventemitter2/eventemitter2.d.ts#0fe94d00f62c380037c686c828a9fad15c87ee46",
     "github-electron": "github:DefinitelyTyped/DefinitelyTyped/github-electron/github-electron.d.ts#04be44e2b5380acbc39439a8ac61bd7938fc77e0",
+    "moment": "github:DefinitelyTyped/DefinitelyTyped/moment/moment.d.ts#b090bcf9ba9f756ec8ff53e7707269729172a325",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#aee0039a2d6686ec78352125010ebb38a7a7d743",
     "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#83b88a031cc8f2006fd361bf0a0b548c3bcc8259",
     "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts#ca5bfe76d2d9bf6852cbc712d9f3e0047c93486e",

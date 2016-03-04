@@ -17,16 +17,21 @@ export const keys = {
 export class StreamQueue {
     queue: any[];
     dispatcher: ActionEmitter;
-    timer: NodeJS.Timer;
+    timer: NodeJS.Timer = null;
 
     constructor(dispatcher: ActionEmitter) {
         this.queue = [];
         this.dispatcher = dispatcher;
-        this.timer = setInterval(() => this.flush(), 5 * 1000);
     }
 
     receiver(tweet: any) {
         this.queue.unshift(tweet);
+        if (!this.timer) {
+            this.timer = setTimeout(() => {
+                this.timer = null;
+                this.flush();
+            }, 5 * 1000);
+        }
     }
 
     flush() {

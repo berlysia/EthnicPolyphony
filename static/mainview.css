@@ -1,0 +1,76 @@
+
+* {
+  font-family: 'Hiragino Kaku Gothic Pro', serif;
+}
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+#mainView {
+  margin-left: 160px;
+}
+#tabs {
+  position: fixed;
+  width: 160px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+#tabs li {
+  list-style-type: none;
+  padding: 0 10px 0 10px;
+  margin: 0;
+  height: 2em;
+  line-height: 2em;
+  text-overflow: ellipsis;
+  width: 140px;
+  color: #222;
+  background: transparent;
+  border-bottom: 1px solid #999;
+  font-size: 14px;
+}
+#tabs li.selected {
+  background: rgba(0, 0, 255, 0.2);
+}
+.tweet {
+  border-bottom: 1px solid #999;
+  font-size: 13px;
+  width: 100%;
+  height: auto;
+}
+
+.tweet__header {
+  width: 52px; /*48 + 2 + 2*/
+  height: 100%;
+}
+.tweet__profile_image {
+  width: 48px;
+  height: 48px;
+  margin: 2px;
+  float: left;
+}
+
+.tweet__content {
+  overflow: auto;
+}
+.tweet__text {
+  width: 100%;
+  height: auto;
+}
+
+.tweet__footer {
+  width: 100%;
+}
+.tweet__created_at {
+  float: left;
+}
+.tweet__source {
+  text-align: right;
+}
+
+.tweet__images_thumb {
+  width: 96px;
+  height: 96px;
+}

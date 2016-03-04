@@ -1,4 +1,9 @@
 import * as crypto from 'crypto';
+const moment = require('moment');
+
+export function formatDateString(datestr: string): string {
+    return moment(datestr, 'ddd MMM DD HH:mm:ss ZZ YYYY').format('ddd MMM DD YYYY, HH:mm:ss');
+}
 
 export function calcmd5(str: string): string {
     const md5 = crypto.createHash('md5');

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Tweet as TweetModel, Entities} from '../../Models/Tweet';
 import {shell} from 'electron';
-import {calcmd5} from '../../util';
+import {calcmd5, formatDateString} from '../../util';
 
 const debug = require('remote').require('debug')('Components:Tweet');
 
@@ -93,6 +93,7 @@ export class TweetImages extends React.Component<PropsWithClassName, {}> {
             <section className={this.props.className || ''}>
                 {this.mergedEntities.reduce((prev: JSX.Element[], media: any, idx: number) => {
                     prev.push(<img
+                        className='tweet__images_thumb'
                         key={calcmd5(idx + media.media_url) }
                         src={`${media.media_url}:thumb`}
                         onClick={() => this._onClick(idx) }
@@ -107,25 +108,55 @@ export class TweetImages extends React.Component<PropsWithClassName, {}> {
 export default class Tweet extends React.Component<Props, {}> {
 
     get created_at(): string {
-        return new Date(this.props.created_at).toString();
+        return formatDateString(this.props.created_at);
+    }
+
+    get source_string(): string {
+        try {
+            return this.props.source.match(/^<.*?>([\s\S]*)<\/.*?>$/)[1];
+        } catch (e) {
+            console.error('an error occurred on parsing source string', e);
+            return '[PARSE ERROR]';
+        }
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: {}) {
         return this.props.id_str !== nextProps.id_str
-            || this.props.favorited !== nextProps.favorited;
+            || this.props.favorited !== nextProps.favorited
+            || this.props.retweeted !== nextProps.retweeted;
     }
+
+    __openPermaLink() {
+        shell.openExternal(`https://twitter.com/statuses/${this.props.id_str}`)
+    }
+    _openPermaLink = this.__openPermaLink.bind(this);
+
+    __openSourceLink() {
+        const matched = decodeURIComponent(this.props.source).match(/href="(https?:\/\/.+)"/);
+        if (matched[1]) {
+            shell.openExternal(matched[1]);
+        }
+    }
+    _openSourceLink = this.__openSourceLink.bind(this);
 
     render() {
         debug('Tweet#render');
+        // <div className={`tweet__retweet${this.props.retweeted ? ' retweeted' : ''}`}>RT {this.props.retweet_count}</div>
+        // <div className={`tweet__favorite${this.props.favorited ? ' favorited' : ''}`}>Fav {this.props.favorite_count}</div>
         return (
             <div className='tweet'>
-                <img className='tweet__profile_image' src={this.props.user.profile_image_url} width='48px' height='48px'/>
-                <section className='tweet__author'> @{this.props.user.screen_name} / {this.props.user.name}</section>
-                <TweetText className='tweet__text' {...this.props} />
-                <TweetImages className='tweet__images' {...this.props} />
-                <section className='tweet__created_at'>{this.created_at}</section>
-                <section className='tweet__id'>{this.props.id_str}</section>
-                <section className='tweet__source' dangerouslySetInnerHTML={{ __html: this.props.source }}></section>
+                <section className='tweet__header'>
+                    <img className='tweet__profile_image' src={this.props.user.profile_image_url} width='48px' height='48px'/>
+                </section>
+                <section className='tweet__content'>
+                    <section className='tweet__author'> @{this.props.user.screen_name} / {this.props.user.name}</section>
+                    <TweetText className='tweet__text' {...this.props} />
+                    <section className='tweet__footer'>
+                        <section className='tweet__created_at'><a href='#' onClick={this._openPermaLink}>{this.created_at}</a></section>
+                        <section className='tweet__source' onClick={this._openSourceLink}>{this.source_string}</section>
+                    </section>
+                    <TweetImages className=' tweet__images' {...this.props} />
+                </section>
             </div>
         );
     }
