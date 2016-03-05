@@ -3,7 +3,7 @@ import ReduceStore from '../Flux/ReduceStore';
 import ViewInfo from './ViewInfo';
 import Tweets from './Tweets';
 
-abstract class ViewContext extends StoreGroup {
+abstract class BaseTimeline extends StoreGroup {
     stores: [ViewInfo, Tweets];
 }
-export default ViewContext;
+export default BaseTimeline;

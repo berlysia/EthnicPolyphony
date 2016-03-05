@@ -1,6 +1,15 @@
 import * as crypto from 'crypto';
 const moment = require('moment');
 
+export function decrementNumericString(num: string): string {
+    const target = Number(num[num.length - 1]);
+    if (target) {
+        return num.substr(0, num.length - 1) + (target - 1).toString();
+    }
+
+    return decrementNumericString(num.substr(0, num.length - 1)) + '9';
+}
+
 export function formatDateString(datestr: string): string {
     return moment(datestr, 'ddd MMM DD HH:mm:ss ZZ YYYY').format('ddd MMM DD YYYY, HH:mm:ss');
 }

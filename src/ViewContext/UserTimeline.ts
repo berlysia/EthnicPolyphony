@@ -1,12 +1,13 @@
 import ActionEmitter from '../Flux/ActionEmitter';
 import ReduceStore from '../Flux/ReduceStore';
-import ViewContext from './ViewContext';
+import BaseTimeline from './BaseTimeline';
 import Tweets from './Tweets';
 import ViewInfo from './ViewInfo';
 import {ViewType, generateViewOptionFromSeed} from '../AppContext/ActionCreator';
 
-export default class UserTimeline extends ViewContext {
+export default class UserTimeline extends BaseTimeline {
     stores: [ViewInfo, Tweets];
+
     constructor(dispatcher: ActionEmitter, id: string, user_id: string) {
         super(dispatcher);
 

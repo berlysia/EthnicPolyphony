@@ -74,10 +74,17 @@ export default class ActionCreator extends _ActionCreator {
                     return tabs;
                 } else {
                     return Authentication.getAccounts()
-                        .then(accounts => accounts.map(account => ({
-                            type: ViewType.HomeTimeline,
-                            source_id: account.id,
-                        })));
+                        .then(accounts => {
+                            return accounts.map(account => [{
+                                type: ViewType.HomeTimeline,
+                                source_id: account.id,
+                            }, {
+                                    type: ViewType.UserTimeline,
+                                    source_id: account.id,
+                                    target_id: account.id,
+                                }])
+                                .reduce((r, c) => r.concat(c), []); // flatten
+                        });
                 }
             })
             .then(tabs => {

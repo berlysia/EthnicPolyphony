@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {ViewContextStackItem} from '../AppContext/ViewManager';
-import ViewContextStoreGroup from '../ViewContext/ViewContext';
-import HomeTimelineStoreGroup, {isHomeTimelineStoreGroup} from '../ViewContext/HomeTimeline';
+import HomeTimelineStoreGroup from '../ViewContext/HomeTimeline';
+import UserTimelineStoreGroup from '../ViewContext/UserTimeline';
 import ActionCreator, {ViewType} from '../AppContext/ActionCreator';
 
 import HomeTimeline from './HomeTimeline';
-// import UserTimeline from './UserTimeline';
+import UserTimeline from './UserTimeline';
 // import ListTimeline from './ListTimeline';
 // import SearchTimeline from './SearchTimeline';
 
@@ -68,15 +68,16 @@ export default class MainView extends React.Component<Props, States> {
                         />
                 );
             };
-            // case ViewType.UserTimeline: {
-            //   view = <UserTimeline
-            //     source_id={top.source_id}
-            //     target_id={top.target_id}
-            //     store={top.store}
-            //     actions={top.actions}
-            //     appActions={this.props.actions}
-            //   />;
-            // } break;
+            case ViewType.UserTimeline: {
+                return (
+                    <UserTimeline
+                        id='mainView'
+                        {...top}
+                        appActions={this.props.actions}
+                        freeze={!this.state.onTop}
+                        />
+                );
+            } break;
             // case ViewType.ListTimeline: {
             //   view = <ListTimeline
             //     source_id={top.source_id}

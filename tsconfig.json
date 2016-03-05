@@ -39,20 +39,22 @@
         "src/typings/twitter.d.ts",
         "src/util.ts",
         "src/ViewContext/ActionCreator.ts",
+        "src/ViewContext/BaseTimeline.ts",
         "src/ViewContext/HomeTimeline.ts",
         "src/ViewContext/ListTimeline.ts",
         "src/ViewContext/SearchTimeline.ts",
         "src/ViewContext/SingleTweet.ts",
         "src/ViewContext/Tweets.ts",
         "src/ViewContext/UserTimeline.ts",
-        "src/ViewContext/ViewContext.ts",
         "src/ViewContext/ViewInfo.ts",
+        "src/Components/BaseTimeline.tsx",
         "src/Components/Editor.tsx",
         "src/Components/HomeTimeline.tsx",
         "src/Components/MainView.tsx",
         "src/Components/Tabs.tsx",
         "src/Components/TweetList/index.tsx",
         "src/Components/TweetList/Tweet.tsx",
+        "src/Components/UserTimeline.tsx",
         "src/Components/View.tsx"
     ]
 }

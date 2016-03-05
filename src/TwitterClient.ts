@@ -1,6 +1,8 @@
 import JSONLoader from './JSONLoader';
 import * as Twitter from 'twitter';
 
+const debug = require('debug')('TwitterClient');
+
 const byScreenName = new Map<string, TwitterClient>();
 const byID = new Map<string, TwitterClient>();
 const IDSNmap = new Map<string, string>();
@@ -27,9 +29,11 @@ export const defaultFetchParams: TwitterParamsForFetch = {
 
 export default class TwitterClient {
     private client: Twitter.Twitter;
+    account: any;
     connected: boolean;
 
     constructor(accountData: any, credentials: any) {
+        this.account = accountData;
         this.client = new Twitter({
             consumer_key: credentials['consumerKey'],
             consumer_secret: credentials['consumerSecret'],
@@ -122,19 +126,23 @@ export default class TwitterClient {
         if (this.connected) return;
         this.client.stream('user', params || {}, stream => {
             this.connected = true;
+            debug(`TwitterClient#userStream: id ${this.account.screenName} :stream created`);
 
             stream.on('data', (data: any) => {
+                debug(`TwitterClient#userStream: id ${this.account.screenName} :stream emit "data"`);
                 if (data['text']) {
                     callback(data);
                 }
             });
 
             stream.on('error', (err: Error) => {
+                debug(`TwitterClient#userStream: id ${this.account.screenName} :stream emit "error"`);
                 console.error('stream error', err);
             });
 
             stream.on('end', () => {
                 this.connected = false;
+                debug(`TwitterClient#userStream: id ${this.account.screenName} :stream emit "end"`);
             });
         });
     }
