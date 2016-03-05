@@ -23,7 +23,7 @@ everything are in `resources`
 ## known issue
 
 - [x] Tweets are scrambled (depend on timing to invoke 'connect' and 'reload')
-- [ ] Tweets flow down when Tweet prepended  
+- [x] Tweets flow down when Tweet prepended
 - [x] memory leak because Tweet cache is unlimited
 - [ ] break `resources/view.json` file sometimes
 - [x] cannot edit tweet when renderer hardly works
@@ -35,15 +35,22 @@ everything are in `resources`
 
 - [x] show (icon) images (+ user media)
 - [ ] favorite
-- [ ] put anchors
+- [ ] retweet
+- [x] put anchors
 - [x] attach some styles
-- [ ] ~~omit React(performance problem)~~
+- [ ] implement 'add tabs...' button
+- [ ] add more types of view(user, list, search, etc...)
+  - [x] HomeTimeline
+  - [x] UserTimeline(self)
+  - [ ] UserTimeline(other)
+  - [ ] ListTimeline
+  - [ ] SearchTimeline
 
 ### low priority
 
 - [ ] attach some **good** styles
-- [ ] add more types of view(user, list, search, etc...)
 - [ ] ~~virtual scroll~~
+- [ ] ~~omit React(performance problem)~~
 
 ## structure
 
