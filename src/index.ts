@@ -7,8 +7,8 @@ import TwitterClient from './TwitterClient';
 // initialize electron
 const mainPageURL = `file://${__dirname}/../static/index.html`;
 const mainWindow = new BrowserWindowWrapper(mainPageURL, {
-    width: 600,
-    height: 900,
+    width: 900,
+    height: 1200,
 });
 const editorPageURL = `file://${__dirname}/../static/editor.html`;
 const editorWindow = new BrowserWindowWrapper(editorPageURL, {

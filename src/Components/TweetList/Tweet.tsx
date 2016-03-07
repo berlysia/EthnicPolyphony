@@ -1,15 +1,28 @@
 import * as React from 'react';
-import {Tweet as TweetModel, Entities} from '../../Models/Tweet';
+import {Tweet as TweetModel, Entities, Users} from '../../Models/Tweet';
 import {shell} from 'electron';
-import {calcmd5, formatDateString} from '../../util';
+import {calcmd5, formatDateString, getProfileImage} from '../../util';
+import ActionCreator, {ViewType} from '../../AppContext/ActionCreator';
 
 const debug = require('remote').require('debug')('Components:Tweet');
+const Bemmer = require('bemmer');
+const classBuilder = Bemmer.create('tweet')
 
-type Props = TweetModel;
+interface Props extends TweetModel {
+    source_id: string;
+    key: string,
+    first: boolean;
+    appActions: ActionCreator;
+    retweet_user?: Users;
+}
 
 interface PropsWithClassName extends Props {
     className?: string;
 };
+
+export function unescape(text: string) {
+    return text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/, '&');
+}
 
 export class TweetText extends React.Component<PropsWithClassName, {}> {
 
@@ -23,7 +36,7 @@ export class TweetText extends React.Component<PropsWithClassName, {}> {
     mergedEntities: { indices: [number, number], expanded_url: string }[];
 
     get textElements(): JSX.Element[] {
-        let text = this.props.text;
+        let text = unescape(this.props.text);
         const md5 = calcmd5(this.props.id_str + text);
 
         const elements = this.mergedEntities.reduceRight((prev: JSX.Element[], curr: any, idx: number) => {
@@ -93,7 +106,7 @@ export class TweetImages extends React.Component<PropsWithClassName, {}> {
             <section className={this.props.className || ''}>
                 {this.mergedEntities.reduce((prev: JSX.Element[], media: any, idx: number) => {
                     prev.push(<img
-                        className='tweet__images_thumb'
+                        className={this.props.className ? this.props.className + '__thumb' : ''}
                         key={calcmd5(idx + media.media_url) }
                         src={`${media.media_url}:thumb`}
                         onClick={() => this._onClick(idx) }
@@ -105,23 +118,7 @@ export class TweetImages extends React.Component<PropsWithClassName, {}> {
     }
 }
 
-const profileImageSize: {
-    normal: string;
-    bigger: string;
-    mini: string;
-    original: string;
-} = {
-        normal: '_normal',
-        bigger: '_bigger',
-        mini: '_mini',
-        original: '',
-    };
-
 export default class Tweet extends React.Component<Props, {}> {
-
-    getProfileImage(sizeStr: string) {
-        return this.props.user.profile_image_url.replace('_normal', sizeStr);
-    }
 
     get created_at(): string {
         return formatDateString(this.props.created_at);
@@ -155,23 +152,61 @@ export default class Tweet extends React.Component<Props, {}> {
     }
     _openSourceLink = this.__openSourceLink.bind(this);
 
+    __openProfileView() {
+        const target_id = this.props.user.id_str;
+        this.props.appActions.pushStack({
+            type: ViewType.UserProfile,
+            source_id: this.props.source_id,
+            target_id,
+            user: this.props.user,
+        });
+    }
+    _openProfileView = this.__openProfileView.bind(this);
+
     render() {
         debug('Tweet#render');
         // <div className={`tweet__retweet${this.props.retweeted ? ' retweeted' : ''}`}>RT {this.props.retweet_count}</div>
         // <div className={`tweet__favorite${this.props.favorited ? ' favorited' : ''}`}>Fav {this.props.favorite_count}</div>
         return (
-            <div className='tweet'>
-                <section className='tweet__header'>
-                    <img className='tweet__profile_image' src={this.getProfileImage(profileImageSize.bigger) } width='48px' height='48px'/>
+            <div className={classBuilder() }>
+                <section className={classBuilder('__header') }>
+                    <img
+                        className={classBuilder('__profile_image') }
+                        src={getProfileImage(this.props.user.profile_image_url, '_bigger') }
+                        width='48px'
+                        height='48px'
+                        onClick={this._openProfileView}
+                        />
                 </section>
-                <section className='tweet__content'>
-                    <section className='tweet__author'> @{this.props.user.screen_name} / {this.props.user.name}</section>
-                    <TweetText className='tweet__text' {...this.props} />
-                    <section className='tweet__footer'>
-                        <section className='tweet__created_at'><a href='#' onClick={this._openPermaLink}>{this.created_at}</a></section>
-                        <section className='tweet__source'><a href='#' onClick={this._openSourceLink}>{this.source_string}</a></section>
+                <section className={classBuilder('__content') }>
+                    <section className={classBuilder('__author') }> @{this.props.user.screen_name} / {this.props.user.name}</section>
+                    <TweetText className={classBuilder('__text') } {...this.props} />
+                    <section className={classBuilder('__footer') }>
+                        <section className={classBuilder('__created_at') }>
+                            <a
+                                href='#'
+                                onClick={this._openPermaLink}
+                                className={classBuilder('__created_at__anchor') }
+                                >{this.created_at}</a>
+                        </section>
+                        <section className={classBuilder('__source') }>
+                            <a
+                                href='#'
+                                onClick={this._openSourceLink}
+                                className={classBuilder('__source__anchor') }
+                                >{this.source_string}</a>
+                        </section>
                     </section>
-                    <TweetImages className=' tweet__images' {...this.props} />
+                    {this.props.extended_entities && this.props.extended_entities.media ? (
+                        <TweetImages className={classBuilder('__images') } {...this.props} />
+                    ) : ''}
+                    {this.props.retweet_user ? (
+                        <section className={classBuilder('__retweeter') }>
+                            <span className={classBuilder('__retweeter__anchor') }>
+                                {`RT by @${this.props.retweet_user.screen_name} / ${this.props.retweet_user.name}`}
+                            </span>
+                        </section>
+                    ) : ''}
                 </section>
             </div>
         );

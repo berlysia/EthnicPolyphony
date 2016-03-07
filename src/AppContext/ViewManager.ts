@@ -1,5 +1,6 @@
 import ReduceStore from '../Flux/ReduceStore';
-import ViewContextStoreGroup from '../ViewContext/ViewContext';
+// import BaseTimelineStoreGroup from '../ViewContext/StoreGroups/BaseTimeline';
+import StoreGroup from '../Flux/StoreGroup';
 import ActionEmitter from '../Flux/ActionEmitter';
 import ActionCreator, {
     ViewType,
@@ -13,14 +14,17 @@ import {view_storage} from '../Constants';
 
 // for pushStack
 import {default as ViewActionCreator} from '../ViewContext/ActionCreator';
-import HomeTimeline from '../ViewContext/HomeTimeline';
-import ListTimeline from '../ViewContext/ListTimeline';
-import UserTimeline from '../ViewContext/UserTimeline';
-import SearchTimeline from '../ViewContext/SearchTimeline';
-import SingleTweet from '../ViewContext/SingleTweet';
+import HomeTimeline from '../ViewContext/StoreGroups/HomeTimeline';
+import ListTimeline from '../ViewContext/StoreGroups/ListTimeline';
+import UserTimeline from '../ViewContext/StoreGroups/UserTimeline';
+import UserProfile from '../ViewContext/StoreGroups/UserProfile';
+import SearchTimeline from '../ViewContext/StoreGroups/SearchTimeline';
+import SingleTweet from '../ViewContext/StoreGroups/SingleTweet';
+
+const debug = require('debug')('AppContext:ViewManager');
 
 export interface ViewContextStackItem extends ViewOption {
-    store: ViewContextStoreGroup;
+    store: StoreGroup;
     actions: ViewActionCreator;
     temporary: boolean;
 }
@@ -33,10 +37,11 @@ interface State {
 type key = string;
 
 export function generateStackItem(option: ViewOption, temporary?: boolean): ViewContextStackItem {
+    console.log('generateStackItem', JSON.stringify(option));
     const key = option.key;
     const dispatcher = new ActionEmitter();
     const actions = new ViewActionCreator(dispatcher);
-    let store: ViewContextStoreGroup;
+    let store: StoreGroup;
     switch (option.type) {
         case ViewType.HomeTimeline: {
             store = new HomeTimeline(dispatcher, option.source_id);
@@ -44,6 +49,13 @@ export function generateStackItem(option: ViewOption, temporary?: boolean): View
 
         case ViewType.UserTimeline: {
             store = new UserTimeline(dispatcher, option.source_id, option.target_id);
+        } break;
+
+        case ViewType.UserProfile: {
+            store = new UserProfile(dispatcher, option.source_id, option.target_id, option.user);
+            if (!option.user) {
+                actions.fetchUserProfile(option.source_id, option.target_id);
+            }
         } break;
 
         case ViewType.ListTimeline: {
@@ -78,19 +90,23 @@ export default class ViewManager extends ReduceStore {
         return this.state.tabs;
     }
 
+    getStack() {
+        return this.state.stack;
+    }
+
     getStackTop(): ViewContextStackItem {
         if (this.state.stack.length === 0) {
             return null;
         }
 
-        return this.state.stack[this.state.stack.length - 1];
+        return this.state.stack[0];
     }
 
     getCurrentTab(): ViewOption {
         return this.state.current;
     }
 
-    getStackTopStore(): ViewContextStoreGroup {
+    getStackTopStore(): StoreGroup {
         const tmp = this.getStackTop();
         if (!tmp) {
             return null;
@@ -99,6 +115,7 @@ export default class ViewManager extends ReduceStore {
     }
 
     reduce(prevState: State, action: Action): State {
+        debug(`#reduce type:${action.type}`);
         switch (action.type) {
             case keys.fetchTweet: {
                 // value: {append: boolean, param        
@@ -127,6 +144,15 @@ export default class ViewManager extends ReduceStore {
                     default: {
                         console.error(`unknown ViewType: ${top.type}`);
                     }
+                }
+
+                return prevState;
+            }
+
+            case keys.fetchProfile: {
+                const top = prevState.stack[0];
+                if (top.type === ViewType.UserProfile) {
+                    top.actions.fetchUserProfile(action.value.source_id, action.value.target_id);
                 }
 
                 return prevState;
@@ -206,7 +232,18 @@ export default class ViewManager extends ReduceStore {
                 }
 
                 const nextState = Object.assign({}, prevState, {
-                    stack: [...prevState.stack, item],
+                    stack: [item, ...prevState.stack],
+                    current: item,
+                });
+
+                return nextState;
+            }
+
+            case keys.popStack: {
+                const nextStack = prevState.stack.slice(1, prevState.stack.length - 1);
+                const nextState = Object.assign({}, prevState, {
+                    stack: nextStack,
+                    current: nextStack[0],
                 });
 
                 return nextState;

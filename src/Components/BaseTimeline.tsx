@@ -2,11 +2,10 @@ import * as React from 'react';
 import {ViewContextStackItem} from '../AppContext/ViewManager';
 import AppActionCreator from '../AppContext/ActionCreator';
 import ActionCreator from '../ViewContext/ActionCreator';
-import {default as BaseTimelineStoreGroup} from '../ViewContext/BaseTimeline';
+import {default as BaseTimelineStoreGroup} from '../ViewContext/StoreGroups/BaseTimeline';
 
 import Tweet from './TweetList/Tweet';
 import TweetList from './TweetList';
-import {TWEETS_SHOW_MAX} from '../ViewContext/Tweets';
 
 import {decrementNumericString} from '../util';
 
@@ -82,7 +81,6 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     bindedReloadAppend = this._reloadAppend.bind(this);
 
     shouldComponentUpdate(nextProps: Props<T>, nextState: States) {
-        debug('BaseTimeline#shouldComponentUpdate', this.props.freeze, nextProps.freeze)
         return (this.props.freeze && !nextProps.freeze)
             || this.props.store !== nextProps.store;
     }
@@ -97,7 +95,11 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
         return (
             <section id={this.props.id}>
                 <button onClick={this.bindedReload} >reload</button>
-                <TweetList tweets={this.props.store.getState().tweets} />
+                <TweetList
+                    source_id={this.props.source_id}
+                    tweets={this.props.store.getState().tweets}
+                    appActions={this.props.appActions}
+                    />
                 <button onClick={this.bindedReloadAppend} >reloadAppend</button>
             </section>
         );

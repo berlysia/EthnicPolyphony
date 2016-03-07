@@ -1,6 +1,6 @@
-import ReduceStore from '../Flux/ReduceStore';
-import {Action} from '../Flux/Action';
-import {ViewType, ViewOption as State} from '../AppContext/ActionCreator';
+import ReduceStore from '../../Flux/ReduceStore';
+import {Action} from '../../Flux/Action';
+import {ViewType, ViewOption as State} from '../../AppContext/ActionCreator';
 
 export default class TimelineInfo extends ReduceStore {
     reduce(prevState: State, action: Action): State {

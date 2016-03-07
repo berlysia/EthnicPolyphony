@@ -57,7 +57,8 @@ export default class TwitterClient {
         return byID.get(id);
     }
 
-    private baseFunc(params: TwitterParamsForFetch, method: METHOD, target: string) {
+    private baseFunc(params: any, method: METHOD, target: string) {
+        debug(`#baseFunc target:${target} params:${JSON.stringify(params)}`);
         const func = (method === METHOD.GET ? this.client.get : this.client.post);
         return new Promise((resolve, reject) => {
             func.call(this.client, target, params, (err: Error, data: any, res: any) => {
@@ -120,6 +121,10 @@ export default class TwitterClient {
 
     searchTweets(q: string, params?: TwitterParamsForFetch) {
         return this.baseFunc(Object.assign({ q }, defaultFetchParams, params || {}), METHOD.GET, 'search/tweets');
+    }
+
+    showUser(user_id: string) {
+        return this.baseFunc({ user_id, include_entities: true }, METHOD.GET, 'users/show');
     }
 
     userStream(callback: Function, params?: TwitterParamsForFetch) {

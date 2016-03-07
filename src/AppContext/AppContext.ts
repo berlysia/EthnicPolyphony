@@ -4,7 +4,7 @@ import {Action} from '../Flux/Action';
 import ViewManager from './ViewManager';
 
 class AppContext extends StoreGroup {
-    protected stores: [ViewManager];
+    stores: [ViewManager];
 
     getStores() {
         const vm = new ViewManager();
@@ -22,6 +22,10 @@ class AppContext extends StoreGroup {
 
     getTabs() {
         return this.stores[0].getTabs();
+    }
+
+    getStack() {
+        return this.stores[0].getStack();
     }
 
     getStackTop() {

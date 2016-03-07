@@ -1,6 +1,13 @@
 import * as crypto from 'crypto';
 const moment = require('moment');
 
+type SizeStr = '_normal' | '_bigger' | '_mini' | '';
+
+export function getProfileImage(url: string, sizeStr?: SizeStr) {
+    if (sizeStr == null) return url;
+    return url.replace('_normal', sizeStr);
+}
+
 export function decrementNumericString(num: string): string {
     const target = Number(num[num.length - 1]);
     if (target) {

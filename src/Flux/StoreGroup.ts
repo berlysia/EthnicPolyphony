@@ -8,9 +8,13 @@ export const STORE_GROUPS_CHANGE = `:PRIVATE:STORE:GROUPS:CHANGE:`;
 export const DISPATCH_AFTER = `:PRIVATE:STORE:GROUPS:DISPATCH:AFTER:`;
 export const DISPATCH_BEFORE = `:PRIVATE:STORE:GROUPS:DISPATCH:BEFORE:`;
 
+export interface StoreCollection extends Array<ReduceStore> {
+    [key: number]: ReduceStore;
+}
+
 abstract class StoreGroup extends EventEmitter {
     protected dispatcher: ActionEmitter;
-    protected stores: ReduceStore[];
+    public stores: StoreCollection;
     protected options: any;
     private remover: Function[];
     private actionListenerRemover: Function;

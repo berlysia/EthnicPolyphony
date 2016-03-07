@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {default as HomeTimelineStoreGroup} from '../ViewContext/HomeTimeline';
+import {default as HomeTimelineStoreGroup} from '../ViewContext/StoreGroups/HomeTimeline';
 import TweetList from './TweetList';
 import BaseTimeline from './BaseTimeline';
+import {TWEETS_SHOW_MAX} from '../ViewContext/ReduceStores/Tweets';
 
 const debug = require('remote').require('debug')('Components:HomeTimeline');
 
@@ -35,7 +36,11 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
             <section id={this.props.id}>
                 <button onClick={this.bindedConnect} >connect</button>
                 <button onClick={this.bindedReload} >reload</button>
-                <TweetList tweets={this.props.store.getState().tweets} />
+                <TweetList
+                    source_id={this.props.source_id}
+                    tweets={this.props.store.getState().tweets.slice(0, TWEETS_SHOW_MAX) }
+                    appActions={this.props.appActions}
+                    />
                 <button onClick={this.bindedReloadAppend} >reloadAppend</button>
             </section>
         );

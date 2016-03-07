@@ -7,8 +7,13 @@ html, body, #root {
   padding: 0;
   height: 100vh;
 }
+#app {
+  height: 100%;
+  width: 100%;
+}
 #mainView {
   margin-left: 160px;
+  height: 100%;
 }
 #tabs {
   position: fixed;
@@ -54,23 +59,138 @@ html, body, #root {
 
 .tweet__content {
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.tweet__author {
+  font-size: 0.8em;
+  color: #444;
+  order: 0;
 }
 .tweet__text {
   width: 100%;
   height: auto;
+  order: 1;
 }
 
 .tweet__footer {
   width: 100%;
+  order: 3;
+}
+.tweet__images {
+  order: 2;
 }
 .tweet__created_at {
   float: left;
 }
+.tweet__created_at__anchor {
+  font-size: 0.9em;
+  color: #666;
+}
 .tweet__source {
   text-align: right;
 }
+.tweet__source__anchor {
+  font-size: 0.9em;
+  color: #666;
+}
 
-.tweet__images_thumb {
+.tweet__images__thumb {
   width: 96px;
   height: 96px;
+}
+.tweet__retweeter {
+  order: 4;
+}
+.tweet__retweeter__anchor {
+  font-size: 0.9em;
+  color: #666;
+}
+
+
+/* UserProfile */
+.user_profile {
+  display: flex;
+  height: 100%;
+}
+
+.user_profile__wrapper {
+  width: 100%;
+  margin: auto;
+}
+
+.user_profile__header__banner__shadow {
+  position: relative;
+}
+.user_profile__header__banner__shadow:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.user_profile__header__banner {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  -webkit-user-drag: none;
+}
+
+.user_profile__header__header {
+  padding: 4px;
+}
+
+.user_profile__header__avatar {
+  width: 128px;
+  height: 128px;
+  padding: 4px;
+  float: left;
+}
+
+.user_profile__header__content {
+  padding: 16px;
+  overflow: auto;
+}
+
+.user_profile__header__description {
+  overflow: auto;
+  padding: 16px;
+}
+
+.user_profile__ribbon {
+  display: flex;
+  width: 100%;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+}
+
+.user_profile__ribbon__item {
+  flex-grow: 1;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.user_profile__ribbon__item::before {
+  display: block;
+}
+
+.user_profile__ribbon__value {
+  display: block;
+}
+
+.user_profile__ribbon__item--statuses::before {
+  content: 'Tweets';
+}
+
+.user_profile__ribbon__item--followees::before {
+  content: 'Followees';
+}
+
+.user_profile__ribbon__item--followers::before {
+  content: 'Followers';
+}
+
+.user_profile__ribbon__item--favorites::before {
+  content: 'Favorites';
 }

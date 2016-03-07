@@ -1,11 +1,14 @@
 import * as React from 'react';
 import Tweet from './Tweet';
 import {Tweet as TweetModel} from '../../Models/Tweet';
+import ActionCreator from '../../AppContext/ActionCreator';
 
 const debug = require('remote').require('debug')('Components:TweetList');
 
 interface Props {
+    source_id: string;
     tweets: TweetModel[];
+    appActions: ActionCreator;
 };
 
 type States = {};
@@ -26,8 +29,27 @@ export default class TweetList extends React.Component<Props, States> {
 
         return (
             <section>
-                {this.props.tweets.map((tw: any, idx: number) => {
-                    return React.createElement(Tweet, Object.assign({ key: tw.id_str, first: idx === 0 }, tw));
+                {this.props.tweets.map((tw: TweetModel, idx: number) => {
+                    if (tw.retweeted_status) {
+                        return (
+                            <Tweet
+                                {...tw.retweeted_status}
+                                source_id={this.props.source_id}
+                                key={tw.id_str}
+                                first={idx === 0}
+                                appActions={this.props.appActions}
+                                retweet_user={tw.user}
+                                />);
+                    } else {
+                        return (
+                            <Tweet
+                                {...tw}
+                                source_id={this.props.source_id}
+                                key={tw.id_str}
+                                first={idx === 0}
+                                appActions={this.props.appActions}
+                                />);
+                    }
                 }) }
             </section>
         );

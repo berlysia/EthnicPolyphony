@@ -1,13 +1,11 @@
-import ActionEmitter from '../Flux/ActionEmitter';
-import ReduceStore from '../Flux/ReduceStore';
+import ActionEmitter from '../../Flux/ActionEmitter';
+import ReduceStore from '../../Flux/ReduceStore';
 import BaseTimeline from './BaseTimeline';
-import Tweets from './Tweets';
-import ViewInfo from './ViewInfo';
-import {ViewType, generateViewOptionFromSeed} from '../AppContext/ActionCreator';
+import Tweets from '../ReduceStores/Tweets';
+import ViewInfo from '../ReduceStores/ViewInfo';
+import {ViewType, generateViewOptionFromSeed} from '../../AppContext/ActionCreator';
 
 export default class UserTimeline extends BaseTimeline {
-    stores: [ViewInfo, Tweets];
-
     constructor(dispatcher: ActionEmitter, id: string, user_id: string) {
         super(dispatcher);
 
@@ -18,12 +16,5 @@ export default class UserTimeline extends BaseTimeline {
             target_id: user_id,
         }));
         this.setStores(info, new Tweets());
-    }
-
-    getState() {
-        return {
-            tweets: this.stores[1].getState(),
-            type: this.stores[0].getState(),
-        }
     }
 }

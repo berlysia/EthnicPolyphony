@@ -25,6 +25,12 @@ export function generateDisplayName(option: ViewOption) {
         case ViewType.SearchTimeline: {
             return `${IDSNmap_get(option.source_id)}/Search/${option.query}`;
         }
+        case ViewType.UserProfile: {
+            if (option.source_id === option.target_id) {
+                return `${IDSNmap_get(option.source_id)}/Prof/Self`;
+            }
+            return `${IDSNmap_get(option.source_id)}/Prof/${option.target_id}`;
+        }
     }
 }
 

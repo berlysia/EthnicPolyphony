@@ -3,6 +3,7 @@ import TwitterClient from '../TwitterClient';
 import * as Authentication from '../Authentication';
 import JSONLoader from '../JSONLoader';
 import {view_storage} from '../Constants';
+import {Users} from '../Models/Tweet';
 
 export enum ViewType {
     HomeTimeline,
@@ -10,6 +11,7 @@ export enum ViewType {
     SingleTweet,
     ListTimeline,
     SearchTimeline,
+    UserProfile,
 };
 
 export const keys = {
@@ -20,6 +22,7 @@ export const keys = {
     popStack: 'popStack',
     pushStack: 'pushStack',
     fetchTweet: 'fetchTweet',
+    fetchProfile: 'fetchProfile',
     updateStatus: 'updateStatus',
     destroyStatus: 'destroyStatus',
     retweet: 'retweet',
@@ -33,6 +36,7 @@ export interface ViewOptionSeed {
     source_id: string;
     target_id?: string;
     query?: string;
+    user?: Users;
 }
 
 export interface ViewOption extends ViewOptionSeed {
@@ -60,7 +64,7 @@ export function generateViewOption(key: string): ViewOption {
 }
 
 export function generateViewOptionFromSeed(option: ViewOptionSeed): ViewOption {
-    return Object.assign({ key: generateKey(option) }, option);
+    return Object.assign(option, { key: generateKey(option) });
 }
 
 // for user action
@@ -75,14 +79,20 @@ export default class ActionCreator extends _ActionCreator {
                 } else {
                     return Authentication.getAccounts()
                         .then(accounts => {
-                            return accounts.map(account => [{
-                                type: ViewType.HomeTimeline,
-                                source_id: account.id,
-                            }, {
+                            return accounts.map(account => [
+                                {
+                                    type: ViewType.HomeTimeline,
+                                    source_id: account.id,
+                                }, {
                                     type: ViewType.UserTimeline,
                                     source_id: account.id,
                                     target_id: account.id,
-                                }])
+                                }, {
+                                    type: ViewType.UserProfile,
+                                    source_id: account.id,
+                                    target_id: account.id,
+                                }
+                            ])
                                 .reduce((r, c) => r.concat(c), []); // flatten
                         });
                 }
@@ -168,6 +178,16 @@ export default class ActionCreator extends _ActionCreator {
                 append,
                 params,
             },
+        });
+    }
+
+    fetchProfile(source_id: string, target_id: string) {
+        this.dispatcher.dispatch({
+            type: keys.fetchProfile,
+            value: {
+                source_id,
+                target_id,
+            }
         });
     }
 

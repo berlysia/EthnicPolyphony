@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {ViewContextStackItem} from '../AppContext/ViewManager';
-import HomeTimelineStoreGroup from '../ViewContext/HomeTimeline';
-import UserTimelineStoreGroup from '../ViewContext/UserTimeline';
+import HomeTimelineStoreGroup from '../ViewContext/StoreGroups/HomeTimeline';
+import UserTimelineStoreGroup from '../ViewContext/StoreGroups/UserTimeline';
 import ActionCreator, {ViewType} from '../AppContext/ActionCreator';
 
 import HomeTimeline from './HomeTimeline';
 import UserTimeline from './UserTimeline';
+import UserProfile from './UserProfile';
 // import ListTimeline from './ListTimeline';
 // import SearchTimeline from './SearchTimeline';
 
@@ -77,7 +78,16 @@ export default class MainView extends React.Component<Props, States> {
                         freeze={!this.state.onTop}
                         />
                 );
-            } break;
+            };
+            case ViewType.UserProfile: {
+                return (
+                    <UserProfile
+                        id='mainView'
+                        {...top}
+                        appActions={this.props.actions}
+                        />
+                );
+            };
             // case ViewType.ListTimeline: {
             //   view = <ListTimeline
             //     source_id={top.source_id}

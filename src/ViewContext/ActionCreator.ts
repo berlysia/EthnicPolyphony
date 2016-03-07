@@ -2,6 +2,8 @@ import _ActionCreator from '../Flux/ActionCreator';
 import ActionEmitter from '../Flux/ActionEmitter';
 import TwitterClient from '../TwitterClient';
 
+const debug = require('debug')('ViewContext:ActionCreator');
+
 export const keys = {
     // fetchUserTimeline: 'fetchUserTimeline',
     // fetchHomeTimeline: 'fetchHomeTimeline',
@@ -11,6 +13,7 @@ export const keys = {
     prepend: 'prepend',
     prependSingle: 'prependSingle',
     append: 'append',
+    receiveProfile: 'receiveProfile',
     error: 'error',
 };
 
@@ -46,13 +49,26 @@ export class StreamQueue {
 // for user action
 export default class ActionCreator extends _ActionCreator {
     connectUserStream(id: string, params: any) {
+        debug('#connectUserStream', id);
         const queue = new StreamQueue(this.dispatcher);
         TwitterClient.byID(id).userStream((tw: any) => {
             queue.receiver(tw);
         });
     }
 
+    fetchUserProfile(id: string, user_id: string) {
+        debug('#fetchUserProfile', id, user_id);
+        TwitterClient.byID(id).showUser(user_id)
+            .then(profile => {
+                this.dispatcher.dispatch({
+                    type: keys.receiveProfile,
+                    value: profile,
+                });
+            });
+    }
+
     fetchUserTimeline(id: string, screen_name: string, params: any, append?: boolean) {
+        debug('#fetchUserTimeline', id, screen_name);
         TwitterClient.byID(id).userTimeline(screen_name, params)
             .then(tweets => {
                 this.dispatcher.dispatch({
@@ -68,6 +84,7 @@ export default class ActionCreator extends _ActionCreator {
     }
 
     fetchUserTimelineByID(id: string, user_id: string, params: any, append?: boolean) {
+        debug('#fetchUserTimelineByID', id, user_id);
         TwitterClient.byID(id).userTimelineByID(user_id, params)
             .then(tweets => {
                 this.dispatcher.dispatch({
@@ -83,7 +100,7 @@ export default class ActionCreator extends _ActionCreator {
     }
 
     fetchHomeTimeline(id: string, params: any, append?: boolean) {
-        // console.log(`fetchHomeTimeline: id:${id}, params:${JSON.stringify(params)}, append: ${append}`)
+        debug('#fetchHomeTimeline', id);
         TwitterClient.byID(id).homeTimeline(params)
             .then(tweets => {
                 this.dispatcher.dispatch({
@@ -100,6 +117,7 @@ export default class ActionCreator extends _ActionCreator {
     }
 
     fetchListTimeline(id: string, list_id: string, params: any, append?: boolean) {
+        debug('#fetchListTimeline', id, list_id);
         TwitterClient.byID(id).listsStatuses(list_id, params)
             .then(tweets => {
                 this.dispatcher.dispatch({
@@ -115,6 +133,7 @@ export default class ActionCreator extends _ActionCreator {
     }
 
     fetchSearchTimeline(id: string, q: string, params: any, append?: boolean) {
+        debug('#fetchSearchTimeline', id, q);
         TwitterClient.byID(id).searchTweets(q, params)
             .then(tweets => {
                 this.dispatcher.dispatch({
