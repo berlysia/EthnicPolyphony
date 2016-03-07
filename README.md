@@ -42,7 +42,8 @@ everything are in `resources`
 - [ ] add more types of view(user, list, search, etc...)
   - [x] HomeTimeline
   - [x] UserTimeline(self)
-  - [ ] UserTimeline(other)
+  - [x] UserProfile
+  - [x] UserTimeline(other)
   - [ ] ListTimeline
   - [ ] SearchTimeline
 
