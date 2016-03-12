@@ -58,6 +58,12 @@ export default class UserProfile extends React.Component<Props, States> {
     }
     _openUserTimeline = this.__openUserTimeline.bind(this);
 
+    __reloadProfile() {
+        const state = this.props.store.getState();
+        this.props.appActions.fetchProfile(state.type.source_id, state.user.id_str);
+    }
+    _reloadProfile = this.__reloadProfile.bind(this);
+
     render() {
         debug('UserProfile#render');
         const state = this.props.store.getState();
@@ -102,6 +108,7 @@ export default class UserProfile extends React.Component<Props, States> {
                             </span>
                         </div>
                     </section>
+                    <button onClick={this._reloadProfile}>reload profile</button>
                 </section>
             </section>
         );
