@@ -5,8 +5,7 @@ import {calcmd5, formatDateString, getProfileImage} from '../../util';
 import ActionCreator, {ViewType} from '../../AppContext/ActionCreator';
 
 const debug = require('remote').require('debug')('Components:Tweet');
-const Bemmer = require('bemmer');
-const classBuilder = Bemmer.create('tweet')
+const classBuilder = require('bemmer').createBuilder('tweet')
 
 interface Props extends TweetModel {
     source_id: string;
@@ -20,13 +19,17 @@ interface PropsWithClassName extends Props {
     className?: string;
 };
 
-export function unescape(text: string) {
-    return text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/, '&');
+function taintText(text: string) {
+    return { __html: text };
+}
+
+export function newlineToBrElement(text: string) {
+    return taintText(text.replace(/\n/g, '<br />'));
 }
 
 export class TweetText extends React.Component<PropsWithClassName, {}> {
 
-    _onClick(index: number) {
+    _openLink(index: number) {
         if (this.mergedEntities[index]
             && this.mergedEntities[index].expanded_url) {
             shell.openExternal(this.mergedEntities[index].expanded_url);
@@ -35,19 +38,28 @@ export class TweetText extends React.Component<PropsWithClassName, {}> {
 
     mergedEntities: { indices: [number, number], expanded_url: string }[];
 
+    _textElements: JSX.Element[] = null;
     get textElements(): JSX.Element[] {
-        let text = unescape(this.props.text);
+        if (this._textElements) return this._textElements;
+        let text = this.props.text;
         const md5 = calcmd5(this.props.id_str + text);
 
         const elements = this.mergedEntities.reduceRight((prev: JSX.Element[], curr: any, idx: number) => {
-            prev.unshift(<span key={md5 + idx + '_spn'}>{text.substr(curr.indices[1]) + ' '}</span>);
-            prev.unshift(<a key={md5 + idx + '_a'} href='#' onClick={() => this._onClick(idx) }>{curr.display_url}</a>);
+            const plainText = newlineToBrElement(text.substr(curr.indices[1]) + ' ');
+            prev.unshift(<span
+                key={md5 + idx + '_spn'}
+                dangerouslySetInnerHTML={plainText}></span>);
+            prev.unshift(<a
+                key={md5 + idx + '_a'}
+                href='#'
+                onClick={() => this._openLink(idx) }
+                dangerouslySetInnerHTML={{ __html: curr.display_url }}></a>);
             text = text.substr(0, curr.indices[0]);
             return prev;
         }, []);
-        elements.unshift(<span key={md5 + '_spn'}>{text}</span>);
+        elements.unshift(<span key={md5 + '_spn'} dangerouslySetInnerHTML={newlineToBrElement(text) }></span>);
 
-        return elements;
+        return this._textElements = elements;
     }
 
     shouldComponentUpdate(nextProps: PropsWithClassName, nextState: {}) {
@@ -163,6 +175,16 @@ export default class Tweet extends React.Component<Props, {}> {
     }
     _openProfileView = this.__openProfileView.bind(this);
 
+    __favorite() {
+        this.props.appActions.favorite(this.props.source_id, this.props.id_str);
+    }
+    _favorite = this.__favorite.bind(this);
+
+    __retweet() {
+        this.props.appActions.retweet(this.props.source_id, this.props.id_str);
+    }
+    _retweet = this.__retweet.bind(this);
+
     render() {
         debug('Tweet#render');
         // <div className={`tweet__retweet${this.props.retweeted ? ' retweeted' : ''}`}>RT {this.props.retweet_count}</div>
@@ -189,6 +211,8 @@ export default class Tweet extends React.Component<Props, {}> {
                                 className={classBuilder('__created_at__anchor') }
                                 >{this.created_at}</a>
                         </section>
+                        <section className={classBuilder('__favorite', { favorited: this.props.favorited }) } onClick={this._favorite}>★</section>
+                        <section className={classBuilder('__retweet', { retweeted: this.props.retweeted }) } onClick={this._retweet}>RT</section>
                         <section className={classBuilder('__source') }>
                             <a
                                 href='#'

@@ -87,6 +87,16 @@ html, body, #root {
   font-size: 0.9em;
   color: #666;
 }
+.tweet__favorite {
+  float: left;
+  margin: 0 2px;
+  text-align: center;
+}
+.tweet__retweet {
+  float: left;
+  margin: 0 2px;
+  text-align: center;
+}
 .tweet__source {
   text-align: right;
 }

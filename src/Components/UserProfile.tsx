@@ -6,7 +6,7 @@ import {default as UserProfileStoreGroup} from '../ViewContext/StoreGroups/UserP
 import {getProfileImage} from '../util';
 
 const debug = require('remote').require('debug')('Components:UserProfile');
-const classBuilder = require('bemmer').create('user_profile');
+const classBuilder = require('bemmer').createBuilder('user_profile');
 
 interface Props {
     id: string;
