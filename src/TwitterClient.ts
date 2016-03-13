@@ -131,23 +131,28 @@ export default class TwitterClient {
         if (this.connected) return;
         this.client.stream('user', params || {}, stream => {
             this.connected = true;
-            debug(`TwitterClient#userStream: id ${this.account.screenName} :stream created`);
+            debug(`#userStream: id ${this.account.screenName} :stream created`);
 
             stream.on('data', (data: any) => {
-                debug(`TwitterClient#userStream: id ${this.account.screenName} :stream emit "data"`);
+                debug(`#userStream: id ${this.account.screenName} :stream emit "data"`);
                 if (data['text']) {
                     callback(data);
                 }
             });
 
             stream.on('error', (err: Error) => {
-                debug(`TwitterClient#userStream: id ${this.account.screenName} :stream emit "error"`);
+                debug(`#userStream: id ${this.account.screenName} :stream emit "error"`);
                 console.error('stream error', err);
             });
 
             stream.on('end', () => {
                 this.connected = false;
-                debug(`TwitterClient#userStream: id ${this.account.screenName} :stream emit "end"`);
+                debug(`#userStream: id ${this.account.screenName} :stream emit "end"`);
+            });
+
+            stream.on('close', () => {
+                this.connected = false;
+                debug(`#userStream: id ${this.account.screenName} :stream emit "close"`);
             });
         });
     }
