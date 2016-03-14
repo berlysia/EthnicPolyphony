@@ -192,27 +192,27 @@ export default class ActionCreator extends _ActionCreator {
     }
 
     updateStatus(id: string, status: string, inReplyTo?: string) {
-        TwitterClient.byID(id).updateStatus(status, inReplyTo);
+        return TwitterClient.byID(id).updateStatus(status, inReplyTo);
     }
 
     destroyStatus(id: string, target_id: string) {
-        TwitterClient.byID(id).destroyStatus(target_id);
+        return TwitterClient.byID(id).destroyStatus(target_id);
     }
 
     retweet(id: string, target_id: string) {
-        TwitterClient.byID(id).retweet(target_id);
+        return TwitterClient.byID(id).retweet(target_id);
     }
 
     unretweet(id: string, target_id: string) {
-        TwitterClient.byID(id).unretweet(target_id);
+        return TwitterClient.byID(id).unretweet(target_id);
     }
 
     favorite(id: string, target_id: string) {
-        TwitterClient.byID(id).favorite(target_id);
+        return TwitterClient.byID(id).favorite(target_id);
     }
 
     unfavorite(id: string, target_id: string) {
-        TwitterClient.byID(id).unfavorite(target_id);
+        return TwitterClient.byID(id).unfavorite(target_id);
     }
 
     addAccount() {

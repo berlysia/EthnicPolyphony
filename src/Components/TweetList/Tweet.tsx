@@ -1,7 +1,12 @@
 import * as React from 'react';
 import {Tweet as TweetModel, Entities, Users} from '../../Models/Tweet';
 import {shell} from 'electron';
-import {calcmd5, formatDateString, getProfileImage} from '../../util';
+import {
+    calcmd5,
+    formatDateString,
+    getProfileImage,
+    validateAsNumericString
+} from '../../util';
 import ActionCreator, {ViewType} from '../../AppContext/ActionCreator';
 
 const debug = require('remote').require('debug')('Components:Tweet');
@@ -67,6 +72,7 @@ export class TweetText extends React.Component<PropsWithClassName, {}> {
     }
 
     render() {
+        // merge, sort by indices, uniquify
         this.mergedEntities = []
             .concat(this.props.entities.urls)
             .concat((this.props.extended_entities && this.props.extended_entities.media) || [])
@@ -130,7 +136,19 @@ export class TweetImages extends React.Component<PropsWithClassName, {}> {
     }
 }
 
-export default class Tweet extends React.Component<Props, {}> {
+interface State {
+    retweeted: boolean;
+    favorited: boolean;
+}
+
+export default class Tweet extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            retweeted: props.retweeted,
+            favorited: props.favorited,
+        };
+    }
 
     get created_at(): string {
         return formatDateString(this.props.created_at);
@@ -152,6 +170,7 @@ export default class Tweet extends React.Component<Props, {}> {
     }
 
     __openPermaLink() {
+        if (!validateAsNumericString(this.props.id_str)) return;
         shell.openExternal(`https://twitter.com/statuses/${this.props.id_str}`)
     }
     _openPermaLink = this.__openPermaLink.bind(this);
@@ -187,12 +206,36 @@ export default class Tweet extends React.Component<Props, {}> {
     _openRetweeterProfileView = this.__openRetweeterProfileView.bind(this);
 
     __favorite() {
-        this.props.appActions.favorite(this.props.source_id, this.props.id_str);
+        if (this.state.favorited && window.confirm(`unfavorite?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) {
+            this.props.appActions
+                .unfavorite(this.props.source_id, this.props.id_str)
+                .then(() => {
+                    this.setState(Object.assign({}, this.state, { favorited: false }));
+                });
+        } else {
+            this.props.appActions
+                .favorite(this.props.source_id, this.props.id_str)
+                .then(() => {
+                    this.setState(Object.assign({}, this.state, { favorited: true }));
+                });
+        }
     }
     _favorite = this.__favorite.bind(this);
 
     __retweet() {
-        this.props.appActions.retweet(this.props.source_id, this.props.id_str);
+        if (this.state.retweeted && window.confirm(`unretweet?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) {
+            this.props.appActions
+                .unretweet(this.props.source_id, this.props.id_str)
+                .then(() => {
+                    this.setState(Object.assign({}, this.state, { retweeted: false }));
+                });
+        } else if (window.confirm(`retweet?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) {
+            this.props.appActions
+                .retweet(this.props.source_id, this.props.id_str)
+                .then(() => {
+                    this.setState(Object.assign({}, this.state, { retweeted: true }));
+                });
+        }
     }
     _retweet = this.__retweet.bind(this);
 
@@ -222,8 +265,8 @@ export default class Tweet extends React.Component<Props, {}> {
                                 className={classBuilder('__created_at__anchor') }
                                 >{this.created_at}</a>
                         </section>
-                        <section className={classBuilder('__favorite', { favorited: this.props.favorited }) } onClick={this._favorite}>★</section>
-                        <section className={classBuilder('__retweet', { retweeted: this.props.retweeted }) } onClick={this._retweet}>RT</section>
+                        <section className={classBuilder('__favorite', { favorited: this.state.favorited }) } onClick={this._favorite}>★</section>
+                        <section className={classBuilder('__retweet', { retweeted: this.state.retweeted }) } onClick={this._retweet}>RT</section>
                         <section className={classBuilder('__source') }>
                             <a
                                 href='#'

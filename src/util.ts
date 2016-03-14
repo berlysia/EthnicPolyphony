@@ -8,6 +8,10 @@ export function getProfileImage(url: string, sizeStr?: SizeStr) {
     return url.replace('_normal', sizeStr);
 }
 
+export function validateAsNumericString(num: string): boolean {
+    return !isNaN(Number(num));
+}
+
 export function decrementNumericString(num: string): string {
     const target = Number(num[num.length - 1]);
     if (target) {
