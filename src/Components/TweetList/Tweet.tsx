@@ -175,6 +175,17 @@ export default class Tweet extends React.Component<Props, {}> {
     }
     _openProfileView = this.__openProfileView.bind(this);
 
+    __openRetweeterProfileView() {
+        const target_id = this.props.retweet_user.id_str;
+        this.props.appActions.pushStack({
+            type: ViewType.UserProfile,
+            source_id: this.props.source_id,
+            target_id,
+            user: this.props.retweet_user,
+        });
+    }
+    _openRetweeterProfileView = this.__openRetweeterProfileView.bind(this);
+
     __favorite() {
         this.props.appActions.favorite(this.props.source_id, this.props.id_str);
     }
@@ -226,9 +237,9 @@ export default class Tweet extends React.Component<Props, {}> {
                     ) : ''}
                     {this.props.retweet_user ? (
                         <section className={classBuilder('__retweeter') }>
-                            <span className={classBuilder('__retweeter__anchor') }>
+                            <a href='#' className={classBuilder('__retweeter__anchor') } onClick={this._openRetweeterProfileView}>
                                 {`RT by @${this.props.retweet_user.screen_name} / ${this.props.retweet_user.name}`}
-                            </span>
+                            </a>
                         </section>
                     ) : ''}
                 </section>
