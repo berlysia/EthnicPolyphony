@@ -34,8 +34,8 @@ everything are in `resources`
 ### high priority
 
 - [x] show (icon) images (+ user media)
-- [ ] favorite
-- [ ] retweet
+- [x] favorite
+- [x] retweet
 - [x] put anchors
 - [x] attach some styles
 - [ ] implement 'add tabs...' button
@@ -46,6 +46,10 @@ everything are in `resources`
   - [x] UserTimeline(other)
   - [ ] ListTimeline
   - [ ] SearchTimeline
+  - [ ] SingleTweet
+  - [ ] chained tweets view  
+- [ ] notification area
+- [ ] tweet filtering
 
 ### low priority
 
