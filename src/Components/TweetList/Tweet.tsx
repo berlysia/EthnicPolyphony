@@ -163,10 +163,10 @@ export default class Tweet extends React.Component<Props, State> {
         }
     }
 
-    shouldComponentUpdate(nextProps: Props, nextState: {}) {
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
         return this.props.id_str !== nextProps.id_str
-            || this.props.favorited !== nextProps.favorited
-            || this.props.retweeted !== nextProps.retweeted;
+            || this.state.favorited !== nextState.favorited
+            || this.state.retweeted !== nextState.retweeted;
     }
 
     __openPermaLink() {
@@ -206,35 +206,42 @@ export default class Tweet extends React.Component<Props, State> {
     _openRetweeterProfileView = this.__openRetweeterProfileView.bind(this);
 
     __favorite() {
-        if (this.state.favorited && window.confirm(`unfavorite?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) {
+        if (this.state.favorited) {
+            if (!window.confirm(`unfavorite?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) return;
             this.props.appActions
                 .unfavorite(this.props.source_id, this.props.id_str)
                 .then(() => {
                     this.setState(Object.assign({}, this.state, { favorited: false }));
-                });
+                })
+                .catch(e => console.error(e, JSON.stringify(e)));
         } else {
             this.props.appActions
                 .favorite(this.props.source_id, this.props.id_str)
                 .then(() => {
                     this.setState(Object.assign({}, this.state, { favorited: true }));
-                });
+                })
+                .catch(e => console.error(e, JSON.stringify(e)));
         }
     }
     _favorite = this.__favorite.bind(this);
 
     __retweet() {
-        if (this.state.retweeted && window.confirm(`unretweet?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) {
+        if (this.state.retweeted) {
+            if (!window.confirm(`unretweet?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) return;
             this.props.appActions
                 .unretweet(this.props.source_id, this.props.id_str)
                 .then(() => {
                     this.setState(Object.assign({}, this.state, { retweeted: false }));
-                });
-        } else if (window.confirm(`retweet?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) {
+                })
+                .catch(e => console.error(e, JSON.stringify(e)));
+        } else {
+            if (!window.confirm(`retweet?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) return;
             this.props.appActions
                 .retweet(this.props.source_id, this.props.id_str)
                 .then(() => {
                     this.setState(Object.assign({}, this.state, { retweeted: true }));
-                });
+                })
+                .catch(e => console.error(e, JSON.stringify(e)));
         }
     }
     _retweet = this.__retweet.bind(this);

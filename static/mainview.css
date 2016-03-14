@@ -50,6 +50,7 @@ a {
   font-size: 13px;
   width: 100%;
   height: auto;
+  box-sizing: border-box;
 }
 
 .tweet__header {
@@ -99,10 +100,16 @@ a {
   margin: 0 2px;
   text-align: center;
 }
+.tweet__favorite--favorited {
+  color: #ff0
+}
 .tweet__retweet {
   float: left;
   margin: 0 2px;
   text-align: center;
+}
+.tweet__retweet--retweeted {
+  color: #0c0;
 }
 .tweet__source {
   text-align: right;
