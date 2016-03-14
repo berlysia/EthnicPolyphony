@@ -1,4 +1,3 @@
-
 * {
   font-family: 'Hiragino Kaku Gothic Pro', serif;
 }
@@ -6,6 +5,13 @@ html, body, #root {
   margin: 0;
   padding: 0;
   height: 100vh;
+}
+html {
+  background: #333;
+  color: #ddd;
+}
+a {
+  color: #ddf;
 }
 #app {
   height: 100%;
@@ -21,7 +27,7 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: #fff;
+  background: #333;
 }
 #tabs li {
   list-style-type: none;
@@ -31,29 +37,30 @@ html, body, #root {
   line-height: 2em;
   text-overflow: ellipsis;
   width: 140px;
-  color: #222;
   background: transparent;
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid #444;
   font-size: 14px;
 }
 #tabs li.selected {
   background: rgba(0, 0, 255, 0.2);
 }
 .tweet {
-  border-bottom: 1px solid #999;
+  padding: 4px;
+  border-bottom: 1px solid #444;
   font-size: 13px;
   width: 100%;
   height: auto;
 }
 
 .tweet__header {
-  width: 52px; /*48 + 2 + 2*/
+  width: 56px; /*48 + 2 + 2*/
   height: 100%;
 }
 .tweet__profile_image {
   width: 48px;
   height: 48px;
   margin: 2px;
+  margin-right: 4px;
   float: left;
 }
 
@@ -64,7 +71,7 @@ html, body, #root {
 }
 .tweet__author {
   font-size: 0.8em;
-  color: #444;
+  color: #999;
   order: 0;
 }
 .tweet__text {
@@ -85,7 +92,7 @@ html, body, #root {
 }
 .tweet__created_at__anchor {
   font-size: 0.9em;
-  color: #666;
+  color: #999;
 }
 .tweet__favorite {
   float: left;
@@ -102,7 +109,7 @@ html, body, #root {
 }
 .tweet__source__anchor {
   font-size: 0.9em;
-  color: #666;
+  color: #999;
 }
 
 .tweet__images__thumb {
@@ -114,7 +121,7 @@ html, body, #root {
 }
 .tweet__retweeter__anchor {
   font-size: 0.9em;
-  color: #666;
+  color: #999;
 }
 
 
@@ -171,8 +178,8 @@ html, body, #root {
 .user_profile__ribbon {
   display: flex;
   width: 100%;
-  border-top: 1px solid #999;
-  border-bottom: 1px solid #999;
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
 }
 
 .user_profile__ribbon__item {
