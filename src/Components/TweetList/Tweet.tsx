@@ -227,7 +227,7 @@ export default class Tweet extends React.Component<Props, State> {
                 .catch(errors => {
                     console.error(errors, JSON.stringify(errors));
                     errors.forEach((e: { code: number, message: string }) => {
-                        if (e.code === 139) {
+                        if (e.code === 139) { // already favorited
                             this.setFavorite(true);
                         }
                     });
