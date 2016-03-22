@@ -30,7 +30,8 @@ export const defaultFetchParams: TwitterParamsForFetch = {
 export default class TwitterClient {
     private client: Twitter.Twitter;
     account: any;
-    connected: boolean;
+    userStreamConnected: boolean;
+    purgeUserStream = () => { };
 
     constructor(accountData: any, credentials: any) {
         this.account = accountData;
@@ -41,7 +42,7 @@ export default class TwitterClient {
             access_token_secret: accountData['accessTokenSecret'],
         });
 
-        this.connected = false;
+        this.userStreamConnected = false;
 
         byScreenName.set(accountData['screenName'], this);
         byID.set(accountData['id'], this);
@@ -128,9 +129,9 @@ export default class TwitterClient {
     }
 
     userStream(callback: Function, params?: TwitterParamsForFetch) {
-        if (this.connected) return;
+        if (this.userStreamConnected) return;
         this.client.stream('user', params || {}, stream => {
-            this.connected = true;
+            this.userStreamConnected = true;
             debug(`#userStream: id ${this.account.screenName} :stream created`);
 
             stream.on('data', (data: any) => {
@@ -146,14 +147,19 @@ export default class TwitterClient {
             });
 
             stream.on('end', () => {
-                this.connected = false;
+                this.userStreamConnected = false;
                 debug(`#userStream: id ${this.account.screenName} :stream emit "end"`);
             });
 
             stream.on('close', () => {
-                this.connected = false;
+                this.userStreamConnected = false;
                 debug(`#userStream: id ${this.account.screenName} :stream emit "close"`);
             });
+
+            this.purgeUserStream = () => {
+                this.userStreamConnected = false;
+                stream.removeAllListeners();
+            };
         });
     }
 }
