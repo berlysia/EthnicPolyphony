@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import ActionCreator, {ViewType} from '../AppContext/ActionCreator';
 import {default as UserProfileStoreGroup} from '../ViewContext/StoreGroups/UserProfile';
+import {shell} from 'electron';
 
 import {getProfileImage} from '../util';
 
@@ -48,7 +49,7 @@ export default class UserProfile extends React.Component<Props, States> {
         return `${user.profile_banner_url}/1500x500`;
     }
 
-    __openUserTimeline() {
+    _openUserTimeline() {
         const state = this.props.store.getState();
         this.props.appActions.pushStack({
             type: ViewType.UserTimeline,
@@ -56,13 +57,15 @@ export default class UserProfile extends React.Component<Props, States> {
             target_id: state.user.id_str,
         });
     }
-    _openUserTimeline = this.__openUserTimeline.bind(this);
 
-    __reloadProfile() {
+    _reloadProfile() {
         const state = this.props.store.getState();
         this.props.appActions.fetchProfile(state.type.source_id, state.user.id_str);
     }
-    _reloadProfile = this.__reloadProfile.bind(this);
+    
+    _openUrl(url: string) {
+      shell.openExternal(url);
+    }
 
     render() {
         debug('#render');
@@ -79,7 +82,7 @@ export default class UserProfile extends React.Component<Props, States> {
                                 <p>{`@${user.screen_name}`}</p>
                                 <p>{user.name}</p>
                                 <p>{user.location}</p>
-                                <p>{user.url}</p>
+                                <p><a href="#" onClick={()=>this._openUrl(user.url)}>{user.url}</a></p>
                             </section>
                         </section>
                         <section className={classBuilder('__header__description') }>
