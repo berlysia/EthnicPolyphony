@@ -89,7 +89,7 @@ export default class TwitterClient {
         return this.baseFunc(Object.assign({
             status,
             in_reply_to_status_id_str: in_reply_to_status_id
-        }, defaultFetchParams, params || {}), METHOD.POST, 'statuses/update');
+        }, params || {}), METHOD.POST, 'statuses/update');
     }
 
     destroyStatus(status_id: string, params?: TwitterParamsForFetch) {
@@ -97,19 +97,19 @@ export default class TwitterClient {
     }
 
     retweet(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.POST, `statuses/retweet/${status_id}`);
+        return this.baseFunc(Object.assign({}, params || {}), METHOD.POST, `statuses/retweet/${status_id}`);
     }
 
     unretweet(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.POST, `statuses/unretweet/${status_id}`);
+        return this.baseFunc(Object.assign({}, params || {}), METHOD.POST, `statuses/unretweet/${status_id}`);
     }
 
     favorite(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ id: status_id }, defaultFetchParams, params || {}), METHOD.POST, 'favorites/create');
+        return this.baseFunc(Object.assign({ id: status_id }, params || {}), METHOD.POST, 'favorites/create');
     }
 
     unfavorite(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ id: status_id }, defaultFetchParams, params || {}), METHOD.POST, 'favorites/destroy');
+        return this.baseFunc(Object.assign({ id: status_id }, params || {}), METHOD.POST, 'favorites/destroy');
     }
 
     listsList(params?: TwitterParamsForFetch) {

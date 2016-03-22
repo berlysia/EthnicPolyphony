@@ -253,6 +253,11 @@ export default class Tweet extends React.Component<Props, State> {
     }
     _retweet = this.__retweet.bind(this);
 
+    __replyTo() {
+        this.props.appActions.replyToStatus(this.props.id_str, this.props.user.screen_name);
+    }
+    _replyTo = this.__replyTo.bind(this);
+
     render() {
         debug('#render');
         // <div className={`tweet__retweet${this.props.retweeted ? ' retweeted' : ''}`}>RT {this.props.retweet_count}</div>
@@ -281,6 +286,7 @@ export default class Tweet extends React.Component<Props, State> {
                         </section>
                         <section className={classBuilder('__favorite', { favorited: this.state.favorited }) } onClick={this._favorite}>★</section>
                         <section className={classBuilder('__retweet', { retweeted: this.state.retweeted }) } onClick={this._retweet}>RT</section>
+                        <section className={classBuilder('__replyTo') } onClick={this._replyTo}>RE: </section>
                         <section className={classBuilder('__source') }>
                             <a
                                 href='#'

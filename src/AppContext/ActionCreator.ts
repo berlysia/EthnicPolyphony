@@ -24,6 +24,7 @@ export const keys = {
     fetchTweet: 'fetchTweet',
     fetchProfile: 'fetchProfile',
     updateStatus: 'updateStatus',
+    replyToStatus: 'replyToStatus',
     destroyStatus: 'destroyStatus',
     retweet: 'retweet',
     unretweet: 'unretweet',
@@ -193,6 +194,16 @@ export default class ActionCreator extends _ActionCreator {
 
     updateStatus(id: string, status: string, inReplyTo?: string) {
         return TwitterClient.byID(id).updateStatus(status, inReplyTo);
+    }
+
+    replyToStatus(status_id: string, screen_name: string) {
+        this.dispatcher.dispatch({
+            type: keys.replyToStatus,
+            value: {
+                status_id,
+                screen_name,
+            },
+        });
     }
 
     destroyStatus(id: string, target_id: string) {

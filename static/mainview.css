@@ -111,6 +111,11 @@ a {
 .tweet__retweet--retweeted {
   color: #0c0;
 }
+.tweet__replyTo {
+  float: left;
+  margin: 0 2px;
+  text-align: center;
+}
 .tweet__source {
   text-align: right;
 }
