@@ -45,7 +45,7 @@ function _cmp(a: any, b: any): boolean {
     return a < b;
 }
 
-export function lower_bound(x: any, xs: any[], cmp?: Function) {
+export function lower_bound<T>(x: T, xs: T[], cmp?: (a: T, b: T) => boolean) {
     cmp = cmp || _cmp;
     let fst = 0;
     let lst = xs.length;
@@ -62,7 +62,7 @@ export function lower_bound(x: any, xs: any[], cmp?: Function) {
     else return fst;
 }
 
-export function upper_bound(x: any, xs: any[], cmp?: Function) {
+export function upper_bound<T>(x: T, xs: T[], cmp?: (a: T, b: T) => boolean) {
     cmp = cmp || _cmp;
     let fst = 0;
     let lst = xs.length;

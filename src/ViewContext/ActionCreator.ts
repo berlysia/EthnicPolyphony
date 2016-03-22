@@ -52,12 +52,22 @@ export default class ActionCreator extends _ActionCreator {
     connectUserStream(id: string, params: any) {
         debug('#connectUserStream', id);
         // const queue = new StreamQueue(this.dispatcher);
-        TwitterClient.byID(id).userStream((tw: any) => {
-            // queue.receiver(tw);
-            this.dispatcher.dispatch({
-                type: keys.prependSingle,
-                value: tw,
-            });
+        TwitterClient.byID(id).userStream({
+            tweet: (tw: any) => {
+                // queue.receiver(tw);
+                this.dispatcher.dispatch({
+                    type: keys.prependSingle,
+                    value: tw,
+                });
+            },
+            delete: (data: any) => {
+                this.dispatcher.dispatch({
+                    type: keys.destroyStatus,
+                    value: {
+                        status_id: data.status.id_str
+                    }
+                })
+            }
         });
     }
 

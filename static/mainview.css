@@ -99,7 +99,7 @@ a {
   font-size: 0.9em;
   color: #999;
 }
-.tweet__replyTo, .tweet__destroy, .tweet__favorite, .tweet__retweet {
+.tweet__replyTo, .tweet__destroy, .tweet__favorite, .tweet__retweet, .tweet__deleted {
   float: left;
   margin: 0 2px;
   text-align: center;

@@ -31,6 +31,12 @@ function calcPosition(tw: Tweet, tweets: Tweet[]): number {
     return (ub === lb) ? lb : -1;
 }
 
+function findIndex(id: string, tweets: Tweet[]): number {
+    const ub = upper_bound({ id_str: id }, tweets, greaterByID);
+    const lb = lower_bound({ id_str: id }, tweets, greaterByID);
+    return (ub - lb === 1) ? lb : -1;
+}
+
 export const TWEETS_SHOW_MAX = 40;
 export const TWEETS_CACHE_MAX = 200;
 
@@ -74,7 +80,7 @@ export default class Tweets extends ReduceStore {
 
             case keys.destroyStatus: {
                 const status_id = action.value.status_id;
-                const target = prevState.findIndex(tw => tw.id_str === status_id);
+                const target = findIndex(status_id, prevState);
                 if (~target) {
                     prevState[target].deleted = true;
                     const nextState = [].concat(prevState);

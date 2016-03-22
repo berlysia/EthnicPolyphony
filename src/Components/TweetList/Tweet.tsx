@@ -172,7 +172,6 @@ export default class Tweet extends React.Component<Props, State> {
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: State) {
-        if (nextProps.deleted) debug('deleted!!!', this.props.id_str, this.props.user.screen_name, this.props.text);
         return nextProps.deleted
             || this.props.id_str !== nextProps.id_str
             || this.state.favorited !== nextState.favorited
@@ -297,6 +296,7 @@ export default class Tweet extends React.Component<Props, State> {
                         {deleted ? '' : <section className={classBuilder('__retweet', { retweeted: this.state.retweeted }) } onClick={this._retweet}>RT</section>}
                         {deleted ? '' : <section className={classBuilder('__replyTo') } onClick={this._replyTo}>RE: </section>}
                         {(!deleted && this.props.source_id === this.props.user.id_str) ? (<section className={classBuilder('__destroy') } onClick={this._destroy}>DEL</section>) : ''}
+                        {deleted ? <section className={classBuilder('__deleted') }>deleted tweet</section> : ''}
                         <section className={classBuilder('__source') }>
                             <a
                                 href='#'

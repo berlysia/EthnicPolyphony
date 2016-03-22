@@ -22,6 +22,12 @@ export interface TwitterParamsForFetch {
     include_rts?: boolean;
 }
 
+export interface StreamCallbacks {
+    tweet?: Function;
+    delete?: Function;
+    limit?: Function;
+}
+
 export const defaultFetchParams: TwitterParamsForFetch = {
     count: 50,
 }
@@ -128,16 +134,27 @@ export default class TwitterClient {
         return this.baseFunc({ user_id, include_entities: true }, METHOD.GET, 'users/show');
     }
 
-    userStream(callback: Function, params?: TwitterParamsForFetch) {
+    userStream(callbacks: StreamCallbacks, params?: TwitterParamsForFetch) {
         if (this.userStreamConnected) return;
         this.client.stream('user', params || {}, stream => {
             this.userStreamConnected = true;
             debug(`#userStream: id ${this.account.screenName} :stream created`);
 
+            const tweetCallback = callbacks.tweet || (() => { });
+            const deleteCallback = callbacks['delete'] || (() => { });
+            const limitCallback = callbacks.limit || (() => { });
+
             stream.on('data', (data: any) => {
                 debug(`#userStream: id ${this.account.screenName} :stream emit "data"`);
                 if (data['text']) {
-                    callback(data);
+                    tweetCallback(data);
+                } else if (data['delete']) {
+                    deleteCallback(data['delete']);
+                } else if (data['limit']) {
+                    limitCallback(data['limit']);
+                } else if (data['disconnect']) {
+                    this.userStreamConnected = false;
+                    debug(`#userStream: id ${this.account.screenName} disconnected with code: ${data.disconnect.code}`);
                 }
             });
 
