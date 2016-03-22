@@ -50,9 +50,13 @@ export class StreamQueue {
 export default class ActionCreator extends _ActionCreator {
     connectUserStream(id: string, params: any) {
         debug('#connectUserStream', id);
-        const queue = new StreamQueue(this.dispatcher);
+        // const queue = new StreamQueue(this.dispatcher);
         TwitterClient.byID(id).userStream((tw: any) => {
-            queue.receiver(tw);
+            // queue.receiver(tw);
+            this.dispatcher.dispatch({
+                type: keys.prependSingle,
+                value: tw,
+            });
         });
     }
 
