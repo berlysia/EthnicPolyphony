@@ -12,6 +12,7 @@ export enum ViewType {
     ListTimeline,
     SearchTimeline,
     UserProfile,
+    MentionsTimeline,
 };
 
 export const keys = {
@@ -84,6 +85,9 @@ export default class ActionCreator extends _ActionCreator {
                             return accounts.map(account => [
                                 {
                                     type: ViewType.HomeTimeline,
+                                    source_id: account.id,
+                                }, {
+                                    type: ViewType.MentionsTimeline,
                                     source_id: account.id,
                                 }, {
                                     type: ViewType.UserTimeline,

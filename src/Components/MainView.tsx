@@ -7,6 +7,7 @@ import ActionCreator, {ViewType} from '../AppContext/ActionCreator';
 import HomeTimeline from './HomeTimeline';
 import UserTimeline from './UserTimeline';
 import UserProfile from './UserProfile';
+import MentionsTimeline from './MentionsTimeline';
 // import ListTimeline from './ListTimeline';
 // import SearchTimeline from './SearchTimeline';
 
@@ -72,6 +73,16 @@ export default class MainView extends React.Component<Props, States> {
             case ViewType.UserTimeline: {
                 return (
                     <UserTimeline
+                        id='mainView'
+                        {...top}
+                        appActions={this.props.actions}
+                        freeze={!this.state.onTop}
+                        />
+                );
+            };
+            case ViewType.MentionsTimeline: {
+                return (
+                    <MentionsTimeline
                         id='mainView'
                         {...top}
                         appActions={this.props.actions}

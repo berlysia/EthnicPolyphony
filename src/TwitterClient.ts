@@ -90,6 +90,10 @@ export default class TwitterClient {
         return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.GET, 'statuses/home_timeline');
     }
 
+    mentionsTimeline(params?: TwitterParamsForFetch) {
+        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.GET, 'statuses/mentions_timeline');
+    }
+
     updateStatus(status: string, in_reply_to_status_id: string, params?: TwitterParamsForFetch) {
         if (status === '') return;
         return this.baseFunc(Object.assign({

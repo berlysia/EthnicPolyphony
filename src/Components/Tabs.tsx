@@ -13,6 +13,9 @@ export function generateDisplayName(option: ViewOption) {
         case ViewType.HomeTimeline: {
             return `${IDSNmap_get(option.source_id)}/Home`;
         }
+        case ViewType.MentionsTimeline: {
+            return `${IDSNmap_get(option.source_id)}/Replies`;
+        }
         case ViewType.UserTimeline: {
             if (option.source_id === option.target_id) {
                 return `${IDSNmap_get(option.source_id)}/User/Self`;

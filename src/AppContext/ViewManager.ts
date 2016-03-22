@@ -15,6 +15,7 @@ import {view_storage} from '../Constants';
 // for pushStack
 import {default as ViewActionCreator} from '../ViewContext/ActionCreator';
 import HomeTimeline from '../ViewContext/StoreGroups/HomeTimeline';
+import MentionsTimeline from '../ViewContext/StoreGroups/MentionsTimeline';
 import ListTimeline from '../ViewContext/StoreGroups/ListTimeline';
 import UserTimeline from '../ViewContext/StoreGroups/UserTimeline';
 import UserProfile from '../ViewContext/StoreGroups/UserProfile';
@@ -45,6 +46,10 @@ export function generateStackItem(option: ViewOption, temporary?: boolean): View
     switch (option.type) {
         case ViewType.HomeTimeline: {
             store = new HomeTimeline(dispatcher, option.source_id);
+        } break;
+
+        case ViewType.MentionsTimeline: {
+            store = new MentionsTimeline(dispatcher, option.source_id);
         } break;
 
         case ViewType.UserTimeline: {
@@ -123,6 +128,10 @@ export default class ViewManager extends ReduceStore {
                 switch (top.type) {
                     case ViewType.HomeTimeline: {
                         top.actions.fetchHomeTimeline(top.source_id, action.value.params, action.value.append);
+                    } break;
+
+                    case ViewType.MentionsTimeline: {
+                        top.actions.fetchMentionsTimeline(top.source_id, action.value.params, action.value.append);
                     } break;
 
                     case ViewType.ListTimeline: {

@@ -131,6 +131,23 @@ export default class ActionCreator extends _ActionCreator {
             });
     }
 
+    fetchMentionsTimeline(id: string, params: any, append?: boolean) {
+        debug('#fetchMentionsTimeline', id);
+        TwitterClient.byID(id).mentionsTimeline(params)
+            .then(tweets => {
+                this.dispatcher.dispatch({
+                    type: append ? keys.append : keys.prepend,
+                    value: tweets,
+                });
+            }, error => {
+                console.error(error, error.stack);
+                this.dispatcher.dispatch({
+                    type: keys.error,
+                    value: error,
+                })
+            });
+    }
+
     fetchListTimeline(id: string, list_id: string, params: any, append?: boolean) {
         debug('#fetchListTimeline', id, list_id);
         TwitterClient.byID(id).listsStatuses(list_id, params)
