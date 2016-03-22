@@ -90,7 +90,7 @@ export function authenticate() {
 
             auther.getRequestToken((err, requestToken, requestTokenSecret) => {
                 if (err) {
-                    console.error('error on getRequestToken', err);
+                    console.error('#authenticate: error on getRequestToken', err);
                     return;
                 }
                 // console.log(`requestToken: ${requestToken}, requestTokenSecret: ${requestTokenSecret}`)
@@ -139,7 +139,7 @@ export function authenticate() {
                     } else {
                         event.preventDefault();
 
-                        debug(`authenticate else clause`, url);
+                        debug(`#authenticate: else clause`, url);
                         resolve(authenticate());
                         authWindow.close();
                         return;

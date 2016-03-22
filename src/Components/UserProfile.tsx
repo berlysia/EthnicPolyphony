@@ -65,7 +65,7 @@ export default class UserProfile extends React.Component<Props, States> {
     _reloadProfile = this.__reloadProfile.bind(this);
 
     render() {
-        debug('UserProfile#render');
+        debug('#render');
         const state = this.props.store.getState();
         const user = state.user;
 

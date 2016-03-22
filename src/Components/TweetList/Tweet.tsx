@@ -254,7 +254,7 @@ export default class Tweet extends React.Component<Props, State> {
     _retweet = this.__retweet.bind(this);
 
     render() {
-        debug('Tweet#render');
+        debug('#render');
         // <div className={`tweet__retweet${this.props.retweeted ? ' retweeted' : ''}`}>RT {this.props.retweet_count}</div>
         // <div className={`tweet__favorite${this.props.favorited ? ' favorited' : ''}`}>Fav {this.props.favorite_count}</div>
         return (

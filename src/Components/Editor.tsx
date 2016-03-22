@@ -56,7 +56,7 @@ export default class Editor extends React.Component<Props, States> {
     bindedOnKeyDownTweetArea = this._onKeyDownTweetArea.bind(this);
 
     render() {
-        debug('Editor#render');
+        debug('#render');
         return (
             <form id='tweetForm' onSubmit={this.bindedOnSubmitTweet as any}>
                 <textarea

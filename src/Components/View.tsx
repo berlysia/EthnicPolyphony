@@ -35,7 +35,7 @@ export default class View extends React.Component<Props, States> {
     }
 
     render() {
-        debug('View#render');
+        debug('#render');
         const state = this.props.store.getState();
         // <Editor actions={this.props.actions} store={this.props.store} />
         return (

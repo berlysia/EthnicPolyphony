@@ -25,7 +25,7 @@ export default class TweetList extends React.Component<Props, States> {
     }
 
     render() {
-        debug('TweetList#render');
+        debug('#render');
 
         return (
             <section>

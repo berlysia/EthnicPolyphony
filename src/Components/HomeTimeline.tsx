@@ -26,7 +26,7 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
     bindedConnect = this._connect.bind(this);
 
     render() {
-        debug('HomeTimeline#render');
+        debug('#render');
         if (this.remover) {
             this._unlistenChange();
             this._listenChange();

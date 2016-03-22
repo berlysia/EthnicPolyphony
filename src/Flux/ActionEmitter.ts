@@ -12,7 +12,7 @@ export default class ActionEmitter extends EventEmitter {
     }
 
     dispatch(action: Action) {
-        debug('dispatch', action.type);
+        debug('#dispatch', action.type);
         this.emit(ACTION_KEY, action);
     }
 }

@@ -86,7 +86,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     }
 
     render() {
-        debug('BaseTimeline#render');
+        debug('#render');
         if (this.remover) {
             this._unlistenChange();
             this._listenChange();
