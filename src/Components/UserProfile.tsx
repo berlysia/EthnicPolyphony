@@ -49,7 +49,7 @@ export default class UserProfile extends React.Component<Props, States> {
         return `${user.profile_banner_url}/1500x500`;
     }
 
-    _openUserTimeline() {
+    __openUserTimeline() {
         const state = this.props.store.getState();
         this.props.appActions.pushStack({
             type: ViewType.UserTimeline,
@@ -57,15 +57,19 @@ export default class UserProfile extends React.Component<Props, States> {
             target_id: state.user.id_str,
         });
     }
+    _openUserTimeline = this.__openUserTimeline.bind(this);
 
-    _reloadProfile() {
+    __reloadProfile() {
         const state = this.props.store.getState();
         this.props.appActions.fetchProfile(state.type.source_id, state.user.id_str);
     }
-    
-    _openUrl(url: string) {
-      shell.openExternal(url);
+    _reloadProfile = this.__reloadProfile.bind(this);
+
+    __openUrl() {
+        const state = this.props.store.getState();
+        shell.openExternal(state.user.url);
     }
+    _openUrl = this.__openUrl.bind(this);
 
     render() {
         debug('#render');
@@ -77,12 +81,14 @@ export default class UserProfile extends React.Component<Props, States> {
                 <section className={classBuilder('__wrapper') }>
                     <section className={classBuilder('__header') }>
                         <section className={classBuilder('__header__header') }>
-                            <img src={getProfileImage(user.profile_image_url, '') } className={classBuilder('__header__avatar') }></img>
+                            <img src={getProfileImage(user.profile_image_url, '') }
+                                className={classBuilder('__header__avatar') }
+                                />
                             <section className={classBuilder('__header__content') }>
                                 <p>{`@${user.screen_name}`}</p>
                                 <p>{user.name}</p>
                                 <p>{user.location}</p>
-                                <p><a href="#" onClick={()=>this._openUrl(user.url)}>{user.url}</a></p>
+                                <p><a href="#" onClick={this._openUrl}>{user.url}</a></p>
                             </section>
                         </section>
                         <section className={classBuilder('__header__description') }>
@@ -90,7 +96,8 @@ export default class UserProfile extends React.Component<Props, States> {
                         </section>
                     </section>
                     <section className={classBuilder('__ribbon') }>
-                        <div className={classBuilder('__ribbon__item', { statuses: true }) } onClick={this._openUserTimeline}>
+                        <div className={classBuilder('__ribbon__item', { statuses: true }) }
+                            onClick={this._openUserTimeline}>
                             <span className={classBuilder('__ribbon__item__value') }>
                                 {user.statuses_count}
                             </span>
