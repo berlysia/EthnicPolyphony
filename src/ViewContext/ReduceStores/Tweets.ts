@@ -2,6 +2,9 @@ import ReduceStore from '../../Flux/ReduceStore';
 import {Action} from '../../Flux/Action';
 import {Tweet, greaterByID} from '../../Models/Tweet';
 import {upper_bound, lower_bound} from '../../util';
+import {keys} from '../ActionCreator';
+
+const debug = require('debug')('ViewContext:Tweets');
 
 function sortTweet(curr: Tweet, next: Tweet) {
     if (curr.id_str < next.id_str) {
@@ -38,9 +41,12 @@ export default class Tweets extends ReduceStore {
     }
 
     reduce(prevState: Tweet[], action: Action): Tweet[] {
+        debug(`#reduce type: ${action.type}`);
+
         switch (action.type) {
-            case 'prependSingle': {
+            case keys.prependSingle: {
                 const nextState = [].concat(prevState);
+                action.value.deleted = false;
                 nextState.splice(calcPosition(action.value, nextState), 0, action.value);
                 if (nextState.length >= TWEETS_CACHE_MAX) {
                     nextState.splice(TWEETS_CACHE_MAX);
@@ -48,20 +54,33 @@ export default class Tweets extends ReduceStore {
                 return nextState;
             }
 
-            case 'prepend': {
-                const nextState = [].concat(action.value).concat(prevState);
+            case keys.prepend: {
+                const received = action.value.map((x: Tweet) => (x.deleted = false, x));
+                const nextState = [].concat(received).concat(prevState);
                 if (nextState.length >= TWEETS_CACHE_MAX) {
                     nextState.splice(TWEETS_CACHE_MAX);
                 }
                 return nextState.sort(sortTweet).reduce(uniquify, []);
             }
 
-            case 'append': {
-                const nextState = [].concat(prevState).concat(action.value);
+            case keys.append: {
+                const received = action.value.map((x: Tweet) => (x.deleted = false, x));
+                const nextState = [].concat(prevState).concat(received);
                 if (nextState.length >= TWEETS_CACHE_MAX) {
                     nextState.splice(TWEETS_CACHE_MAX);
                 }
                 return nextState.sort(sortTweet).reduce(uniquify, []);
+            }
+
+            case keys.destroyStatus: {
+                const status_id = action.value.status_id;
+                const target = prevState.findIndex(tw => tw.id_str === status_id);
+                if (~target) {
+                    prevState[target].deleted = true;
+                    const nextState = [].concat(prevState);
+                    return nextState;
+                }
+                return prevState;
             }
 
             default: {
@@ -71,11 +90,12 @@ export default class Tweets extends ReduceStore {
     }
 
     changed(prevState: Tweet[], nextState: Tweet[]) {
-        return !(
-            prevState.length === nextState.length
-            && prevState.length > 0
-            && prevState[0] === nextState[0]
-        );
+        return prevState !== nextState;
+        // return !(
+        //     prevState.length === nextState.length
+        //     && prevState.length > 0
+        //     && prevState[0] === nextState[0]
+        // );
     }
 
     getTweets(filter?: (item: Tweet, index?: number, tweets?: Tweet[]) => boolean): Tweet[] {

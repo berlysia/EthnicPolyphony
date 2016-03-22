@@ -207,7 +207,15 @@ export default class ActionCreator extends _ActionCreator {
     }
 
     destroyStatus(id: string, target_id: string) {
-        return TwitterClient.byID(id).destroyStatus(target_id);
+        return TwitterClient.byID(id).destroyStatus(target_id)
+            .then(() => {
+                this.dispatcher.dispatch({
+                    type: keys.destroyStatus,
+                    value: {
+                        status_id: target_id,
+                    }
+                })
+            });
     }
 
     retweet(id: string, target_id: string) {

@@ -14,6 +14,7 @@ export const keys = {
     prependSingle: 'prependSingle',
     append: 'append',
     receiveProfile: 'receiveProfile',
+    destroyStatus: 'destroyStatus',
     error: 'error',
 };
 
@@ -150,5 +151,14 @@ export default class ActionCreator extends _ActionCreator {
                     value: error,
                 })
             });
+    }
+
+    destroyStatus(status_id: string) {
+        this.dispatcher.dispatch({
+            type: keys.destroyStatus,
+            value: {
+                status_id,
+            },
+        })
     }
 }

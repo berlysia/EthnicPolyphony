@@ -81,7 +81,9 @@ export interface Users {
 }
 
 export interface Tweet {
-    // annotations: any;
+    deleted?: boolean;
+
+    annotations: any;
     contributors?: any;
     coordinates?: any;
     created_at: string;

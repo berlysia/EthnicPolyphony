@@ -93,7 +93,7 @@ export default class TwitterClient {
     }
 
     destroyStatus(status_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.POST, `statuses/destroy/${status_id}`);
+        return this.baseFunc(Object.assign({}, params || {}), METHOD.POST, `statuses/destroy/${status_id}`);
     }
 
     retweet(status_id: string, params?: TwitterParamsForFetch) {

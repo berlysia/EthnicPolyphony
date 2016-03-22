@@ -260,6 +260,10 @@ export default class ViewManager extends ReduceStore {
                 return prevState;
             }
 
+            case keys.destroyStatus: {
+                prevState.stack[0].actions.destroyStatus(action.value.status_id);
+            }
+
             default:
                 return prevState;
         }

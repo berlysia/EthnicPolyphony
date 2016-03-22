@@ -53,6 +53,10 @@ a {
   box-sizing: border-box;
 }
 
+.tweet--deleted {
+  background: #555;
+}
+
 .tweet__header {
   width: 56px; /*48 + 2 + 2*/
   height: 100%;
@@ -95,7 +99,7 @@ a {
   font-size: 0.9em;
   color: #999;
 }
-.tweet__favorite {
+.tweet__replyTo, .tweet__destroy, .tweet__favorite, .tweet__retweet {
   float: left;
   margin: 0 2px;
   text-align: center;
@@ -103,18 +107,8 @@ a {
 .tweet__favorite--favorited {
   color: #ff0
 }
-.tweet__retweet {
-  float: left;
-  margin: 0 2px;
-  text-align: center;
-}
 .tweet__retweet--retweeted {
   color: #0c0;
-}
-.tweet__replyTo {
-  float: left;
-  margin: 0 2px;
-  text-align: center;
 }
 .tweet__source {
   text-align: right;

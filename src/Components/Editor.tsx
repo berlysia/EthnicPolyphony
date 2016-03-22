@@ -45,7 +45,6 @@ export default class Editor extends React.Component<Props, States> {
     }
 
     onAction(action: Action) {
-        debug('#onAction', action);
         switch (action.type) {
             case keys.replyToStatus: {
                 const status_id = action.value.status_id;
@@ -79,7 +78,6 @@ export default class Editor extends React.Component<Props, States> {
     }
 
     _updateStatus() {
-        debug('#_updateStatus', this.state);
         const status = this.state.text;
         let inReplyTo = this.state.inReplyTo;
 

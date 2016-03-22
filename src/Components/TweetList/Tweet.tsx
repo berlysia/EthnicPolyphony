@@ -172,7 +172,9 @@ export default class Tweet extends React.Component<Props, State> {
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: State) {
-        return this.props.id_str !== nextProps.id_str
+        if (nextProps.deleted) debug('deleted!!!', this.props.id_str, this.props.user.screen_name, this.props.text);
+        return nextProps.deleted
+            || this.props.id_str !== nextProps.id_str
             || this.state.favorited !== nextState.favorited
             || this.state.retweeted !== nextState.retweeted;
     }
@@ -258,12 +260,19 @@ export default class Tweet extends React.Component<Props, State> {
     }
     _replyTo = this.__replyTo.bind(this);
 
+    __destroy() {
+        if (!window.confirm(`destroy tweet?\n@${this.props.user.screen_name} / ${this.props.user.name}\n${this.props.text}`)) return;
+        this.props.appActions.destroyStatus(this.props.source_id, this.props.id_str);
+    }
+    _destroy = this.__destroy.bind(this);
+
     render() {
         debug('#render');
         // <div className={`tweet__retweet${this.props.retweeted ? ' retweeted' : ''}`}>RT {this.props.retweet_count}</div>
         // <div className={`tweet__favorite${this.props.favorited ? ' favorited' : ''}`}>Fav {this.props.favorite_count}</div>
+        const deleted = !!this.props.deleted;
         return (
-            <div className={classBuilder() }>
+            <div className={classBuilder('', { deleted: deleted }) }>
                 <section className={classBuilder('__header') }>
                     <img
                         className={classBuilder('__profile_image') }
@@ -284,9 +293,10 @@ export default class Tweet extends React.Component<Props, State> {
                                 className={classBuilder('__created_at__anchor') }
                                 >{this.created_at}</a>
                         </section>
-                        <section className={classBuilder('__favorite', { favorited: this.state.favorited }) } onClick={this._favorite}>★</section>
-                        <section className={classBuilder('__retweet', { retweeted: this.state.retweeted }) } onClick={this._retweet}>RT</section>
-                        <section className={classBuilder('__replyTo') } onClick={this._replyTo}>RE: </section>
+                        {deleted ? '' : <section className={classBuilder('__favorite', { favorited: this.state.favorited }) } onClick={this._favorite}>★</section>}
+                        {deleted ? '' : <section className={classBuilder('__retweet', { retweeted: this.state.retweeted }) } onClick={this._retweet}>RT</section>}
+                        {deleted ? '' : <section className={classBuilder('__replyTo') } onClick={this._replyTo}>RE: </section>}
+                        {(!deleted && this.props.source_id === this.props.user.id_str) ? (<section className={classBuilder('__destroy') } onClick={this._destroy}>DEL</section>) : ''}
                         <section className={classBuilder('__source') }>
                             <a
                                 href='#'
