@@ -6,7 +6,8 @@ import ActionCreator, {
     ViewType,
     keys,
     ViewOption,
-    generateKey
+    generateKey,
+    equalsViewOption
 } from './ActionCreator';
 import {Action} from '../Flux/Action';
 import JSONLoader from '../JSONLoader';
@@ -39,7 +40,6 @@ type key = string;
 
 export function generateStackItem(option: ViewOption, temporary?: boolean): ViewContextStackItem {
     console.log('generateStackItem', JSON.stringify(option));
-    const key = option.key;
     const dispatcher = new ActionEmitter();
     const actions = new ViewActionCreator(dispatcher);
     let store: StoreGroup;
@@ -204,12 +204,12 @@ export default class ViewManager extends ReduceStore {
                 const option: ViewOption = action.value.option;
                 const key: string = generateKey(option);
 
-                const tabs = prevState.tabs.filter(x => x.key !== key);
+                const tabs = prevState.tabs.filter(x => !equalsViewOption(x, option));
 
-                if (key === prevState.current.key) {
+                if (equalsViewOption(option, prevState.current)) {
                     const nextState = Object.assign({}, prevState, {
                         tabs,
-                        stack: [permanentContext.get(tabs[0].key)],
+                        stack: [permanentContext.get(generateKey(tabs[0]))],
                         current: tabs[0]
                     });
 
@@ -226,7 +226,7 @@ export default class ViewManager extends ReduceStore {
             case keys.pushStack: {
                 // value: {option: ViewOption}
                 const option: ViewOption = action.value.option;
-                const key: string = option.key;
+                const key: string = generateKey(option);
                 let item: ViewContextStackItem;
 
                 if (permanentContext.has(key)) {

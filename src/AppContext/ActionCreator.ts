@@ -5,14 +5,14 @@ import JSONLoader from '../JSONLoader';
 import {view_storage} from '../Constants';
 import {Users} from '../Models/Tweet';
 
-export enum ViewType {
-    HomeTimeline,
-    UserTimeline,
-    SingleTweet,
-    ListTimeline,
-    SearchTimeline,
-    UserProfile,
-    MentionsTimeline,
+export const ViewType = {
+    HomeTimeline: 'HomeTimeline',
+    UserTimeline: 'UserTimeline',
+    SingleTweet: 'SingleTweet',
+    ListTimeline: 'ListTimeline',
+    SearchTimeline: 'SearchTimeline',
+    UserProfile: 'UserProfile',
+    MentionsTimeline: 'MentionsTimeline',
 };
 
 export const keys = {
@@ -34,40 +34,22 @@ export const keys = {
     focusEditor: 'focusEditor',
 };
 
-export interface ViewOptionSeed {
-    type: ViewType;
+export interface ViewOption {
+    type: string;
     source_id: string;
     target_id?: string;
     query?: string;
     user?: Users;
 }
 
-export interface ViewOption extends ViewOptionSeed {
-    key: string;
+export function equalsViewOption(a: ViewOption, b: ViewOption) {
+    return a.type === b.type
+        && a.source_id === b.source_id
+        && a.target_id === b.target_id;
 }
 
-export function generateKey(o: ViewOptionSeed): string {
-    return `:VIEWKEY:${o.type}:${o.source_id}:${o.target_id || -1}:${o.query || ''}:`;
-}
-
-export function generateViewOption(key: string): ViewOption {
-    const matched = key.match(/^:VIEWKEY:([\:]+):([\:]+):([\:]+):(.*):$/)
-    const ret: ViewOption = {
-        key,
-        type: Number(matched[1]),
-        source_id: matched[2]
-    };
-    if (matched[3] !== '-1') {
-        ret.target_id = matched[3];
-    }
-    if (matched[4] && matched[4] !== '') {
-        ret.query = matched[4];
-    }
-    return ret;
-}
-
-export function generateViewOptionFromSeed(option: ViewOptionSeed): ViewOption {
-    return Object.assign(option, { key: generateKey(option) });
+export function generateKey(o: ViewOption): string {
+    return Object.keys(o).sort().reduce((r, x) => (r + `${x}:${(o as any)[x]}:`), ':');
 }
 
 // for user action
@@ -109,11 +91,7 @@ export default class ActionCreator extends _ActionCreator {
             });
     }
 
-    selectTab(option: ViewOptionSeed): void;
     selectTab(option: ViewOption) {
-        if (option.key == undefined) {
-            option = generateViewOptionFromSeed(option);
-        }
         this.dispatcher.dispatch({
             type: keys.selectTab,
             value: {
@@ -122,11 +100,7 @@ export default class ActionCreator extends _ActionCreator {
         })
     }
 
-    createTab(option: ViewOptionSeed): void;
     createTab(option: ViewOption) {
-        if (option.key == undefined) {
-            option = generateViewOptionFromSeed(option);
-        }
         this.dispatcher.dispatch({
             type: keys.createTab,
             value: {
@@ -136,11 +110,7 @@ export default class ActionCreator extends _ActionCreator {
         this.saveTabs();
     }
 
-    deleteTab(option: ViewOptionSeed): void;
     deleteTab(option: ViewOption) {
-        if (option.key == undefined) {
-            option = generateViewOptionFromSeed(option);
-        }
         this.dispatcher.dispatch({
             type: keys.deleteTab,
             value: {
@@ -164,11 +134,7 @@ export default class ActionCreator extends _ActionCreator {
         })
     }
 
-    pushStack(option: ViewOptionSeed): void;
     pushStack(option: ViewOption) {
-        if (option.key == undefined) {
-            option = generateViewOptionFromSeed(option);
-        }
         this.dispatcher.dispatch({
             type: keys.pushStack,
             value: {

@@ -3,7 +3,7 @@ import ReduceStore from '../../Flux/ReduceStore';
 import StoreGroup from '../../Flux/StoreGroup';
 import ViewInfo from '../ReduceStores/ViewInfo';
 import {default as UserProfileStore} from '../ReduceStores/UserProfile';
-import {ViewType, generateViewOptionFromSeed} from '../../AppContext/ActionCreator';
+import {ViewType} from '../../AppContext/ActionCreator';
 import {Users} from '../../Models/Tweet';
 import TwitterClient from '../../TwitterClient';
 
@@ -12,11 +12,11 @@ export default class UserProfile extends StoreGroup {
         super(dispatcher);
 
         const info = new ViewInfo();
-        info.setState(generateViewOptionFromSeed({
+        info.setState({
             type: ViewType.UserProfile,
             source_id: id,
             target_id,
-        }));
+        });
 
         const user = new UserProfileStore();
         if (profile) {

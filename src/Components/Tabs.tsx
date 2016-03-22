@@ -3,7 +3,7 @@ import {findDOMNode} from 'react-dom';
 import {remote} from 'electron';
 
 import ActionCreator from '../AppContext/ActionCreator';
-import {ViewOption, ViewType} from '../AppContext/ActionCreator';
+import {ViewOption, ViewType, equalsViewOption, generateKey} from '../AppContext/ActionCreator';
 
 const debug = require('remote').require('debug')('Components:Tabs');
 
@@ -40,7 +40,7 @@ export function generateDisplayName(option: ViewOption) {
 interface TabProps {
     actions: ActionCreator;
     tab: ViewOption;
-    currentKey: string;
+    currentTab: ViewOption;
     key: string;
 }
 
@@ -53,7 +53,7 @@ export class Tab extends React.Component<TabProps, {}> {
     render() {
         return (
             <li
-                className={(this.props.currentKey === this.props.tab.key) ? 'selected' : ''}
+                className={equalsViewOption(this.props.currentTab, this.props.tab) ? 'selected' : ''}
                 onClick={this.bindedSelectTab}
                 >{generateDisplayName(this.props.tab) }</li>
         );
@@ -87,7 +87,7 @@ export default class Tabs extends React.Component<Props, States> {
         return (
             <ul id='tabs'>
                 {this.props.tabs.map(tab => (
-                    <Tab key={tab.key} tab={tab} currentKey={this.props.current.key} actions={this.props.actions} />
+                    <Tab key={generateKey(tab) } tab={tab} currentTab={this.props.current} actions={this.props.actions} />
                 )) }
                 <li onClick={this.bindedCreateTab }>new Tab...</li>
                 <li onClick={this.bindedAddAccount }>new Account...</li>
