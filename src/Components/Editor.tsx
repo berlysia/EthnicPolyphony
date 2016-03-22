@@ -13,18 +13,12 @@ interface Props {
 type States = {};
 
 export default class Editor extends React.Component<Props, States> {
-    _editor: any;
-    _inReplyTo: any;
-    editorRef = (el: any) => this._editor = el;
-    inReplyToRef = (el: any) => this._inReplyTo = el;
-
     source_id: string;
-    remover: Function;
 
-    _updateStatus() {
-        const status = this._editor.value.substr(0, 140);
+    _updateStatus(form: any /*HTMLFormElement*/) {
+        const status = form.tweet.value.substr(0, 140);
         // TODO url minify considered truncate   
-        let inReplyTo = this._inReplyTo.value;
+        let inReplyTo = form.inReplyTo.value;
 
         if (!inReplyTo.match(/^\d+$/)) {
             inReplyTo = null;
@@ -37,19 +31,19 @@ export default class Editor extends React.Component<Props, States> {
         );
 
         // TODO retry on fail, or save values
-        this._editor.value = '';
-        this._inReplyTo.value = '';
+        form.tweet.value = '';
+        form.inReplyTo.value = '';
     }
 
     _onSubmitTweet(event: React.FormEvent) {
         event.preventDefault();
-        this._updateStatus();
+        this._updateStatus(event.target as HTMLFormElement);
     }
     bindedOnSubmitTweet = this._onSubmitTweet.bind(this);
 
     _onKeyDownTweetArea(event: React.KeyboardEvent) {
         if (((event.metaKey || event.ctrlKey) && event.keyCode === 13)) {
-            this._updateStatus();
+            this._updateStatus((event.target as HTMLElement).parentNode as HTMLFormElement);
             return;
         }
     }
@@ -62,13 +56,12 @@ export default class Editor extends React.Component<Props, States> {
                 <textarea
                     id='tweetTextArea'
                     name='tweet'
-                    ref={this.editorRef as any}
                     onKeyDown={this.bindedOnKeyDownTweetArea as any}
                     ></textarea>
                 <input
                     id='tweetInReplyTo'
+                    name='inReplyTo'
                     type="hidden"
-                    ref={this.inReplyToRef as any}
                     defaultValue=''
                     />
                 <input id='tweetSubmit' type='submit' value='submit'></input>
