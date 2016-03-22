@@ -66,6 +66,12 @@ export default class Editor extends React.Component<Props, States> {
                     source_id
                 });
             } break;
+            case keys.focusEditor: {
+                const textarea = document.querySelector('#tweetTextArea') as HTMLTextAreaElement;
+                if (textarea) {
+                    textarea.focus();
+                }
+            }
         }
     }
 

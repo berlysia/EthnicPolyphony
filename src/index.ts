@@ -3,6 +3,7 @@ import BrowserWindowWrapper from './BrowserWindowWrapper';
 import {dispatcher, actions, store} from './app';
 import * as Authentication from './Authentication';
 import TwitterClient from './TwitterClient';
+import {keys} from './AppContext/ActionCreator';
 
 // initialize electron
 const mainPageURL = `file://${__dirname}/../static/index.html`;
@@ -51,3 +52,12 @@ app.on('activate', function() {
         editorWindow.createWindow();
     }
 });
+
+dispatcher.onAction((action: any) => {
+    if (action.type === keys.focusEditor) {
+        if (editorWindow.window == null) {
+            editorWindow.createWindow();
+        }
+        editorWindow.window.focus();
+    }
+})

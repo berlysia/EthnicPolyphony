@@ -30,6 +30,7 @@ export const keys = {
     unretweet: 'unretweet',
     favorite: 'favorite',
     unfavorite: 'unfavorite',
+    focusEditor: 'focusEditor',
 };
 
 export interface ViewOptionSeed {
@@ -197,6 +198,7 @@ export default class ActionCreator extends _ActionCreator {
     }
 
     replyToStatus(status_id: string, screen_name: string) {
+        this.focusEditor();
         this.dispatcher.dispatch({
             type: keys.replyToStatus,
             value: {
@@ -243,5 +245,12 @@ export default class ActionCreator extends _ActionCreator {
                         source_id: <string>data.id,
                     }));
             })
+    }
+
+    focusEditor() {
+        this.dispatcher.dispatch({
+            type: keys.focusEditor,
+            value: null,
+        })
     }
 }
