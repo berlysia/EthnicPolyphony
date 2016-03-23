@@ -12,6 +12,7 @@ html {
 }
 a {
   color: #ddf;
+  text-decoration: underline;
 }
 #app {
   height: 100%;

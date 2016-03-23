@@ -88,7 +88,7 @@ export default class UserProfile extends React.Component<Props, States> {
                                 <p>{`@${user.screen_name}`}</p>
                                 <p>{user.name}</p>
                                 <p>{user.location}</p>
-                                <p><a href="#" onClick={this._openUrl}>{user.url}</a></p>
+                                <p><a onClick={this._openUrl}>{user.url}</a></p>
                             </section>
                         </section>
                         <section className={classBuilder('__header__description') }>

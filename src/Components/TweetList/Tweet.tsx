@@ -56,7 +56,6 @@ export class TweetText extends React.Component<PropsWithClassName, {}> {
                 dangerouslySetInnerHTML={plainText}></span>);
             prev.unshift(<a
                 key={md5 + idx + '_a'}
-                href='#'
                 onClick={() => this._openLink(idx) }
                 dangerouslySetInnerHTML={{ __html: curr.display_url }}></a>);
             text = text.substr(0, curr.indices[0]);
@@ -287,7 +286,6 @@ export default class Tweet extends React.Component<Props, State> {
                     <section className={classBuilder('__footer') }>
                         <section className={classBuilder('__created_at') }>
                             <a
-                                href='#'
                                 onClick={this._openPermaLink}
                                 className={classBuilder('__created_at__anchor') }
                                 >{this.created_at}</a>
@@ -299,7 +297,6 @@ export default class Tweet extends React.Component<Props, State> {
                         {deleted ? <section className={classBuilder('__deleted') }>deleted tweet</section> : ''}
                         <section className={classBuilder('__source') }>
                             <a
-                                href='#'
                                 onClick={this._openSourceLink}
                                 className={classBuilder('__source__anchor') }
                                 >{this.source_string}</a>
@@ -310,7 +307,7 @@ export default class Tweet extends React.Component<Props, State> {
                     ) : ''}
                     {this.props.retweet_user ? (
                         <section className={classBuilder('__retweeter') }>
-                            <a href='#' className={classBuilder('__retweeter__anchor') } onClick={this._openRetweeterProfileView}>
+                            <a className={classBuilder('__retweeter__anchor') } onClick={this._openRetweeterProfileView}>
                                 {`RT by @${this.props.retweet_user.screen_name} / ${this.props.retweet_user.name}`}
                             </a>
                         </section>
