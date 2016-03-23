@@ -5,12 +5,14 @@ import {
     greaterByID,
     equalByID,
     sortTweet,
+    sliceWithMaxID,
+    sliceWithMinID,
 } from '../../Models/Tweet';
 import {
     upper_bound,
     lower_bound,
     uniquify,
-    findIndex
+    findIndex,
 } from '../../util';
 import {keys} from '../ActionCreator';
 
@@ -38,12 +40,14 @@ export default class Tweets extends ReduceStore {
             }
 
             case keys.prepend: {
+                if(action.value.length === 0) return prevState;
                 const received = action.value.map((x: Tweet) => (x.deleted = false, x));
                 const nextState = [].concat(received).concat(prevState);
                 return nextState.sort(sortTweet).reduce(uniquify(equalByID), []);
             }
 
             case keys.append: {
+                if(action.value.length === 0) return prevState;
                 const received = action.value.map((x: Tweet) => (x.deleted = false, x));
                 const nextState = [].concat(prevState).concat(received);
                 return nextState.sort(sortTweet).reduce(uniquify(equalByID), []);
@@ -89,6 +93,4 @@ export default class Tweets extends ReduceStore {
     getTweetByTweetID(tweetID: string) {
         return this.getTweet((tweet: Tweet) => tweet.id_str === tweetID);
     }
-
-
 }

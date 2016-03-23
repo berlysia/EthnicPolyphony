@@ -239,6 +239,16 @@ export default class ViewManager extends ReduceStore {
                         temporaryContext.set(key, item);
                     }
                 }
+                
+                if(option.max_status_id) {
+                    item = Object.assign({}, item);
+                    item.max_status_id = option.max_status_id;
+                }
+                
+                if(option.min_status_id) {
+                    item = Object.assign({}, item);
+                    item.min_status_id = option.min_status_id;
+                }
 
                 const nextState = Object.assign({}, prevState, {
                     stack: [item, ...prevState.stack],

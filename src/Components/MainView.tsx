@@ -15,7 +15,7 @@ const debug = require('remote').require('debug')('Components:MainView');
 
 interface Props {
     actions: ActionCreator;
-    stores: ViewContextStackItem;
+    top: ViewContextStackItem;
 };
 
 interface States {
@@ -55,9 +55,9 @@ export default class MainView extends React.Component<Props, States> {
     }
 
     render() {
-        debug('#render');
+        debug(`#render - type: ${this.props.top.type}`);
         let view: any = null;
-        const top = this.props.stores;
+        const top = this.props.top;
 
         switch (top.type) {
             case ViewType.HomeTimeline: {
@@ -67,6 +67,8 @@ export default class MainView extends React.Component<Props, States> {
                         {...top}
                         appActions={this.props.actions}
                         freeze={!this.state.onTop}
+                        max_status_id={top.max_status_id}
+                        min_status_id={top.min_status_id}
                         />
                 );
             };
@@ -77,6 +79,8 @@ export default class MainView extends React.Component<Props, States> {
                         {...top}
                         appActions={this.props.actions}
                         freeze={!this.state.onTop}
+                        max_status_id={top.max_status_id}
+                        min_status_id={top.min_status_id}
                         />
                 );
             };
@@ -87,6 +91,8 @@ export default class MainView extends React.Component<Props, States> {
                         {...top}
                         appActions={this.props.actions}
                         freeze={!this.state.onTop}
+                        max_status_id={top.max_status_id}
+                        min_status_id={top.min_status_id}
                         />
                 );
             };

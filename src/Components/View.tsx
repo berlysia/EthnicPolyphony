@@ -41,7 +41,7 @@ export default class View extends React.Component<Props, States> {
         return (
             <section id='app'>
                 <Tabs actions={this.props.actions} tabs={state.tabs} current={state.current}/>
-                <MainView actions={this.props.actions} stores={state.top} />
+                <MainView actions={this.props.actions} top={state.top} />
             </section>
         );
     }

@@ -49,10 +49,15 @@ export class StreamQueue {
 
 // for user action
 export default class ActionCreator extends _ActionCreator {
-    connectUserStream(id: string, params: any) {
+    connectUserStream(id: string, params: any, forceReconnect?: boolean) {
         debug('#connectUserStream', id);
         // const queue = new StreamQueue(this.dispatcher);
-        TwitterClient.byID(id).userStream({
+        const client = TwitterClient.byID(id);
+        if(forceReconnect) {
+            debug('#connectUserStream: force reconnect');
+            client.purgeUserStream();
+        }
+        client.userStream({
             tweet: (tw: any) => {
                 // queue.receiver(tw);
                 this.dispatcher.dispatch({

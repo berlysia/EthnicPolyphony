@@ -3,10 +3,11 @@ import {ViewContextStackItem} from '../AppContext/ViewManager';
 import AppActionCreator from '../AppContext/ActionCreator';
 import ActionCreator from '../ViewContext/ActionCreator';
 import {default as BaseTimelineStoreGroup} from '../ViewContext/StoreGroups/BaseTimeline';
-import {TWEETS_SHOW_MAX} from '../ViewContext/ReduceStores/Tweets';
+import Tweets, {TWEETS_SHOW_MAX} from '../ViewContext/ReduceStores/Tweets';
 
 import Tweet from './TweetList/Tweet';
 import TweetList from './TweetList';
+import {Tweet as TweetModel, sliceWithMaxID, sliceWithMinID} from '../Models/Tweet';
 
 import {decrementNumericString} from '../util';
 
@@ -18,6 +19,8 @@ export interface Props<TimelineStoreGroup extends BaseTimelineStoreGroup> {
     actions: ActionCreator;
     appActions: AppActionCreator;
     id: string;
+    max_status_id?: string;
+    min_status_id?: string;
     freeze?: boolean;
 };
 
@@ -34,9 +37,9 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
 
         window.addEventListener('beforeunload', this.bindedUnlistenChange as any);
         this.removerOnUnload = window.removeEventListener.bind(window, 'beforeunload', this.bindedUnlistenChange);
-
-        if (!this.props.store.getState().tweets[0]) {
-            this._reload();
+        
+        if (this.props.store.getState().tweets.length === 0) {
+            this._fetch();
         }
     }
 
@@ -53,50 +56,88 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     componentWillUnmount() {
         this._unlistenChange();
     }
-
-    _reload() {
-        const recent = this.props.store.getState().tweets[0];
-        if (!recent) {
-            this.props.appActions.fetchTweet({});
-        } else {
-            const since_id = recent.id_str;
-            this.props.appActions.fetchTweet({ since_id });
+    
+    componentWillUpdate(nextProps: Props<T>, nextState: States) {
+        if(this.props.store !== nextProps.store){
+            this._unlistenChange();
         }
     }
-    bindedReload = this._reload.bind(this);
-
-    _reloadAppend() {
-        const tweets = this.props.store.getState().tweets;
-        if (!tweets[0]) {
-            return this.props.appActions.fetchTweet({});
+    
+    componentDidUpdate(nextProps: Props<T>, nextState: States) {
+        if(this.props.store !== nextProps.store){
+            this._listenChange();
         }
-        const length = Object.keys(tweets).length;
-        const max_id = decrementNumericString(tweets[length - 1].id_str);
-
-        this.props.appActions.fetchTweet({ max_id }, true);
     }
-    bindedReloadAppend = this._reloadAppend.bind(this);
+    
+    __fetch() {
+        debug(`#fetch - max:${this.props.max_status_id}, min:${this.props.min_status_id}`);
+        if(this.props.max_status_id) {
+            const max_id = this.props.max_status_id;
+            this.props.appActions.fetchTweet({ max_id });
+            return;    
+        }
+        if(this.props.min_status_id) {
+            const since_id = this.props.min_status_id;
+            this.props.appActions.fetchTweet({ since_id }, true);
+            return;
+        }
+        this.props.appActions.fetchTweet({});
+    }
+    _fetch = this.__fetch.bind(this);
+
+    __newer() {
+        const type = this.props.store.getState().type;
+        const tweets = this.tweets();
+        debug(`#_newer - min_id: ${tweets[0].id_str}`);
+        this.props.appActions.pushStack(Object.assign({}, type, {
+            min_status_id: tweets[0].id_str
+        }));
+        window.scrollTo(0,0); // scroll to top
+    }
+    _newer = this.__newer.bind(this);
+
+    __older() {
+        const type = this.props.store.getState().type;
+        const tweets = this.tweets();
+        debug(`#_older - max_id: ${tweets[tweets.length - 1].id_str}`);
+        this.props.appActions.pushStack(Object.assign({}, type, {
+            max_status_id: tweets[tweets.length - 1].id_str
+        }));
+        window.scrollTo(0,0); // scroll to top
+    }
+    _older = this.__older.bind(this);
 
     shouldComponentUpdate(nextProps: Props<T>, nextState: States) {
-        return this.props.store !== nextProps.store;
+        return this.props.max_status_id !== nextProps.max_status_id
+            || this.props.min_status_id !== nextProps.min_status_id
+            || this.props.store !== nextProps.store;
+    }
+    
+    tweets(props?: Props<T>) {
+        props = props || this.props;
+        const allTweets = props.store.getState().tweets;
+        if(props.max_status_id) {
+            return sliceWithMaxID(allTweets, props.max_status_id, TWEETS_SHOW_MAX);
+        } else {
+            return sliceWithMinID(allTweets, props.min_status_id, TWEETS_SHOW_MAX);
+        }
     }
 
     render() {
         debug('#render');
-        if (this.remover) {
-            this._unlistenChange();
-            this._listenChange();
-        }
-
+        
+        const tweets = this.tweets();
+        
         return (
             <section id={this.props.id}>
-                <button onClick={this.bindedReload} >reload</button>
+                <button onClick={this._newer} >newer tweets...</button>
                 <TweetList
                     source_id={this.props.source_id}
-                    tweets={this.props.store.getState().tweets.slice(0, TWEETS_SHOW_MAX)}
+                    tweets={tweets}
                     appActions={this.props.appActions}
                     />
-                <button onClick={this.bindedReloadAppend} >reloadAppend</button>
+                {tweets.length < TWEETS_SHOW_MAX ? <button onClick={this._fetch} >fetch tweets...</button> : ''}
+                <button onClick={this._older} >older tweets...</button>
             </section>
         );
     }

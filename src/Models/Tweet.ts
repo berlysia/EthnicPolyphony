@@ -1,4 +1,5 @@
 import {upper_bound, lower_bound} from '../util';
+const debug = require('debug')('Models:Tweet');
 
 export interface MediaSize {
     h: number;
@@ -116,6 +117,45 @@ export interface Tweet {
     truncated: boolean;
     user: Users;
 };
+
+export function sliceWithMaxID(tweets: Tweet[], max_id: string, size: number): Tweet[] {
+    debug('#sliceWithMaxID');
+    if(!max_id) {
+        debug('- lack of id');
+        return tweets.slice(0, size);
+    }
+    if(tweets.length === 0) {
+        debug('- empty tweets');
+        return tweets.slice(0, size);
+    }
+
+    let ub = upper_bound({id_str: max_id}, tweets, greaterByID);
+    let lb = lower_bound({id_str: max_id}, tweets, greaterByID);
+    if(lb <= ub) {
+        return tweets.slice(ub, ub + size);
+    }
+    throw new Error('something wrong: upper_bound() < lower_bound');
+}
+
+export function sliceWithMinID(tweets: Tweet[], min_id: string, size: number): Tweet[] {
+    debug('#sliceWithMinID');
+    if(!min_id) {
+        debug('- lack of id');
+        return tweets.slice(0, size);
+    }
+    if(tweets.length === 0) {
+        debug('- empty tweets');
+        return tweets.slice(0, size);
+    }
+
+    let ub = upper_bound({id_str: min_id}, tweets, greaterByID);
+    let lb = lower_bound({id_str: min_id}, tweets, greaterByID);
+    if(lb <= ub) {
+        const startpos = Math.max(0, lb - size);
+        return tweets.slice(startpos, lb);
+    }
+    throw new Error('something wrong: upper_bound() < lower_bound');
+}
 
 export function greaterByID(a: {id_str: string}, b: {id_str: string}) {
     return a.id_str > b.id_str;

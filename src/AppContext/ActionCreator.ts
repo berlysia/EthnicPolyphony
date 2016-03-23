@@ -40,6 +40,8 @@ export interface ViewOption {
     target_id?: string;
     query?: string;
     user?: Users;
+    max_status_id?: string;
+    min_status_id?: string;
 }
 
 export function equalsViewOption(a: ViewOption, b: ViewOption) {
@@ -49,7 +51,9 @@ export function equalsViewOption(a: ViewOption, b: ViewOption) {
 }
 
 export function generateKey(o: ViewOption): string {
-    return Object.keys(o).sort().reduce((r, x) => (r + `${x}:${(o as any)[x]}:`), ':');
+    return Object.keys(o).sort()
+        .filter(key => !key.endsWith('_status_id'))
+        .reduce((r, x) => (r + `${x}:${(o as any)[x]}:`), ':');
 }
 
 // for user action

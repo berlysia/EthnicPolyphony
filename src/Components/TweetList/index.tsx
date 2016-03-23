@@ -14,7 +14,7 @@ interface Props {
 type States = {};
 
 export default class TweetList extends React.Component<Props, States> {
-
+  
     shouldComponentUpdate(nextProps: Props, nextState: States) {
         return nextProps.tweets !== this.props.tweets;
         // const prevLength = this.props.tweets.length;

@@ -2,6 +2,7 @@ import StoreGroup, {StoreCollection} from '../../Flux/StoreGroup';
 import ReduceStore from '../../Flux/ReduceStore';
 import {ViewOption} from '../../AppContext/ActionCreator';
 import {Tweet} from '../../Models/Tweet';
+import Tweets from '../ReduceStores/Tweets';
 
 abstract class BaseTimeline extends StoreGroup {
     getState(): { type: ViewOption, tweets: Tweet[] } {

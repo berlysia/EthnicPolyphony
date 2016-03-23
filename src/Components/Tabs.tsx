@@ -82,7 +82,7 @@ export default class Tabs extends React.Component<Props, States> {
     bindedAddAccount = this._addAccount.bind(this);
 
     render() {
-        debug('#render', this.props.tabs);
+        debug('#render');
         // TODO cutting out tab element as ReactComponent (optimize for onClick) 
         return (
             <ul id='tabs'>

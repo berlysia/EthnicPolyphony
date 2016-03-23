@@ -2,56 +2,53 @@ import * as React from 'react';
 import {default as HomeTimelineStoreGroup} from '../ViewContext/StoreGroups/HomeTimeline';
 import TweetList from './TweetList';
 import BaseTimeline, {Props} from './BaseTimeline';
-import {TWEETS_SHOW_MAX} from '../ViewContext/ReduceStores/Tweets';
+import Tweets, {TWEETS_SHOW_MAX} from '../ViewContext/ReduceStores/Tweets';
+import {Tweet as TweetModel} from '../Models/Tweet';
 
 const debug = require('remote').require('debug')('Components:HomeTimeline');
 
 export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
 
     _wrappedForceUpdate() {
-        if (this.props.freeze) return;
+        if (this.props.freeze && !(this.props.max_status_id || this.props.min_status_id)) return;
         this.forceUpdate();
     }
     bindedForceUpdate = this._wrappedForceUpdate.bind(this);
 
     _listenChange() {
-        this.remover = this.props.store.onChange(this.bindedForceUpdate);
-
-        window.addEventListener('beforeunload', this.bindedUnlistenChange as any);
-        this.removerOnUnload = window.removeEventListener.bind(window, 'beforeunload', this.bindedUnlistenChange);
-
-        if (!this.props.store.getState().tweets[0]) {
-            this._reload();
-        }
+        super._listenChange();
         this._connect(); // if dups, rejected by client
     }
 
-    _connect() {
-        this.props.actions.connectUserStream(this.props.source_id, {});
+    __connect(forceReconnect?: boolean) {
+        this.props.actions.connectUserStream(this.props.source_id, {}, forceReconnect);
     }
-    bindedConnect = this._connect.bind(this);
+    _connect = this.__connect.bind(this);
+    _reconnect = this.__connect.bind(this, true);
 
-    shouldComponentUpdate(nextProps: Props<HomeTimelineStoreGroup>, nextState: {}) {
-        return (this.props.freeze && !nextProps.freeze)
-            || this.props.store !== nextProps.store;
+    shouldComponentUpdate(nextProps: Props<HomeTimelineStoreGroup>, nextState: {tweets: TweetModel[]}) {
+        return (!(this.props.max_status_id || this.props.min_status_id)
+                && this.props.freeze && !nextProps.freeze)
+            || super.shouldComponentUpdate(nextProps, nextState);
     }
 
     render() {
         debug('#render');
-        if (this.remover) {
-            this._unlistenChange();
-            this._listenChange();
-        }
+        
+        const realtimeUpdate = !(this.props.max_status_id || this.props.min_status_id);
+        const tweets = this.tweets();
 
         return (
             <section id={this.props.id}>
-                <button onClick={this.bindedConnect} >connect</button>
-                <button onClick={this.bindedReload} >reload</button>
+                {realtimeUpdate ? <button onClick={this._connect} >reconnect</button> : ''}
+                {realtimeUpdate ? '' : <button onClick={this._newer} >newer tweets...</button>}
                 <TweetList
                     source_id={this.props.source_id}
-                    tweets={this.props.store.getState().tweets.slice(0, TWEETS_SHOW_MAX) }
+                    tweets={tweets}
                     appActions={this.props.appActions}
                     />
+                {!realtimeUpdate && tweets.length < TWEETS_SHOW_MAX ? <button onClick={this._fetch} >fetch tweets...</button> : ''}
+                <button onClick={this._older} >older tweets...</button>
             </section>
         );
     }
