@@ -10,6 +10,7 @@ import {
     upper_bound,
     lower_bound,
     uniquify,
+    findIndex
 } from '../../util';
 import {keys} from '../ActionCreator';
 
@@ -50,7 +51,7 @@ export default class Tweets extends ReduceStore {
 
             case keys.destroyStatus: {
                 const status_id: string = action.value.status_id;
-                const target = prevState.findIndex(x => greaterByID({ id_str: status_id }, x));
+                const target = findIndex({ id_str: status_id }, prevState, greaterByID);
                 if (~target) {
                     prevState[target].deleted = true;
                     const nextState = [].concat(prevState);
