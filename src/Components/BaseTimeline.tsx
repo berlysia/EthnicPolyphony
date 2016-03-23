@@ -3,6 +3,7 @@ import {ViewContextStackItem} from '../AppContext/ViewManager';
 import AppActionCreator from '../AppContext/ActionCreator';
 import ActionCreator from '../ViewContext/ActionCreator';
 import {default as BaseTimelineStoreGroup} from '../ViewContext/StoreGroups/BaseTimeline';
+import {TWEETS_SHOW_MAX} from '../ViewContext/ReduceStores/Tweets';
 
 import Tweet from './TweetList/Tweet';
 import TweetList from './TweetList';
@@ -92,7 +93,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
                 <button onClick={this.bindedReload} >reload</button>
                 <TweetList
                     source_id={this.props.source_id}
-                    tweets={this.props.store.getState().tweets}
+                    tweets={this.props.store.getState().tweets.slice(0, TWEETS_SHOW_MAX)}
                     appActions={this.props.appActions}
                     />
                 <button onClick={this.bindedReloadAppend} >reloadAppend</button>
