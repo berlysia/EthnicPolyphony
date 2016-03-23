@@ -9,16 +9,14 @@ import {
 import {
     upper_bound,
     lower_bound,
-    findInsertPosition,
     uniquify,
-    findIndex,
 } from '../../util';
 import {keys} from '../ActionCreator';
 
 const debug = require('debug')('ViewContext:Tweets');
 
 export const TWEETS_SHOW_MAX = 50;
-export const TWEETS_CACHE_MAX = 200;
+// export const TWEETS_CACHE_MAX = 200;
 
 export default class Tweets extends ReduceStore {
     constructor() {
@@ -32,35 +30,27 @@ export default class Tweets extends ReduceStore {
         switch (action.type) {
             case keys.prependSingle: {
                 const nextState = [].concat(prevState);
-                action.value.deleted = false;
-                nextState.splice(findInsertPosition(action.value, nextState, greaterByID), 0, action.value);
-                if (nextState.length >= TWEETS_CACHE_MAX) {
-                    nextState.splice(TWEETS_CACHE_MAX);
-                }
+                const tweet = action.value;
+                tweet.deleted = false;
+                nextState.splice(nextState.findIndex(x => greaterByID(tweet, x)), 0, tweet);
                 return nextState;
             }
 
             case keys.prepend: {
                 const received = action.value.map((x: Tweet) => (x.deleted = false, x));
                 const nextState = [].concat(received).concat(prevState);
-                if (nextState.length >= TWEETS_CACHE_MAX) {
-                    nextState.splice(TWEETS_CACHE_MAX);
-                }
                 return nextState.sort(sortTweet).reduce(uniquify(equalByID), []);
             }
 
             case keys.append: {
                 const received = action.value.map((x: Tweet) => (x.deleted = false, x));
                 const nextState = [].concat(prevState).concat(received);
-                if (nextState.length >= TWEETS_CACHE_MAX) {
-                    nextState.splice(TWEETS_CACHE_MAX);
-                }
                 return nextState.sort(sortTweet).reduce(uniquify(equalByID), []);
             }
 
             case keys.destroyStatus: {
                 const status_id: string = action.value.status_id;
-                const target = findIndex({ id_str: status_id }, prevState, greaterByID);
+                const target = prevState.findIndex(x => greaterByID({ id_str: status_id }, x));
                 if (~target) {
                     prevState[target].deleted = true;
                     const nextState = [].concat(prevState);
@@ -73,15 +63,6 @@ export default class Tweets extends ReduceStore {
                 return prevState;
             }
         }
-    }
-
-    changed(prevState: Tweet[], nextState: Tweet[]) {
-        return prevState !== nextState;
-        // return !(
-        //     prevState.length === nextState.length
-        //     && prevState.length > 0
-        //     && prevState[0] === nextState[0]
-        // );
     }
 
     getTweets(filter?: (item: Tweet, index?: number, tweets?: Tweet[]) => boolean): Tweet[] {

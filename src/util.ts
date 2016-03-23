@@ -94,13 +94,16 @@ export function uniquify<T>(equals?: (a: T, b: T) => boolean) {
     }
 }
 
-export function findInsertPosition<T>(item: T, array: T[], comp?: (a: T, b: T) => boolean): number {
-    // array should be sorted and uniquified
-    comp = comp || _cmp;
-    return array.findIndex(x => comp(item, x));
+export function findInsertPosition<T>(item: T, array: T[], comp: (a: T, b: T) => boolean): number {
+    // array should be sorted
+    const ub = upper_bound(item, array, comp);
+    const lb = lower_bound(item, array, comp);
+    return (ub === lb) ? lb : -1;  
 }
 
-export function findIndex<T>(item: T, array: T[], comp?: (a: T, b: T) => boolean): number {
-    comp = comp || _equals;
-    return array.findIndex(x => comp(x, item));
+export function findIndex<T>(item: T, array: T[], comp: (a: T, b: T) => boolean): number {
+    // array should be sorted
+    const ub = upper_bound(item, array, comp);
+    const lb = lower_bound(item, array, comp);
+    return (ub - lb === -1) ? lb : -1;  
 }

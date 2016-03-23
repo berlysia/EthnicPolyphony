@@ -117,15 +117,15 @@ export interface Tweet {
     user: Users;
 };
 
-export function greaterByID(a: Tweet, b: Tweet) {
+export function greaterByID(a: {id_str: string}, b: {id_str: string}) {
     return a.id_str > b.id_str;
 }
 
-export function equalByID(a: Tweet, b: Tweet) {
+export function equalByID(a: {id_str: string}, b: {id_str: string}) {
     return a.id_str === b.id_str;
 }
 
-export function sortTweet(curr: Tweet, next: Tweet) {
+export function sortTweet(curr: {id_str: string}, next: {id_str: string}) {
     if (curr.id_str < next.id_str) {
         return 1;
     } else if (curr.id_str > next.id_str) {
