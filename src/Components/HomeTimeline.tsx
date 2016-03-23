@@ -1,12 +1,18 @@
 import * as React from 'react';
 import {default as HomeTimelineStoreGroup} from '../ViewContext/StoreGroups/HomeTimeline';
 import TweetList from './TweetList';
-import BaseTimeline from './BaseTimeline';
+import BaseTimeline, {Props} from './BaseTimeline';
 import {TWEETS_SHOW_MAX} from '../ViewContext/ReduceStores/Tweets';
 
 const debug = require('remote').require('debug')('Components:HomeTimeline');
 
 export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
+
+    _wrappedForceUpdate() {
+        if (this.props.freeze) return;
+        this.forceUpdate();
+    }
+    bindedForceUpdate = this._wrappedForceUpdate.bind(this);
 
     _listenChange() {
         this.remover = this.props.store.onChange(this.bindedForceUpdate);
@@ -24,6 +30,11 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
         this.props.actions.connectUserStream(this.props.source_id, {});
     }
     bindedConnect = this._connect.bind(this);
+
+    shouldComponentUpdate(nextProps: Props<HomeTimelineStoreGroup>, nextState: {}) {
+        return (this.props.freeze && !nextProps.freeze)
+            || this.props.store !== nextProps.store;
+    }
 
     render() {
         debug('#render');

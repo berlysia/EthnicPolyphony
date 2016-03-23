@@ -11,13 +11,13 @@ import {decrementNumericString} from '../util';
 
 const debug = require('remote').require('debug')('Components:BaseTimeline');
 
-interface Props<TimelineStoreGroup extends BaseTimelineStoreGroup> {
+export interface Props<TimelineStoreGroup extends BaseTimelineStoreGroup> {
     source_id: string;
     store: TimelineStoreGroup;
     actions: ActionCreator;
     appActions: AppActionCreator;
     id: string;
-    freeze: boolean;
+    freeze?: boolean;
 };
 
 type States = {};
@@ -26,11 +26,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     remover: Function;
     removerOnUnload: Function;
 
-    _wrappedForceUpdate() {
-        if (this.props.freeze) return;
-        this.forceUpdate();
-    }
-    bindedForceUpdate: Function = this._wrappedForceUpdate.bind(this);
+    bindedForceUpdate: Function = this.forceUpdate.bind(this);
 
     _listenChange() {
         this.remover = this.props.store.onChange(this.bindedForceUpdate);
@@ -81,8 +77,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     bindedReloadAppend = this._reloadAppend.bind(this);
 
     shouldComponentUpdate(nextProps: Props<T>, nextState: States) {
-        return (this.props.freeze && !nextProps.freeze)
-            || this.props.store !== nextProps.store;
+        return this.props.store !== nextProps.store;
     }
 
     render() {
