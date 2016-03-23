@@ -29,7 +29,7 @@ export interface StreamCallbacks {
 }
 
 export const defaultFetchParams: TwitterParamsForFetch = {
-    count: 50,
+    count: 200,
 }
 
 

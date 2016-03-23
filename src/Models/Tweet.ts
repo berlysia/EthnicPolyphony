@@ -1,3 +1,5 @@
+import {upper_bound, lower_bound} from '../util';
+
 export interface MediaSize {
     h: number;
     w: number;
@@ -117,4 +119,18 @@ export interface Tweet {
 
 export function greaterByID(a: Tweet, b: Tweet) {
     return a.id_str > b.id_str;
+}
+
+export function equalByID(a: Tweet, b: Tweet) {
+    return a.id_str === b.id_str;
+}
+
+export function sortTweet(curr: Tweet, next: Tweet) {
+    if (curr.id_str < next.id_str) {
+        return 1;
+    } else if (curr.id_str > next.id_str) {
+        return -1
+    } else {
+        return 0;
+    }
 }

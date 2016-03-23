@@ -78,3 +78,31 @@ export function upper_bound<T>(x: T, xs: T[], cmp?: (a: T, b: T) => boolean) {
     if (!cmp(x, xs[fst])) return lst;
     else return fst;
 }
+
+function _equals(a: any, b: any): boolean {
+    return a === b;
+}
+
+export function uniquify<T>(equals?: (a: T, b: T) => boolean) {
+    equals = equals || _equals;
+    return (prev: T[], curr: T, idx: number) => {
+        if (idx === 0 || !equals(prev[prev.length - 1], curr)) {
+            prev.push(curr);
+        }
+
+        return prev;
+    }
+}
+
+export function findInsertPosition<T>(item: T, array: T[], comp?: (a: T, b: T) => boolean): number {
+    // array should be sorted.
+    const ub = upper_bound(item, array, comp);
+    const lb = lower_bound(item, array, comp);
+    return (ub === lb) ? lb : -1;
+}
+
+export function findIndex<T>(item: T, array: T[], comp?: (a: T, b: T) => boolean): number {
+    const ub = upper_bound(item, array, comp);
+    const lb = lower_bound(item, array, comp);
+    return (ub - lb === 1) ? lb : -1;
+}
