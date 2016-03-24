@@ -77,6 +77,7 @@ export default class Tweets extends ReduceStore {
             case keys.destroyStatus: {
                 const status_id: string = action.value.status_id;
                 const target = findIndex({ id_str: status_id }, prevState, greaterByID);
+                debug(`#reduce - destroyStatus, ${status_id} found in ${target}`);
                 if (~target) {
                     prevState[target].deleted = true;
                     const nextState = [].concat(prevState);
