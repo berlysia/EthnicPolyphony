@@ -32,6 +32,14 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
         window.scrollTo(0,0); // scroll to top
     }
     _topOfTimeline = this.__topOfTimeline.bind(this);
+    
+    __fragment() {
+        const type = this.props.store.getState().type;
+        this.props.appActions.pushStack(Object.assign({}, type, {
+            max_status_id: this.state.tweets[0].id_str,
+        }));
+    }
+    _fragment = this.__fragment.bind(this);
 
     render() {
         debug('#render');
@@ -47,6 +55,7 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
         return (
             <section id={this.props.id}>
                 {fragmented ? <button onClick={this._topOfTimeline}>top of timelime</button> : ''}
+                {!fragmented ? <button onClick={this._fragment}>fragment view</button> : ''}
                 {ceiled ? <button onClick={this._connect} >reconnect</button> : ''}
                 {fragmented && !ceiled ? <button onClick={this._newer} >newer tweets...</button> : ''}
                 <TweetList
