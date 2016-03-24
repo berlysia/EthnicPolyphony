@@ -60,6 +60,7 @@
         "src/Components/TweetList/Tweet.tsx",
         "src/Components/UserProfile.tsx",
         "src/Components/UserTimeline.tsx",
-        "src/Components/View.tsx"
+        "src/Components/View.tsx",
+        "src/Components/ViewContextContainer.tsx"
     ]
 }

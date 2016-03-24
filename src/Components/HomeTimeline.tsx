@@ -15,8 +15,7 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
     }
     bindedForceUpdate = this._wrappedForceUpdate.bind(this);
 
-    _listenChange() {
-        super._listenChange();
+    componentDidUpdate() {
         this._connect(); // if dups, rejected by client
     }
 

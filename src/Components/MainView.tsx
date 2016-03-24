@@ -3,13 +3,7 @@ import {ViewContextStackItem} from '../AppContext/ViewManager';
 import HomeTimelineStoreGroup from '../ViewContext/StoreGroups/HomeTimeline';
 import UserTimelineStoreGroup from '../ViewContext/StoreGroups/UserTimeline';
 import ActionCreator, {ViewType} from '../AppContext/ActionCreator';
-
-import HomeTimeline from './HomeTimeline';
-import UserTimeline from './UserTimeline';
-import UserProfile from './UserProfile';
-import MentionsTimeline from './MentionsTimeline';
-// import ListTimeline from './ListTimeline';
-// import SearchTimeline from './SearchTimeline';
+import ViewContextContainer from './ViewContextContainer';
 
 const debug = require('remote').require('debug')('Components:MainView');
 
@@ -55,74 +49,6 @@ export default class MainView extends React.Component<Props, States> {
     }
 
     render() {
-        debug(`#render - type: ${this.props.top.type}`);
-        let view: any = null;
-        const top = this.props.top;
-
-        switch (top.type) {
-            case ViewType.HomeTimeline: {
-                return (
-                    <HomeTimeline
-                        id='mainView'
-                        {...top}
-                        appActions={this.props.actions}
-                        freeze={!this.state.onTop}
-                        max_status_id={top.max_status_id}
-                        min_status_id={top.min_status_id}
-                        />
-                );
-            };
-            case ViewType.UserTimeline: {
-                return (
-                    <UserTimeline
-                        id='mainView'
-                        {...top}
-                        appActions={this.props.actions}
-                        freeze={!this.state.onTop}
-                        max_status_id={top.max_status_id}
-                        min_status_id={top.min_status_id}
-                        />
-                );
-            };
-            case ViewType.MentionsTimeline: {
-                return (
-                    <MentionsTimeline
-                        id='mainView'
-                        {...top}
-                        appActions={this.props.actions}
-                        freeze={!this.state.onTop}
-                        max_status_id={top.max_status_id}
-                        min_status_id={top.min_status_id}
-                        />
-                );
-            };
-            case ViewType.UserProfile: {
-                return (
-                    <UserProfile
-                        id='mainView'
-                        {...top}
-                        appActions={this.props.actions}
-                        />
-                );
-            };
-            // case ViewType.ListTimeline: {
-            //   view = <ListTimeline
-            //     source_id={top.source_id}
-            //     target_id={top.target_id}
-            //     store={top.store}
-            //     actions={top.actions}
-            //     appActions={this.props.actions}
-            //   />;
-            // } break;
-            // case ViewType.SearchTimeline: {
-            //   view = <SearchTimeline
-            //     source_id={top.source_id}
-            //     query={top.query}
-            //     store={top.store}
-            //     actions={top.actions}
-            //     appActions={this.props.actions}
-            //   />;
-            // } break;
-        }
+        return <ViewContextContainer {...this.props} appActions={this.props.actions} onTop={this.state.onTop} />
     }
 }

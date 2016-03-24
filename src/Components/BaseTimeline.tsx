@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {ViewContextStackItem} from '../AppContext/ViewManager';
-import AppActionCreator from '../AppContext/ActionCreator';
+import AppActionCreator, {ViewOption} from '../AppContext/ActionCreator';
 import ActionCreator from '../ViewContext/ActionCreator';
 import {default as BaseTimelineStoreGroup} from '../ViewContext/StoreGroups/BaseTimeline';
 import Tweets, {TWEETS_SHOW_MAX} from '../ViewContext/ReduceStores/Tweets';
@@ -13,7 +13,7 @@ import {decrementNumericString} from '../util';
 
 const debug = require('remote').require('debug')('Components:BaseTimeline');
 
-export interface Props<TimelineStoreGroup extends BaseTimelineStoreGroup> {
+export interface Props<TimelineStoreGroup extends BaseTimelineStoreGroup> extends ViewOption {
     source_id: string;
     store: TimelineStoreGroup;
     actions: ActionCreator;
@@ -108,7 +108,11 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     _older = this.__older.bind(this);
 
     shouldComponentUpdate(nextProps: Props<T>, nextState: States) {
-        return this.props.max_status_id !== nextProps.max_status_id
+        return this.props.tweets !== nextProps.tweets
+            || this.props.type !== nextProps.type
+            || this.props.source_id !== nextProps.source_id
+            || this.props.target_id !== nextProps.target_id
+            || this.props.max_status_id !== nextProps.max_status_id
             || this.props.min_status_id !== nextProps.min_status_id
             || this.props.store !== nextProps.store;
     }
@@ -118,25 +122,24 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
         const allTweets = props.store.getState().tweets;
         if(props.max_status_id) {
             return sliceWithMaxID(allTweets, props.max_status_id, TWEETS_SHOW_MAX);
-        } else {
+        }
+        if(props.min_status_id) {
             return sliceWithMinID(allTweets, props.min_status_id, TWEETS_SHOW_MAX);
         }
+        return allTweets.slice(0, TWEETS_SHOW_MAX);
     }
 
     render() {
         debug('#render');
-        
-        const tweets = this.tweets();
         
         return (
             <section id={this.props.id}>
                 <button onClick={this._newer} >newer tweets...</button>
                 <TweetList
                     source_id={this.props.source_id}
-                    tweets={tweets}
+                    tweets={this.tweets()}
                     appActions={this.props.appActions}
                     />
-                {tweets.length < TWEETS_SHOW_MAX ? <button onClick={this._fetch} >fetch tweets...</button> : ''}
                 <button onClick={this._older} >older tweets...</button>
             </section>
         );
