@@ -26,7 +26,7 @@ export default class TweetList extends React.Component<Props, States> {
     }
 
     render() {
-        debug('#render');
+        debug('#render - count: ' + this.props.tweets.length);
 
         return (
             <section>

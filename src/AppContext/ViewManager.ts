@@ -249,6 +249,7 @@ export default class ViewManager extends ReduceStore {
                     item = Object.assign({}, item);
                     item.min_status_id = option.min_status_id;
                 }
+                debug(`#reduce - pushStack, max: ${item.max_status_id}, min: ${item.min_status_id}`);
 
                 const nextState = Object.assign({}, prevState, {
                     stack: [item, ...prevState.stack],

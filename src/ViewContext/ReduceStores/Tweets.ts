@@ -3,6 +3,7 @@ import {Action} from '../../Flux/Action';
 import {
     Tweet,
     greaterByID,
+    greaterEqualByID,
     equalByID,
     sortTweet,
     sliceWithMaxID,
@@ -19,7 +20,11 @@ import {keys} from '../ActionCreator';
 const debug = require('debug')('ViewContext:Tweets');
 
 export const TWEETS_SHOW_MAX = 50;
-// export const TWEETS_CACHE_MAX = 200;
+export const TWEETS_SHORTAGE_RATIO = 0.2;
+export const EPS = 1e-3;
+export function ignoreTweetsShortage(shortage: number) {
+    return -EPS <= shortage && shortage <= TWEETS_SHOW_MAX * TWEETS_SHORTAGE_RATIO;
+}
 
 export default class Tweets extends ReduceStore {
     constructor() {
@@ -32,10 +37,26 @@ export default class Tweets extends ReduceStore {
 
         switch (action.type) {
             case keys.prependSingle: {
+                // {prev,next}State is decreasing in the meaning of id.
+                // 1. calc the position which given tweet goes to.
+                // 2. if there is the tweet has same id of given one, returns prevState
+                // 3. insert given tweet and returns nextState
                 const nextState = [].concat(prevState);
                 const tweet = action.value;
                 tweet.deleted = false;
-                nextState.splice(nextState.findIndex(x => greaterByID(tweet, x)), 0, tweet);
+                let insertPos = prevState.findIndex(x => greaterEqualByID(tweet, x));
+                if(insertPos === -1) {
+                    if(prevState.length
+                      && greaterByID(tweet, prevState[prevState.length - 1])) {
+                        insertPos = prevState.length;
+                    } else {
+                        insertPos = 0;
+                    }
+                }
+                if(prevState[insertPos].id_str === tweet.id_str) {
+                    return prevState;
+                }
+                nextState.splice(insertPos, 0, tweet);
                 return nextState;
             }
 

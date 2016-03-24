@@ -158,7 +158,19 @@ export function sliceWithMinID(tweets: Tweet[], min_id: string, size: number): T
 }
 
 export function greaterByID(a: {id_str: string}, b: {id_str: string}) {
-    return a.id_str > b.id_str;
+    const astr = a.id_str, bstr = b.id_str;
+    if(astr.length !== bstr.length) {
+        return astr.length > bstr.length;
+    }
+    return astr > bstr;
+}
+
+export function greaterEqualByID(a: {id_str: string}, b: {id_str: string}) {
+    const astr = a.id_str, bstr = b.id_str;
+    if(astr.length !== bstr.length) {
+        return astr.length > bstr.length;
+    }
+    return astr >= bstr;
 }
 
 export function equalByID(a: {id_str: string}, b: {id_str: string}) {

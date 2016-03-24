@@ -49,6 +49,12 @@ export default class MainView extends React.Component<Props, States> {
     }
 
     render() {
-        return <ViewContextContainer {...this.props} appActions={this.props.actions} onTop={this.state.onTop} />
+        return (
+            <ViewContextContainer
+                {...this.props}
+                appActions={this.props.actions}
+                onTop={this.state.onTop}
+            />
+        );
     }
 }
