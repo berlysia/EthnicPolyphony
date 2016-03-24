@@ -13,11 +13,15 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
         this._connect(); // if dups, rejected by client
     }
 
-    __connect(forceReconnect?: boolean) {
-        this.props.actions.connectUserStream(this.props.source_id, {}, forceReconnect);
+    __connect() {
+        this.props.actions.connectUserStream(this.props.source_id, {});
     }
     _connect = this.__connect.bind(this);
-    _reconnect = this.__connect.bind(this, true);
+
+    __reconnect() {
+        this.props.actions.connectUserStream(this.props.source_id, {}, true);
+    }
+    _reconnect = this.__reconnect.bind(this);
 
     shouldComponentUpdate(nextProps: Props<HomeTimelineStoreGroup>, nextState: {tweets: TweetModel[]}) {
         if(!(this.props.max_status_id || this.props.min_status_id) && nextProps.freeze) {
@@ -56,7 +60,7 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
             <section id={this.props.id}>
                 {fragmented ? <button onClick={this._topOfTimeline}>top of timelime</button> : ''}
                 {!fragmented ? <button onClick={this._fragment}>fragment view</button> : ''}
-                {ceiled ? <button onClick={this._connect} >reconnect</button> : ''}
+                {ceiled ? <button onClick={this._reconnect} >reconnect</button> : ''}
                 {fragmented && !ceiled ? <button onClick={this._newer} >newer tweets...</button> : ''}
                 <TweetList
                     source_id={this.props.source_id}

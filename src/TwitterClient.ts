@@ -178,6 +178,7 @@ export default class TwitterClient {
             });
 
             this.purgeUserStream = () => {
+                debug(`#purgeUserStream`);
                 this.userStreamConnected = false;
                 stream.destroy();
                 stream.removeAllListeners();
