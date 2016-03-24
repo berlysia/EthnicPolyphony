@@ -45,15 +45,19 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     }
     
     componentWillReceiveProps(nextProps: Props<T>) {
+        if(this.props.store !== nextProps.store
+            && nextProps.store.getState().tweets.length === 0) {
+            this._fetch(nextProps);
+        }
         const tweets = this.tweets(nextProps);
         this.setState({
             tweets,
         });
     }
     
-    __fetch() {
-        debug('#_fetch')
-        this.props.appActions.fetchTweet({});
+    __fetch(props?: Props<T>) {
+        debug('#_fetch');
+        (props || this.props).appActions.fetchTweet({});
     }
     _fetch = this.__fetch.bind(this);
     
