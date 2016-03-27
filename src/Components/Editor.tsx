@@ -13,13 +13,13 @@ interface Props {
     dispatcher: ActionEmitter;
 };
 
-type States = {
+type State = {
     text?: string;
     inReplyTo?: string;
     source_id?: string;
 };
 
-export default class Editor extends React.Component<Props, States> {
+export default class Editor extends React.Component<Props, State> {
     removeActionListener: Function = () => { };
     removeListenersOnBeforeUnload: Function = () => { };
 

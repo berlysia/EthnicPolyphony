@@ -14,9 +14,9 @@ interface Props {
     store: AppContext;
 };
 
-type States = {};
+type State = {};
 
-export default class View extends React.Component<Props, States> {
+export default class View extends React.Component<Props, State> {
     remover: Function;
     removerOnUnload: Function;
 

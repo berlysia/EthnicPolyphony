@@ -15,9 +15,9 @@ interface Props {
     store: UserProfileStoreGroup;
 };
 
-type States = {};
+type State = {};
 
-export default class UserProfile extends React.Component<Props, States> {
+export default class UserProfile extends React.Component<Props, State> {
     remover: Function;
     removerOnUnload: Function;
 

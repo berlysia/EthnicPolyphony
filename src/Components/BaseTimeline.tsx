@@ -25,11 +25,11 @@ export interface Props<TimelineStoreGroup extends BaseTimelineStoreGroup> extend
     tweets: TweetModel[];
 };
 
-type States = {
+type State = {
     tweets: TweetModel[];
 };
 
-export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends React.Component<Props<T>, States> {
+export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends React.Component<Props<T>, State> {
     
     constructor(props: Props<T>) {
         super(props);
@@ -61,7 +61,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     }
     _fetch = this.__fetch.bind(this);
     
-    __fetchNewer(props?: Props<T>, state?: States) {
+    __fetchNewer(props?: Props<T>, state?: State) {
         props = props || this.props;
         state = state || this.state;
         const tweets = state.tweets;
@@ -72,7 +72,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     }
     _fetchNewer = this.__fetchNewer.bind(this, null, null);
     
-    __fetchOlder(props?: Props<T>, state?: States) {
+    __fetchOlder(props?: Props<T>, state?: State) {
         props = props || this.props;
         state = state || this.state;
         const tweets = state.tweets;
@@ -107,7 +107,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     }
     _older = this.__older.bind(this);
 
-    shouldComponentUpdate(nextProps: Props<T>, nextState: States) {
+    shouldComponentUpdate(nextProps: Props<T>, nextState: State) {
         return this.props.tweets !== nextProps.tweets
             || this.props.type !== nextProps.type
             || this.props.source_id !== nextProps.source_id
@@ -129,7 +129,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
         return allTweets.slice(0, TWEETS_SHOW_MAX);
     }
     
-    ceiled(props?: Props<T>, state?: States) {
+    ceiled(props?: Props<T>, state?: State) {
         props = props || this.props;
         state = state || this.state;
         return (
@@ -139,7 +139,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
           ) || (props.tweets.length === 0 && state.tweets.length === 0);
     }
     
-    floored(props?: Props<T>, state?: States) {
+    floored(props?: Props<T>, state?: State) {
         props = props || this.props;
         state = state || this.state;
         return (

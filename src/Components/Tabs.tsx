@@ -66,9 +66,9 @@ interface Props {
     current: ViewOption;
 };
 
-type States = {};
+type State = {};
 
-export default class Tabs extends React.Component<Props, States> {
+export default class Tabs extends React.Component<Props, State> {
 
     _createTab() {
         console.warn('not implemented');

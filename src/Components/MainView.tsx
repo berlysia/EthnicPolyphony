@@ -12,11 +12,11 @@ interface Props {
     top: ViewContextStackItem;
 };
 
-interface States {
+interface State {
     onTop: boolean;
 }
 
-export default class MainView extends React.Component<Props, States> {
+export default class MainView extends React.Component<Props, State> {
     constructor() {
         super();
         this.state = { onTop: true };

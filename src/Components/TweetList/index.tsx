@@ -11,11 +11,11 @@ interface Props {
     appActions: ActionCreator;
 };
 
-type States = {};
+type State = {};
 
-export default class TweetList extends React.Component<Props, States> {
+export default class TweetList extends React.Component<Props, State> {
   
-    shouldComponentUpdate(nextProps: Props, nextState: States) {
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
         return nextProps.tweets !== this.props.tweets;
         // const prevLength = this.props.tweets.length;
         // const nextLength = nextProps.tweets.length;
