@@ -23,7 +23,7 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
     }
     _reconnect = this.__reconnect.bind(this);
 
-    shouldComponentUpdate(nextProps: Props<HomeTimelineStoreGroup>, nextState: {tweets: TweetModel[]}) {
+    shouldComponentUpdate(nextProps: Props<HomeTimelineStoreGroup>, nextState: {tweets: string[]}) {
         if(!(this.props.max_status_id || this.props.min_status_id) && nextProps.freeze) {
             return false;
         }
@@ -40,7 +40,7 @@ export default class HomeTimeline extends BaseTimeline<HomeTimelineStoreGroup> {
     __fragment() {
         const type = this.props.store.getState().type;
         this.props.appActions.pushStack(Object.assign({}, type, {
-            max_status_id: this.state.tweets[0].id_str,
+            max_status_id: this.state.tweets[0],
         }));
     }
     _fragment = this.__fragment.bind(this);

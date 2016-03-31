@@ -118,7 +118,7 @@ export interface Tweet {
     user: Users;
 };
 
-export function sliceWithMaxID(tweets: Tweet[], max_id: string, size: number): Tweet[] {
+export function sliceWithMaxID(tweets: string[], max_id: string, size: number): string[] {
     debug('#sliceWithMaxID');
     if(!max_id) {
         debug('- lack of id');
@@ -129,15 +129,15 @@ export function sliceWithMaxID(tweets: Tweet[], max_id: string, size: number): T
         return tweets.slice(0, size);
     }
 
-    let ub = upper_bound({id_str: max_id}, tweets, greaterByID);
-    let lb = lower_bound({id_str: max_id}, tweets, greaterByID);
+    let ub = upper_bound(max_id, tweets, greaterByID);
+    let lb = lower_bound(max_id, tweets, greaterByID);
     if(lb <= ub) {
         return tweets.slice(ub, ub + size);
     }
     throw new Error('something wrong: upper_bound() < lower_bound');
 }
 
-export function sliceWithMinID(tweets: Tweet[], min_id: string, size: number): Tweet[] {
+export function sliceWithMinID(tweets: string[], min_id: string, size: number): string[] {
     debug('#sliceWithMinID');
     if(!min_id) {
         debug('- lack of id');
@@ -148,8 +148,8 @@ export function sliceWithMinID(tweets: Tweet[], min_id: string, size: number): T
         return tweets.slice(0, size);
     }
 
-    let ub = upper_bound({id_str: min_id}, tweets, greaterByID);
-    let lb = lower_bound({id_str: min_id}, tweets, greaterByID);
+    let ub = upper_bound(min_id, tweets, greaterByID);
+    let lb = lower_bound(min_id, tweets, greaterByID);
     if(lb <= ub) {
         const startpos = Math.max(0, lb - size);
         return tweets.slice(startpos, lb);
@@ -157,30 +157,25 @@ export function sliceWithMinID(tweets: Tweet[], min_id: string, size: number): T
     throw new Error('something wrong: upper_bound() < lower_bound');
 }
 
-export function greaterByID(a: {id_str: string}, b: {id_str: string}) {
-    const astr = a.id_str, bstr = b.id_str;
-    if(astr.length !== bstr.length) {
-        return astr.length > bstr.length;
+export function greaterByID(a: string, b: string) {
+    if(a.length !== b.length) {
+        return a.length > b.length;
     }
-    return astr > bstr;
+    return a > b;
 }
 
-export function greaterEqualByID(a: {id_str: string}, b: {id_str: string}) {
-    const astr = a.id_str, bstr = b.id_str;
-    if(astr.length !== bstr.length) {
-        return astr.length > bstr.length;
-    }
-    return astr >= bstr;
+export function greaterEqualByID(a: string, b: string) {
+    return equalByID(a,b) || greaterByID(a,b);
 }
 
-export function equalByID(a: {id_str: string}, b: {id_str: string}) {
-    return a.id_str === b.id_str;
+export function equalByID(a: string, b: string) {
+    return a === b;
 }
 
-export function sortTweet(curr: {id_str: string}, next: {id_str: string}) {
-    if (curr.id_str < next.id_str) {
+export function sortTweet(curr: string, next: string) {
+    if (!greaterEqualByID(curr, next)) {
         return 1;
-    } else if (curr.id_str > next.id_str) {
+    } else if (greaterByID(curr, next)) {
         return -1
     } else {
         return 0;

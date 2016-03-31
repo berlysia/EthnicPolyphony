@@ -22,11 +22,11 @@ export interface Props<TimelineStoreGroup extends BaseTimelineStoreGroup> extend
     max_status_id?: string;
     min_status_id?: string;
     freeze?: boolean;
-    tweets: TweetModel[];
+    tweets: string[];
 };
 
 type State = {
-    tweets: TweetModel[];
+    tweets: string[];
 };
 
 export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends React.Component<Props<T>, State> {
@@ -65,7 +65,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
         props = props || this.props;
         state = state || this.state;
         const tweets = state.tweets;
-        const since_id = tweets.length ? tweets[0].id_str : props.max_status_id || props.min_status_id;
+        const since_id = tweets.length ? tweets[0] : props.max_status_id || props.min_status_id;
         debug(`#_fetchNewer - min:${since_id}`);
         if(!since_id) return this._fetch();
         props.appActions.fetchTweet({ since_id });
@@ -76,7 +76,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
         props = props || this.props;
         state = state || this.state;
         const tweets = state.tweets;
-        const max_id = tweets.length ? tweets[tweets.length - 1].id_str : props.min_status_id || props.max_status_id;
+        const max_id = tweets.length ? tweets[tweets.length - 1] : props.min_status_id || props.max_status_id;
         debug(`#_fetchOlder - max:${max_id}`);
         if(!max_id) return this._fetch();
         props.appActions.fetchTweet({ max_id }, true);
@@ -86,7 +86,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     __newer() {
         const type = this.props.store.getState().type;
         const tweets = this.state.tweets;
-        const min_status_id = tweets.length ? tweets[0].id_str : this.props.max_status_id || this.props.min_status_id;
+        const min_status_id = tweets.length ? tweets[0] : this.props.max_status_id || this.props.min_status_id;
         debug(`#_newer - min_id: ${min_status_id}`);
         this.props.appActions.pushStack(Object.assign({}, type, {
             min_status_id
@@ -98,7 +98,7 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
     __older() {
         const type = this.props.store.getState().type;
         const tweets = this.state.tweets;
-        const max_status_id = tweets.length ? tweets[tweets.length - 1].id_str : this.props.min_status_id || this.props.max_status_id;
+        const max_status_id = tweets.length ? tweets[tweets.length - 1] : this.props.min_status_id || this.props.max_status_id;
         debug(`#_older - max_id: ${max_status_id}`);
         this.props.appActions.pushStack(Object.assign({}, type, {
             max_status_id
@@ -136,7 +136,9 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
             state.tweets.length
             && props.tweets.length
             && state.tweets[0] === props.tweets[0]
-          ) || (props.tweets.length === 0 && state.tweets.length === 0);
+        ) || props.tweets.length === 0
+          || (state.tweets.length === 0
+            && props.min_status_id > props.tweets[0]);
     }
     
     floored(props?: Props<T>, state?: State) {
@@ -146,7 +148,9 @@ export default class BaseTimeline<T extends BaseTimelineStoreGroup> extends Reac
             state.tweets.length
             && props.tweets.length
             && state.tweets[state.tweets.length - 1] === props.tweets[props.tweets.length - 1]
-          ) || (props.tweets.length === 0 && state.tweets.length === 0);
+        ) || props.tweets.length === 0
+          || (state.tweets.length === 0
+            && props.max_status_id < props.tweets[props.tweets.length - 1]);
     }
 
     render() {

@@ -32,7 +32,7 @@ export default class Tweets extends ReduceStore {
         this.state = [];
     }
 
-    reduce(prevState: Tweet[], action: Action): Tweet[] {
+    reduce(prevState: string[], action: Action): string[] {
         debug(`#reduce type: ${action.type}`);
 
         switch (action.type) {
@@ -42,8 +42,7 @@ export default class Tweets extends ReduceStore {
                 // 2. if there is the tweet has same id of given one, returns prevState
                 // 3. insert given tweet and returns nextState
                 const nextState = [].concat(prevState);
-                const tweet = action.value;
-                tweet.deleted = false;
+                const tweet = action.value.id_str;
                 let insertPos = prevState.findIndex(x => greaterEqualByID(tweet, x));
                 if(insertPos === -1) {
                     if(prevState.length
@@ -53,7 +52,7 @@ export default class Tweets extends ReduceStore {
                         insertPos = 0;
                     }
                 }
-                if(prevState[insertPos].id_str === tweet.id_str) {
+                if(prevState[insertPos] === tweet) {
                     return prevState;
                 }
                 nextState.splice(insertPos, 0, tweet);
@@ -62,24 +61,23 @@ export default class Tweets extends ReduceStore {
 
             case keys.prepend: {
                 if(action.value.length === 0) return prevState;
-                const received = action.value.map((x: Tweet) => (x.deleted = false, x));
+                const received = action.value.map((tw: Tweet) => tw.id_str);
                 const nextState = [].concat(received).concat(prevState);
-                return nextState.sort(sortTweet).reduce(uniquify(equalByID), []);
+                return nextState.sort(sortTweet).reduce(uniquify(), []);
             }
 
             case keys.append: {
                 if(action.value.length === 0) return prevState;
-                const received = action.value.map((x: Tweet) => (x.deleted = false, x));
+                const received = action.value.map((tw: Tweet) => tw.id_str);
                 const nextState = [].concat(prevState).concat(received);
-                return nextState.sort(sortTweet).reduce(uniquify(equalByID), []);
+                return nextState.sort(sortTweet).reduce(uniquify(), []);
             }
 
             case keys.destroyStatus: {
                 const status_id: string = action.value.status_id;
-                const target = findIndex({ id_str: status_id }, prevState, greaterByID);
+                const target = findIndex(status_id, prevState, greaterByID);
                 debug(`#reduce - destroyStatus, ${status_id} found in ${target}`);
                 if (~target) {
-                    prevState[target].deleted = true;
                     const nextState = [].concat(prevState);
                     return nextState;
                 }
@@ -90,29 +88,5 @@ export default class Tweets extends ReduceStore {
                 return prevState;
             }
         }
-    }
-
-    getTweets(filter?: (item: Tweet, index?: number, tweets?: Tweet[]) => boolean): Tweet[] {
-        if (filter) {
-            return this.state.filter(filter);
-        } else {
-            return this.state;
-        }
-    }
-
-    getTweet(filter: (item: Tweet, index?: number, tweets?: Tweet[]) => boolean): Tweet {
-        return this.state.find(filter);
-    }
-
-    getTweetsByAccountID(accountID: string) {
-        return this.getTweets((tweet: Tweet) => tweet.user.id_str === accountID);
-    }
-
-    getTweetsByScreenName(screenName: string) {
-        return this.getTweets((tweet: Tweet) => tweet.user.screen_name === screenName);
-    }
-
-    getTweetByTweetID(tweetID: string) {
-        return this.getTweet((tweet: Tweet) => tweet.id_str === tweetID);
     }
 }

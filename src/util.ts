@@ -108,6 +108,6 @@ export function findIndex<T>(item: T, array: T[], comp: (a: T, b: T) => boolean)
     // array should be sorted
     const ub = upper_bound(item, array, comp);
     const lb = lower_bound(item, array, comp);
-    debug(`#findIndex - item:${item} ub: ${ub} lb: ${lb} returns ${ub-lb===-1?lb:-1}`);
+    debug(`#findIndex - item:${item} ub: ${ub} lb: ${lb} returns ${ub-lb===1?lb:-1}`);
     return (ub - lb === 1) ? lb : -1;  
 }

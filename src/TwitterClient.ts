@@ -1,4 +1,6 @@
 import JSONLoader from './JSONLoader';
+import TweetStorage from './TweetStorage';
+import {Tweet} from './Models/Tweet';
 import * as Twitter from 'twitter';
 
 const debug = require('debug')('TwitterClient');
@@ -35,6 +37,7 @@ export const defaultFetchParams: TwitterParamsForFetch = {
 
 export default class TwitterClient {
     private client: Twitter.Twitter;
+    private storage: TweetStorage;
     account: any;
     userStreamConnected: boolean;
     purgeUserStream = () => { };
@@ -54,6 +57,8 @@ export default class TwitterClient {
         byID.set(accountData['id'], this);
         IDSNmap.set(accountData['screenName'], accountData['id']);
         IDSNmap.set(accountData['id'], accountData['screenName']);
+        
+        this.storage = new TweetStorage(accountData['id']);
     }
 
     static byScreenName(screenName: string): TwitterClient {
@@ -77,21 +82,41 @@ export default class TwitterClient {
             });
         });
     }
-
+    
+    private _tweetsToStorage(tweets: Tweet[]): Tweet[] {
+      tweets.forEach((tw: Tweet)=>{
+        tw.deleted = false; // mutate tweet object
+        this.storage.set(tw.id_str, tw);
+      });
+      return tweets;
+    }
+    private tweetsToStorage = this._tweetsToStorage.bind(this);
+    
+    private _tweetToStorage(tweet: Tweet): Tweet {
+      tweet.deleted = false; // mutate tweet object
+      this.storage.set(tweet.id_str, tweet);
+      return tweet;
+    }
+    private tweetToStorage = this._tweetToStorage.bind(this);
+    
     userTimeline(screen_name: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ screen_name }, defaultFetchParams, params || {}), METHOD.GET, 'statuses/user_timeline');
+        return this.baseFunc(Object.assign({ screen_name }, defaultFetchParams, params || {}), METHOD.GET, 'statuses/user_timeline')
+            .then(this.tweetsToStorage);
     }
 
     userTimelineByID(user_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ user_id }, defaultFetchParams, params || {}), METHOD.GET, 'statuses/user_timeline');
+        return this.baseFunc(Object.assign({ user_id }, defaultFetchParams, params || {}), METHOD.GET, 'statuses/user_timeline')
+            .then(this.tweetsToStorage);
     }
 
     homeTimeline(params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.GET, 'statuses/home_timeline');
+        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.GET, 'statuses/home_timeline')
+            .then(this.tweetsToStorage);
     }
 
     mentionsTimeline(params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.GET, 'statuses/mentions_timeline');
+        return this.baseFunc(Object.assign({}, defaultFetchParams, params || {}), METHOD.GET, 'statuses/mentions_timeline')
+            .then(this.tweetsToStorage);
     }
 
     updateStatus(status: string, in_reply_to_status_id: string, params?: TwitterParamsForFetch) {
@@ -127,7 +152,8 @@ export default class TwitterClient {
     }
 
     listsStatuses(list_id: string, params?: TwitterParamsForFetch) {
-        return this.baseFunc(Object.assign({ list_id }, defaultFetchParams, params || {}), METHOD.GET, 'lists/statuses');
+        return this.baseFunc(Object.assign({ list_id }, defaultFetchParams, params || {}), METHOD.GET, 'lists/statuses')
+            .then(this.tweetsToStorage);
     }
 
     searchTweets(q: string, params?: TwitterParamsForFetch) {
@@ -151,8 +177,10 @@ export default class TwitterClient {
             stream.on('data', (data: any) => {
                 debug(`#userStream: id ${this.account.screenName} :stream emit "data"`);
                 if (data['text']) {
+                    this.tweetToStorage(data);
                     tweetCallback(data);
                 } else if (data['delete']) {
+                    this.storage.delete(data['delete']['status']['id_str'] as string);
                     deleteCallback(data['delete']);
                 } else if (data['limit']) {
                     limitCallback(data['limit']);

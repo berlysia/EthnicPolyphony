@@ -14,8 +14,6 @@ const classBuilder = require('bemmer').createBuilder('tweet')
 
 interface Props extends TweetModel {
     source_id: string;
-    key: string,
-    first: boolean;
     appActions: ActionCreator;
     retweet_user?: Users;
 }

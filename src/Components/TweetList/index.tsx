@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Tweet from './Tweet';
+import TweetContainer from './TweetContainer';
 import {Tweet as TweetModel} from '../../Models/Tweet';
 import ActionCreator from '../../AppContext/ActionCreator';
 
@@ -7,7 +7,7 @@ const debug = require('remote').require('debug')('Components:TweetList');
 
 interface Props {
     source_id: string;
-    tweets: TweetModel[];
+    tweets: string[];
     appActions: ActionCreator;
 };
 
@@ -30,27 +30,15 @@ export default class TweetList extends React.Component<Props, State> {
 
         return (
             <section>
-                {this.props.tweets.map((tw: TweetModel, idx: number) => {
-                    if (tw.retweeted_status) {
-                        return (
-                            <Tweet
-                                {...tw.retweeted_status}
-                                source_id={this.props.source_id}
-                                key={tw.id_str}
-                                first={idx === 0}
-                                appActions={this.props.appActions}
-                                retweet_user={tw.user}
-                                />);
-                    } else {
-                        return (
-                            <Tweet
-                                {...tw}
-                                source_id={this.props.source_id}
-                                key={tw.id_str}
-                                first={idx === 0}
-                                appActions={this.props.appActions}
-                                />);
-                    }
+                {this.props.tweets.map((status_id: string) => {
+                    return (
+                        <TweetContainer
+                            key={status_id}
+                            status_id={status_id}
+                            appActions={this.props.appActions}
+                            source_id={this.props.source_id}
+                        />
+                    );
                 }) }
             </section>
         );
