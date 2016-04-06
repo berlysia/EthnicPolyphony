@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import ActionCreator, {ViewType} from '../AppContext/ActionCreator';
+import ActionCreator, {ViewType, ViewOption} from '../AppContext/ActionCreator';
 import {default as UserProfileStoreGroup} from '../ViewContext/StoreGroups/UserProfile';
 import {shell} from 'electron';
+import {Tweet as TweetModel, Entities, Users} from '../Models/Tweet';
 
 import {getProfileImage} from '../util';
 
@@ -15,33 +16,22 @@ interface Props {
     store: UserProfileStoreGroup;
 };
 
-type State = {};
+type State = {
+  user: Users;
+  type: ViewOption;
+};
 
 export default class UserProfile extends React.Component<Props, State> {
     remover: Function;
     removerOnUnload: Function;
-
-    bindedForceUpdate = this.forceUpdate.bind(this);
-
-    _listenChange() {
-        this.remover = this.props.store.onChange(this.bindedForceUpdate);
-
-        window.addEventListener('beforeunload', this.bindedUnlistenChange);
-        this.removerOnUnload = window.removeEventListener.bind(window, 'beforeunload', this.bindedUnlistenChange);
+    
+    constructor(props: Props, context: any) {
+        super(props, context);
+        this.state = props.store.getState();
     }
-
-    _unlistenChange() {
-        this.remover();
-        this.removerOnUnload();
-    }
-    bindedUnlistenChange = this._unlistenChange.bind(this);
-
-    componentDidMount() {
-        this._listenChange();
-    }
-
-    componentWillUnmount() {
-        this._unlistenChange();
+    
+    componentWillReceiveProps(nextProps: Props) {
+        this.setState(nextProps.store.getState());
     }
 
     imageSource(user: any) {
@@ -50,31 +40,32 @@ export default class UserProfile extends React.Component<Props, State> {
     }
 
     __openUserTimeline() {
-        const state = this.props.store.getState();
         this.props.appActions.pushStack({
             type: ViewType.UserTimeline,
-            source_id: state.type.source_id,
-            target_id: state.user.id_str,
+            source_id: this.state.type.source_id,
+            target_id: this.state.user.id_str,
         });
     }
     _openUserTimeline = this.__openUserTimeline.bind(this);
 
     __reloadProfile() {
-        const state = this.props.store.getState();
-        this.props.appActions.fetchProfile(state.type.source_id, state.user.id_str);
+        this.props.appActions.fetchProfile(this.state.type.source_id, this.state.user.id_str);
     }
     _reloadProfile = this.__reloadProfile.bind(this);
 
     __openUrl() {
-        const state = this.props.store.getState();
-        shell.openExternal(state.user.url);
+        shell.openExternal(this.state.user.url);
     }
     _openUrl = this.__openUrl.bind(this);
 
+    __openUserPage() {
+        shell.openExternal(`https://twitter.com/${this.state.user.screen_name}`);
+    }
+    _openUserPage = this.__openUserPage.bind(this);
+
     render() {
         debug('#render');
-        const state = this.props.store.getState();
-        const user = state.user;
+        const user = this.state.user;
 
         if (user) return (
             <section id={this.props.id} className={classBuilder() }>
@@ -85,7 +76,7 @@ export default class UserProfile extends React.Component<Props, State> {
                                 className={classBuilder('__header__avatar') }
                                 />
                             <section className={classBuilder('__header__content') }>
-                                <p>{`@${user.screen_name}`}</p>
+                                <p><a onClick={this._openUserPage}>{`@${user.screen_name}`}</a></p>
                                 <p>{user.name}</p>
                                 <p>{user.location}</p>
                                 <p><a onClick={this._openUrl}>{user.url}</a></p>
