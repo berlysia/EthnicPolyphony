@@ -3,6 +3,9 @@ import {Tweet as TweetModel, Entities, Users} from '../../Models/Tweet';
 import Tweet from './Tweet';
 import ActionCreator, {ViewType} from '../../AppContext/ActionCreator';
 
+import {getTweet, TweetStorageErr} from '../../TweetStorage';
+import {Result} from 'option-t/src/Result';
+
 const debug = require('remote').require('debug')('Components:TweetContainer');
 
 interface Props {
@@ -12,49 +15,60 @@ interface Props {
   appActions: ActionCreator;
 }
 
-type State = TweetModel;
+type State = {
+    tweet: Result<TweetModel, TweetStorageErr>;
+};
 
 export default class TweetContainer extends React.Component<Props, State> {
     constructor(props: Props, context: any) {
         super(props, context);
-        this.state = this.getTweet(props);
+        this.state = {tweet: this.getTweet(props)};
     }
     
-    getTweet(props: Props): TweetModel {
-        return require('remote').require('./TweetStorage').getTweet(props.source_id, props.status_id);
+    getTweet(props: Props): Result<TweetModel, TweetStorageErr> {
+        const getTweet_ : typeof getTweet = require('remote').require('./TweetStorage').getTweet;
+        return getTweet_(props.source_id, props.status_id);
     }
     
     componentWillReceiveProps(props: Props) {
-        this.setState(this.getTweet(props));
+        this.setState({tweet: this.getTweet(props)});
     }
     
     shouldComponentUpdate(nextProps: Props, nextState: State) {
-        return this.props.source_id !== nextProps.source_id
-            || this.props.status_id !== nextProps.status_id
-            || this.state.deleted !== nextState.deleted
-            || this.state.favorited !== nextState.favorited
-            || this.state.retweeted !== nextState.retweeted;
+        if(this.props.source_id !== nextProps.source_id) return true;
+        if(this.props.status_id !== nextProps.status_id) return true;
+        if(this.state.tweet.isErr() || nextState.tweet.isErr()) return true;
+        
+        const currTweet = this.state.tweet.unwrap();
+        const nextTweet = nextState.tweet.unwrap(); 
+        if(currTweet.deleted !== nextTweet.deleted) return true;
+        if(currTweet.favorited !== nextTweet.favorited) return true;
+        if(currTweet.retweeted !== nextTweet.retweeted) return true;
+
+        return false;
     }
     
     render() {
         debug('#render');
-        if (this.state == null) {
+        if (this.state.tweet.isErr()) {
             return;
-        } else if (this.state.retweeted_status) {
+        }
+        const tweet = this.state.tweet.unwrap();
+        if (tweet.retweeted_status) {
             return (
                 <Tweet
-                    {...this.state.retweeted_status}
+                    {...tweet.retweeted_status}
                     source_id={this.props.source_id}
-                    key={this.state.id_str}
+                    key={tweet.id_str}
                     appActions={this.props.appActions}
-                    retweet_user={this.state.user}
+                    retweet_user={tweet.user}
                 />);
         } else {
             return (
                 <Tweet
-                    {...this.state}
+                    {...tweet}
                     source_id={this.props.source_id}
-                    key={this.state.id_str}
+                    key={tweet.id_str}
                     appActions={this.props.appActions}
                 />);
         }

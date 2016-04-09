@@ -1,15 +1,50 @@
 import {Tweet} from './Models/Tweet';
+import {Result, Ok, Err, ResultBase} from 'option-t/src/Result';
 const debug = require('debug')('TweetStorage');
 
-export function getTweet(source_id: string, status_id: string): Tweet {
+export type ErrCode = number;
+export const ErrCode = {
+    NOTFETCHED: 0,
+    NOTFOUND: 1,
+    IRREGALSOURCE: 2,
+    UNKNOWN: 99,
+}
+const ErrMessage : {
+  [key: number]: string;
+} = {
+    [ErrCode.NOTFETCHED]: 'status is not fetched',
+    [ErrCode.NOTFOUND]: 'status is not found',
+    [ErrCode.IRREGALSOURCE]: 'source_id is irregal',
+    [ErrCode.UNKNOWN]: 'unknown error',
+};
+export interface TweetStorageErr {
+    code: ErrCode;
+    message: string;
+}
+
+function errByCode(code: ErrCode): TweetStorageErr {
+    return {
+        code,
+        message: ErrMessage[code]
+    };
+}
+
+export function getTweet(source_id: string, status_id: string): Result<Tweet, TweetStorageErr> {
     const storage = TweetStorage.byID(source_id);
-    if(storage) {
-        if(storage.has(status_id)) {
-            return storage.get(status_id);
-        }
-        return null;
+    if(!storage) {
+        return new Err<Tweet, TweetStorageErr>(errByCode(ErrCode.IRREGALSOURCE));
     }
-    return null;
+    if(!storage.has(status_id)) {
+        return new Err<Tweet, TweetStorageErr>(errByCode(ErrCode.NOTFETCHED));
+    }
+    const tweet = storage.get(status_id);
+    if(tweet.created_at) {
+        return new Ok<Tweet, TweetStorageErr>(tweet);
+    }
+    if(tweet.deleted) {
+        return new Err<Tweet, TweetStorageErr>(errByCode(ErrCode.NOTFOUND));
+    }
+    return new Err<Tweet, TweetStorageErr>(errByCode(ErrCode.UNKNOWN));
 }
 
 export default class TweetStorage {

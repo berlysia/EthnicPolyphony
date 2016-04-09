@@ -23,6 +23,7 @@
     "map-iterator": "^1.1.0",
     "moment": "^2.11.2",
     "node-twitter-api": "^1.7.0",
+    "option-t": "^0.18.3",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "reduce-iterator": "^1.0.0",
