@@ -1,7 +1,7 @@
 {
   "name": "ethnic-polyphony",
   "version": "0.0.1",
-  "description": "Ethnic Polyphony ====",
+  "description": "Ethnic Polyphony is the twitter client built with Electron.",
   "main": "dist/index.js",
   "scripts": {
     "start": "electron dist/index.js",
