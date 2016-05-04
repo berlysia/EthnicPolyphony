@@ -6,6 +6,7 @@ import HomeTimeline from './HomeTimeline';
 import UserTimeline from './UserTimeline';
 import UserProfile from './UserProfile';
 import MentionsTimeline from './MentionsTimeline';
+import SingleTweet from './SingleTweet';
 // import ListTimeline from './ListTimeline';
 // import SearchTimeline from './SearchTimeline';
 
@@ -44,19 +45,19 @@ export default class ViewContextContainer extends React.Component<Props, any> {
     componentWillUnmount() {
         this._unlistenChange();
     }
-        
+
     componentWillUpdate(nextProps: Props, nextState: any) {
-        if(this.props.top.store !== nextProps.top.store){
+        if (this.props.top.store !== nextProps.top.store) {
             this._unlistenChange();
         }
     }
-    
+
     componentDidUpdate(nextProps: Props, nextState: any) {
-        if(this.props.top.store !== nextProps.top.store){
+        if (this.props.top.store !== nextProps.top.store) {
             this._listenChange();
         }
     }
-    
+
     render() {
         debug(`#render - type: ${this.props.top.type}`);
         let view: any = null;
@@ -68,7 +69,7 @@ export default class ViewContextContainer extends React.Component<Props, any> {
                     <HomeTimeline
                         id='mainView'
                         {...top}
-                        {...top.store.getState()}
+                        {...top.store.getState() }
                         appActions={this.props.appActions}
                         freeze={!this.props.onTop}
                         />
@@ -79,7 +80,7 @@ export default class ViewContextContainer extends React.Component<Props, any> {
                     <UserTimeline
                         id='mainView'
                         {...top}
-                        {...top.store.getState()}
+                        {...top.store.getState() }
                         appActions={this.props.appActions}
                         freeze={!this.props.onTop}
                         />
@@ -90,7 +91,7 @@ export default class ViewContextContainer extends React.Component<Props, any> {
                     <MentionsTimeline
                         id='mainView'
                         {...top}
-                        {...top.store.getState()}
+                        {...top.store.getState() }
                         appActions={this.props.appActions}
                         freeze={!this.props.onTop}
                         />
@@ -101,8 +102,17 @@ export default class ViewContextContainer extends React.Component<Props, any> {
                     <UserProfile
                         id='mainView'
                         {...top}
-                        {...top.store.getState()}
+                        {...top.store.getState() }
                         appActions={this.props.appActions}
+                        />
+                );
+            };
+            case ViewType.SingleTweet: {
+                return (
+                    <SingleTweet
+                        id='mainView'
+                        appActions={this.props.appActions}
+                        {...top}
                         />
                 );
             };

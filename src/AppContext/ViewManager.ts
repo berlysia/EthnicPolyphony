@@ -21,7 +21,6 @@ import ListTimeline from '../ViewContext/StoreGroups/ListTimeline';
 import UserTimeline from '../ViewContext/StoreGroups/UserTimeline';
 import UserProfile from '../ViewContext/StoreGroups/UserProfile';
 import SearchTimeline from '../ViewContext/StoreGroups/SearchTimeline';
-import SingleTweet from '../ViewContext/StoreGroups/SingleTweet';
 
 const debug = require('debug')('AppContext:ViewManager');
 
@@ -39,11 +38,20 @@ interface State {
 type key = string;
 
 export function generateStackItem(option: ViewOption, temporary?: boolean): ViewContextStackItem {
-    console.log('generateStackItem', JSON.stringify(option));
+    debug('generateStackItem', JSON.stringify(option));
     const dispatcher = new ActionEmitter();
     const actions = new ViewActionCreator(dispatcher);
     let store: StoreGroup;
     switch (option.type) {
+        case ViewType.SingleTweet: {
+            // stateless
+            return Object.assign({
+                store: null,
+                actions: null,
+                temporary: !!temporary,
+            }, option);
+        }
+
         case ViewType.HomeTimeline: {
             store = new HomeTimeline(dispatcher, option.source_id);
         } break;
@@ -69,10 +77,6 @@ export function generateStackItem(option: ViewOption, temporary?: boolean): View
 
         case ViewType.SearchTimeline: {
             store = new SearchTimeline(dispatcher, option.source_id, option.query);
-        } break;
-
-        case ViewType.SingleTweet: {
-            store = new SingleTweet(dispatcher, option.source_id, option.target_id);
         } break;
 
         default: {
@@ -239,13 +243,13 @@ export default class ViewManager extends ReduceStore {
                         temporaryContext.set(key, item);
                     }
                 }
-                
-                if(option.max_status_id) {
+
+                if (option.max_status_id) {
                     item = Object.assign({}, item);
                     item.max_status_id = option.max_status_id;
                 }
-                
-                if(option.min_status_id) {
+
+                if (option.min_status_id) {
                     item = Object.assign({}, item);
                     item.min_status_id = option.min_status_id;
                 }

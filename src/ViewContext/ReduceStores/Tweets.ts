@@ -19,7 +19,7 @@ import {keys} from '../ActionCreator';
 
 const debug = require('debug')('ViewContext:Tweets');
 
-export const TWEETS_SHOW_MAX = 50;
+export const TWEETS_SHOW_MAX = 200;
 export const TWEETS_SHORTAGE_RATIO = 0.2;
 export const EPS = 1e-3;
 export function ignoreTweetsShortage(shortage: number) {
@@ -44,15 +44,15 @@ export default class Tweets extends ReduceStore {
                 const nextState = [].concat(prevState);
                 const tweet = action.value.id_str;
                 let insertPos = prevState.findIndex(x => greaterEqualByID(tweet, x));
-                if(insertPos === -1) {
-                    if(prevState.length
-                      && greaterByID(tweet, prevState[prevState.length - 1])) {
+                if (insertPos === -1) {
+                    if (prevState.length
+                        && greaterByID(tweet, prevState[prevState.length - 1])) {
                         insertPos = prevState.length;
                     } else {
                         insertPos = 0;
                     }
                 }
-                if(prevState[insertPos] === tweet) {
+                if (prevState[insertPos] === tweet) {
                     return prevState;
                 }
                 nextState.splice(insertPos, 0, tweet);
@@ -60,14 +60,16 @@ export default class Tweets extends ReduceStore {
             }
 
             case keys.prepend: {
-                if(action.value.length === 0) return prevState;
+                debug(`prepend: ${action.value.length}`);
+                if (action.value.length === 0) return prevState;
                 const received = action.value.map((tw: Tweet) => tw.id_str);
                 const nextState = [].concat(received).concat(prevState);
                 return nextState.sort(sortTweet).reduce(uniquify(), []);
             }
 
             case keys.append: {
-                if(action.value.length === 0) return prevState;
+                debug(`append: ${action.value.length}`);
+                if (action.value.length === 0) return prevState;
                 const received = action.value.map((tw: Tweet) => tw.id_str);
                 const nextState = [].concat(prevState).concat(received);
                 return nextState.sort(sortTweet).reduce(uniquify(), []);
@@ -78,8 +80,7 @@ export default class Tweets extends ReduceStore {
                 const target = findIndex(status_id, prevState, greaterByID);
                 debug(`#reduce - destroyStatus, ${status_id} found in ${target}`);
                 if (~target) {
-                    const nextState = [].concat(prevState);
-                    return nextState;
+                    return [].concat(prevState);
                 }
                 return prevState;
             }

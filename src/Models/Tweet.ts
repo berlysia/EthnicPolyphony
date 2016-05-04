@@ -120,18 +120,18 @@ export interface Tweet {
 
 export function sliceWithMaxID(tweets: string[], max_id: string, size: number): string[] {
     debug('#sliceWithMaxID');
-    if(!max_id) {
+    if (!max_id) {
         debug('- lack of id');
         return tweets.slice(0, size);
     }
-    if(tweets.length === 0) {
+    if (tweets.length === 0) {
         debug('- empty tweets');
         return tweets.slice(0, size);
     }
 
     let ub = upper_bound(max_id, tweets, greaterByID);
     let lb = lower_bound(max_id, tweets, greaterByID);
-    if(lb <= ub) {
+    if (lb <= ub) {
         return tweets.slice(ub, ub + size);
     }
     throw new Error('something wrong: upper_bound() < lower_bound');
@@ -139,18 +139,18 @@ export function sliceWithMaxID(tweets: string[], max_id: string, size: number): 
 
 export function sliceWithMinID(tweets: string[], min_id: string, size: number): string[] {
     debug('#sliceWithMinID');
-    if(!min_id) {
+    if (!min_id) {
         debug('- lack of id');
         return tweets.slice(0, size);
     }
-    if(tweets.length === 0) {
+    if (tweets.length === 0) {
         debug('- empty tweets');
         return tweets.slice(0, size);
     }
 
     let ub = upper_bound(min_id, tweets, greaterByID);
     let lb = lower_bound(min_id, tweets, greaterByID);
-    if(lb <= ub) {
+    if (lb <= ub) {
         const startpos = Math.max(0, lb - size);
         return tweets.slice(startpos, lb);
     }
@@ -158,14 +158,14 @@ export function sliceWithMinID(tweets: string[], min_id: string, size: number): 
 }
 
 export function greaterByID(a: string, b: string) {
-    if(a.length !== b.length) {
+    if (a.length !== b.length) {
         return a.length > b.length;
     }
     return a > b;
 }
 
 export function greaterEqualByID(a: string, b: string) {
-    return equalByID(a,b) || greaterByID(a,b);
+    return equalByID(a, b) || greaterByID(a, b);
 }
 
 export function equalByID(a: string, b: string) {

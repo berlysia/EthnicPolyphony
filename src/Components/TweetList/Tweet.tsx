@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import {Tweet as TweetModel, Entities, Users} from '../../Models/Tweet';
 import {shell} from 'electron';
 import {
@@ -16,6 +17,8 @@ interface Props extends TweetModel {
     source_id: string;
     appActions: ActionCreator;
     retweet_user?: Users;
+    retweet_id?: string;
+    reportHeight?: Function;
 }
 
 interface PropsWithClassName extends Props {
@@ -48,18 +51,18 @@ export class TweetText extends React.Component<PropsWithClassName, {}> {
         const md5 = calcmd5(this.props.id_str + text);
 
         const elements = this.mergedEntities.reduceRight((prev: JSX.Element[], curr: any, idx: number) => {
-            const plainText = newlineToBrElement(text.substr(curr.indices[1]) + ' ');
             prev.unshift(<span
                 key={md5 + idx + '_spn'}
-                dangerouslySetInnerHTML={plainText}></span>);
+                dangerouslySetInnerHTML={newlineToBrElement(text.substr(curr.indices[1]) + ' ')}
+                ></span>);
             prev.unshift(<a
                 key={md5 + idx + '_a'}
                 onClick={() => this._openLink(idx) }
-                dangerouslySetInnerHTML={{ __html: curr.display_url }}></a>);
+                dangerouslySetInnerHTML={{ __html: curr.display_url }} />);
             text = text.substr(0, curr.indices[0]);
             return prev;
         }, []);
-        elements.unshift(<span key={md5 + '_spn'} dangerouslySetInnerHTML={newlineToBrElement(text) }></span>);
+        elements.unshift(<span key={md5 + '_spn'} dangerouslySetInnerHTML={newlineToBrElement(text)}></span>);
 
         return this._textElements = elements;
     }
@@ -173,6 +176,22 @@ export default class Tweet extends React.Component<Props, State> {
             || this.props.id_str !== nextProps.id_str
             || this.state.favorited !== nextState.favorited
             || this.state.retweeted !== nextState.retweeted;
+    }
+    
+    reportHeight() {
+        const el = ReactDOM.findDOMNode(this);
+        const height = el.getBoundingClientRect().height;
+        if(this.props.reportHeight instanceof Function) {
+            this.props.reportHeight(this.props.retweet_id || this.props.id_str, height);
+        }
+    }
+    
+    componentDidMount() {
+        this.reportHeight();
+    }
+    
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        this.reportHeight();
     }
 
     __openPermaLink() {

@@ -7,11 +7,13 @@
         "outDir": "dist/",
         "jsx": "react",
         "sourceMap": true,
-        "inlineSources": true
+        "inlineSources": true,
+        "allowJs": true
     },
     "filesGlob": [
         "typings/main.d.ts",
         "src/**/*.ts",
+        "src/**/*.js",
         "src/**/*.tsx"
     ],
     "files": [
@@ -48,14 +50,16 @@
         "src/ViewContext/StoreGroups/ListTimeline.ts",
         "src/ViewContext/StoreGroups/MentionsTimeline.ts",
         "src/ViewContext/StoreGroups/SearchTimeline.ts",
-        "src/ViewContext/StoreGroups/SingleTweet.ts",
         "src/ViewContext/StoreGroups/UserProfile.ts",
         "src/ViewContext/StoreGroups/UserTimeline.ts",
+        "src/Components/TweetList/react-virtual-list.js",
         "src/Components/BaseTimeline.tsx",
         "src/Components/Editor.tsx",
         "src/Components/HomeTimeline.tsx",
         "src/Components/MainView.tsx",
         "src/Components/MentionsTimeline.tsx",
+        "src/Components/SingleTweet/index.tsx",
+        "src/Components/SingleTweet/Tweet.tsx",
         "src/Components/Tabs.tsx",
         "src/Components/TweetList/index.tsx",
         "src/Components/TweetList/Tweet.tsx",

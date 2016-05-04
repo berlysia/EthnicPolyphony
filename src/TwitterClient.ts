@@ -1,4 +1,3 @@
-import JSONLoader from './JSONLoader';
 import TweetStorage from './TweetStorage';
 import {Tweet} from './Models/Tweet';
 import * as Twitter from 'twitter';
@@ -57,7 +56,7 @@ export default class TwitterClient {
         byID.set(accountData['id'], this);
         IDSNmap.set(accountData['screenName'], accountData['id']);
         IDSNmap.set(accountData['id'], accountData['screenName']);
-        
+
         this.storage = new TweetStorage(accountData['id']);
     }
 
@@ -82,23 +81,23 @@ export default class TwitterClient {
             });
         });
     }
-    
+
     private _tweetsToStorage(tweets: Tweet[]): Tweet[] {
-      tweets.forEach((tw: Tweet)=>{
-        tw.deleted = false; // mutate tweet object
-        this.storage.set(tw.id_str, tw);
-      });
-      return tweets;
+        tweets.forEach((tw: Tweet) => {
+            tw.deleted = false; // mutate tweet object
+            this.storage.set(tw.id_str, tw);
+        });
+        return tweets;
     }
     private tweetsToStorage = this._tweetsToStorage.bind(this);
-    
+
     private _tweetToStorage(tweet: Tweet): Tweet {
-      tweet.deleted = false; // mutate tweet object
-      this.storage.set(tweet.id_str, tweet);
-      return tweet;
+        tweet.deleted = false; // mutate tweet object
+        this.storage.set(tweet.id_str, tweet);
+        return tweet;
     }
     private tweetToStorage = this._tweetToStorage.bind(this);
-    
+
     userTimeline(screen_name: string, params?: TwitterParamsForFetch) {
         return this.baseFunc(Object.assign({ screen_name }, defaultFetchParams, params || {}), METHOD.GET, 'statuses/user_timeline')
             .then(this.tweetsToStorage);
@@ -162,6 +161,11 @@ export default class TwitterClient {
 
     showUser(user_id: string) {
         return this.baseFunc({ user_id, include_entities: true }, METHOD.GET, 'users/show');
+    }
+
+    showStatus(status_id: string) {
+        return this.baseFunc({ include_entities: true }, METHOD.GET, `statuses/show/${status_id}`)
+            .then(this.tweetToStorage);
     }
 
     userStream(callbacks: StreamCallbacks, params?: TwitterParamsForFetch) {

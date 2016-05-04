@@ -54,7 +54,7 @@ export default class MainView extends React.Component<Props, State> {
                 {...this.props}
                 appActions={this.props.actions}
                 onTop={this.state.onTop}
-            />
+                />
         );
     }
 }

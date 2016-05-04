@@ -13,14 +13,12 @@ interface Props {
     status_id: string;
     key: string;
     appActions: ActionCreator;
+    reportHeight?: Function;
 }
 
 type State = {};
 
 export default class TweetContainer extends React.Component<Props, State> {
-    constructor(props: Props, context: any) {
-        super(props, context);
-    }
 
     getTweet(props: Props): Result<TweetModel, TweetStorageErr> {
         const getTweet_: typeof getTweet = require('remote').require('./TweetStorage').getTweet;
@@ -49,6 +47,8 @@ export default class TweetContainer extends React.Component<Props, State> {
                     key={tweet.id_str}
                     appActions={this.props.appActions}
                     retweet_user={tweet.user}
+                    retweet_id={tweet.id_str}
+                    reportHeight={this.props.reportHeight}
                     />);
         } else {
             return (
@@ -57,6 +57,7 @@ export default class TweetContainer extends React.Component<Props, State> {
                     source_id={this.props.source_id}
                     key={tweet.id_str}
                     appActions={this.props.appActions}
+                    reportHeight={this.props.reportHeight}
                     />);
         }
     }

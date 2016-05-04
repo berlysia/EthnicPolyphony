@@ -17,19 +17,19 @@ interface Props {
 };
 
 type State = {
-  user: Users;
-  type: ViewOption;
+    user: Users;
+    type: ViewOption;
 };
 
 export default class UserProfile extends React.Component<Props, State> {
     remover: Function;
     removerOnUnload: Function;
-    
+
     constructor(props: Props, context: any) {
         super(props, context);
         this.state = props.store.getState();
     }
-    
+
     componentWillReceiveProps(nextProps: Props) {
         this.setState(nextProps.store.getState());
     }

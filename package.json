@@ -25,6 +25,7 @@
     "node-twitter-api": "^1.7.0",
     "option-t": "^0.18.3",
     "react": "^0.14.7",
+    "react-addons-shallow-compare": "^15.0.1",
     "react-dom": "^0.14.7",
     "reduce-iterator": "^1.0.0",
     "request": "^2.69.0",

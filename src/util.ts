@@ -47,7 +47,7 @@ function _cmp(a: any, b: any): boolean {
 }
 
 export function lower_bound<T>(x: T, xs: T[], cmp?: (a: T, b: T) => boolean) {
-    if(xs.length === 0) return -1;
+    if (xs.length === 0) return -1;
     cmp = cmp || _cmp;
     let fst = 0;
     let lst = xs.length;
@@ -65,7 +65,7 @@ export function lower_bound<T>(x: T, xs: T[], cmp?: (a: T, b: T) => boolean) {
 }
 
 export function upper_bound<T>(x: T, xs: T[], cmp?: (a: T, b: T) => boolean) {
-    if(xs.length === 0) return -1;
+    if (xs.length === 0) return -1;
     cmp = cmp || _cmp;
     let fst = 0;
     let lst = xs.length;
@@ -101,13 +101,13 @@ export function findInsertPosition<T>(item: T, array: T[], comp: (a: T, b: T) =>
     // array should be sorted
     const ub = upper_bound(item, array, comp);
     const lb = lower_bound(item, array, comp);
-    return (ub === lb) ? lb : -1;  
+    return (ub === lb) ? lb : -1;
 }
 
 export function findIndex<T>(item: T, array: T[], comp: (a: T, b: T) => boolean): number {
     // array should be sorted
     const ub = upper_bound(item, array, comp);
     const lb = lower_bound(item, array, comp);
-    debug(`#findIndex - item:${item} ub: ${ub} lb: ${lb} returns ${ub-lb===1?lb:-1}`);
-    return (ub - lb === 1) ? lb : -1;  
+    debug(`#findIndex - item:${item} ub: ${ub} lb: ${lb} returns ${ub - lb === 1 ? lb : -1}`);
+    return (ub - lb === 1) ? lb : -1;
 }

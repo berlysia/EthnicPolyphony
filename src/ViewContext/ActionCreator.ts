@@ -53,7 +53,7 @@ export default class ActionCreator extends _ActionCreator {
         debug('#connectUserStream', id);
         // const queue = new StreamQueue(this.dispatcher);
         const client = TwitterClient.byID(id);
-        if(forceReconnect) {
+        if (forceReconnect) {
             debug('#connectUserStream: force reconnect');
             client.purgeUserStream();
         }
