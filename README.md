@@ -4,7 +4,6 @@ Ethnic Polyphony
 Twitter Client built with Electron & React & TypeScript. WIP.
 
 ## installation
-
 put your app credentials into `resources/credentials.json`.
 
 ```
@@ -26,7 +25,7 @@ everything are in `resources`
 - [x] Tweets flow down when Tweet prepended
 - [x] memory leak because Tweet cache is unlimited
 - [ ] break `resources/view.json` file sometimes
-- [x] cannot edit tweet when renderer hardly works
+- [x] cannot edit Tweet when renderer hardly works
   - Now receiving Tweet from user stream is queued and flush every 5 seconds
 
 ## tasks
@@ -35,7 +34,7 @@ everything are in `resources`
 
 - [x] show (icon) images (+ user media)
 - [x] favorite
-- [x] retweet
+- [x] reTweet
 - [x] put anchors
 - [x] attach some styles
 - [ ] implement 'add tabs...' button
@@ -47,9 +46,9 @@ everything are in `resources`
   - [ ] ListTimeline
   - [ ] SearchTimeline
   - [ ] SingleTweet
-  - [ ] chained tweets view  
+  - [ ] chained Tweets view
 - [ ] notification area
-- [ ] tweet filtering
+- [ ] Tweet filtering
 
 ### low priority
 
