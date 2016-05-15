@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "removeComments": true,
         "outDir": "dist/",
         "jsx": "react",
@@ -39,7 +39,6 @@
         "src/typings/map-iterator.d.ts",
         "src/typings/node-twitter-api.d.ts",
         "src/typings/reduce-iterator.d.ts",
-        "src/typings/twitter.d.ts",
         "src/util.ts",
         "src/ViewContext/ActionCreator.ts",
         "src/ViewContext/ReduceStores/Tweets.ts",

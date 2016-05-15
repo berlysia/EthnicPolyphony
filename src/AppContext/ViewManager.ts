@@ -54,6 +54,7 @@ export function generateStackItem(option: ViewOption, temporary?: boolean): View
 
         case ViewType.HomeTimeline: {
             store = new HomeTimeline(dispatcher, option.source_id);
+            actions.connectUserStream(option.source_id);
         } break;
 
         case ViewType.MentionsTimeline: {
