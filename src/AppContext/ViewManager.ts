@@ -260,7 +260,7 @@ export default class ViewManager extends ReduceStore {
                     stack: [item, ...prevState.stack],
                     current: item,
                 });
-                
+
                 return nextState;
             }
 

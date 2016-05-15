@@ -37,7 +37,7 @@ export function getTweet(source_id: string, status_id: string): Result<Tweet, Tw
     if (!storage.has(status_id)) {
         return new Err<Tweet, TweetStorageErr>(errByCode(ErrCode.NOTFETCHED));
     }
-    
+
     const tweet = storage.get(status_id);
     if (tweet.created_at) {
         return new Ok<Tweet, TweetStorageErr>(tweet);

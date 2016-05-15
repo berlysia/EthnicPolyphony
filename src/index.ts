@@ -25,7 +25,9 @@ app.on('ready', () => {
             const accounts = data[1];
             accounts.map((account: any) => new TwitterClient(account, credentials));
         })
-        .then(() => actions.initialize())
+        .then(() => {
+            actions.initialize();
+        })
         .then(() => {
             mainWindow.createWindow();
             editorWindow.createWindow();

@@ -16,13 +16,13 @@ type State = {};
 export default class TweetList extends React.Component<Props, State> {
 
     // shouldComponentUpdate(nextProps: Props, nextState: State) {
-        // return nextProps.tweets !== this.props.tweets;
-        // const prevLength = this.props.tweets.length;
-        // const nextLength = nextProps.tweets.length;
-        // return prevLength !== nextLength
-        //     || (prevLength === 0 || nextLength === 0)
-        //     || this.props.tweets[0].id_str !== nextProps.tweets[0].id_str
-        //     || this.props.tweets[prevLength - 1].id_str !== nextProps.tweets[nextLength - 1].id_str;
+    // return nextProps.tweets !== this.props.tweets;
+    // const prevLength = this.props.tweets.length;
+    // const nextLength = nextProps.tweets.length;
+    // return prevLength !== nextLength
+    //     || (prevLength === 0 || nextLength === 0)
+    //     || this.props.tweets[0].id_str !== nextProps.tweets[0].id_str
+    //     || this.props.tweets[prevLength - 1].id_str !== nextProps.tweets[nextLength - 1].id_str;
     // }
 
     render() {
@@ -36,7 +36,7 @@ export default class TweetList extends React.Component<Props, State> {
                     appActions={this.props.appActions}
                     source_id={this.props.source_id}
                     reportHeight={reportHeight}
-                />
+                    />
             );
         };
 

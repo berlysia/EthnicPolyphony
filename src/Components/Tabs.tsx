@@ -80,7 +80,7 @@ export default class Tabs extends React.Component<Props, State> {
         this.props.actions.addAccount();
     }
     _addAccount = this.__addAccount.bind(this);
-    
+
     __popStack() {
         debug(`${this.constructor.name}#_popStack`);
         this.props.actions.popStack();
