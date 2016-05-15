@@ -260,12 +260,12 @@ export default class ViewManager extends ReduceStore {
                     stack: [item, ...prevState.stack],
                     current: item,
                 });
-
+                
                 return nextState;
             }
 
             case keys.popStack: {
-                const nextStack = prevState.stack.slice(1, prevState.stack.length - 1);
+                const nextStack = prevState.stack.slice(1, prevState.stack.length);
                 const nextState = Object.assign({}, prevState, {
                     stack: nextStack,
                     current: nextStack[0],

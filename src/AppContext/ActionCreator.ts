@@ -45,6 +45,7 @@ export interface ViewOption {
 }
 
 export function equalsViewOption(a: ViewOption, b: ViewOption) {
+    if (a == null || b == null) return false;
     return a.type === b.type
         && a.source_id === b.source_id
         && a.target_id === b.target_id;
@@ -133,7 +134,7 @@ export default class ActionCreator extends _ActionCreator {
 
     popStack() {
         this.dispatcher.dispatch({
-            type: keys.pushStack,
+            type: keys.popStack,
             value: {}
         })
     }

@@ -70,16 +70,22 @@ type State = {};
 
 export default class Tabs extends React.Component<Props, State> {
 
-    _createTab() {
+    __createTab() {
         console.warn('not implemented');
     }
-    bindedCreateTab = this._createTab.bind(this);
+    _createTab = this.__createTab.bind(this);
 
-    _addAccount() {
+    __addAccount() {
         debug('add account...');
         this.props.actions.addAccount();
     }
-    bindedAddAccount = this._addAccount.bind(this);
+    _addAccount = this.__addAccount.bind(this);
+    
+    __popStack() {
+        debug(`${this.constructor.name}#_popStack`);
+        this.props.actions.popStack();
+    }
+    _popStack = this.__popStack.bind(this);
 
     render() {
         debug('#render');
@@ -89,8 +95,9 @@ export default class Tabs extends React.Component<Props, State> {
                 {this.props.tabs.map(tab => (
                     <Tab key={generateKey(tab) } tab={tab} currentTab={this.props.current} actions={this.props.actions} />
                 )) }
-                <li onClick={this.bindedCreateTab }>new Tab...</li>
-                <li onClick={this.bindedAddAccount }>new Account...</li>
+                <li onClick={this._createTab }>new Tab...</li>
+                <li onClick={this._addAccount }>new Account...</li>
+                <li onClick={this._popStack }>back...</li>
             </ul>
         );
     }
